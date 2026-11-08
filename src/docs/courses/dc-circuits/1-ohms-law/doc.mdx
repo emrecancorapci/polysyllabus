@@ -34,6 +34,10 @@ $$
 
 The SI unit is the **volt** (V), where 1 V = 1 J/C. A voltage is always measured *between* two points, never at a single point.
 
+<Callout variant="tip" title="Think in pairs">
+  Whenever you see "the voltage at a point", ask "relative to what?" — the reference node has to be defined first. You will use this constantly once nodal analysis shows up.
+</Callout>
+
 ## Resistance and Ohm's law
 
 **Resistance** measures how strongly a material opposes current flow; its SI unit is the **ohm** ($\Omega$). For many materials over a wide range, the current through the material is proportional to the voltage across it:
@@ -66,10 +70,29 @@ A 12 V battery is connected across a 220 Ω resistor. What current flows, and wh
 1. Current, from Ohm's law: $I = V / R = 12\,\text{V} / 220\,\Omega \approx 54.5\,\text{mA}$
 2. Power: $P = V \, I = 12\,\text{V} \times 0.0545\,\text{A} \approx 0.65\,\text{W}$
 
-So a standard 0.25 W resistor would overheat here — component power ratings matter as much as resistance values.
+<Callout variant="warning">
+  A standard 0.25 W resistor would overheat in this circuit — component power ratings matter as much as resistance values.
+</Callout>
+
+## Try it yourself
+
+A space heater draws 4 A from a 230 V supply. What resistance does it present, and how much power does it dissipate?
+
+<CollapsibleSolution>
+  Resistance: $R = V / I = 230\,\text{V} / 4\,\text{A} = 57.5\,\Omega$. Power: $P = V \, I = 230\,\text{V} \times 4\,\text{A} = 920\,\text{W}$ — consistent with $P = V^2/R = 230^2 / 57.5$.
+</CollapsibleSolution>
 
 ## Key takeaways
 
 - Current $I$ (A) is charge flow per unit time; voltage $V$ (V) is energy per unit charge; resistance $R$ ($\Omega$) opposes current.
 - Ohm's law, $V = I \, R$, links the three for ohmic materials.
 - Always pair a resistance value with its power rating when choosing components.
+
+## Check your understanding
+
+<Quiz
+  question="A 9 V battery is connected across a 1.8 kΩ resistor. How much current flows?"
+  options={["5 mA", "50 mA", "500 mA", "2 A"]}
+  answer={0}
+  explanation="I = V / R = 9 V / 1800 Ω = 5 mA. The other options correspond to misplacing the decimal point or inverting the ratio."
+/>
