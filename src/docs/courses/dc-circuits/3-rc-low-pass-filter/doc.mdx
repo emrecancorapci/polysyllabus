@@ -61,8 +61,8 @@ Drag the sliders and watch the cutoff — and the whole magnitude curve — move
   spec={{
     title: "RC low-pass explorer",
     params: [
-      { name: "R", symbol: "R", min: 100, max: 10000, step: 100, default: 1000, unit: "Ω" },
-      { name: "C", symbol: "C", min: 10, max: 1000, step: 10, default: 100, unit: "nF" },
+      { name: "R", min: 100, max: 10000, step: 100, default: 1000, unit: "Ω", log: true },
+      { name: "C", min: 10, max: 1000, step: 10, default: 100, unit: "nF", log: true },
     ],
     outputs: [
       { name: "Cutoff frequency", formula: "1 / (2 * pi * R * C * 1e-9)", unit: "Hz" },
@@ -75,6 +75,13 @@ Drag the sliders and watch the cutoff — and the whole magnitude curve — move
         label: "Magnitude",
         unit: "dB",
       },
+      markers: [
+        {
+          xFormula: "1 / (2 * pi * R * C * 1e-9)",
+          y: -3,
+          label: "−3 dB at fc",
+        },
+      ],
     },
   }}
 />
