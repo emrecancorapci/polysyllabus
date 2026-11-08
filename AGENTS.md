@@ -43,7 +43,7 @@ A personal study tool for electrical and electronics engineering courses. A sepa
 - Use **atomic commits**: one logical change per commit.
 - A commit should not exceed **~400 changed lines**. Treat this as a guideline: if it would force impractically small commits, adjust the split and note the exception in the sprint file.
 - Exceptions to the size limit: project scaffolding, package installation, and data insertion (adding content to the collections).
-- Use clear, imperative commit messages (for example `Add lesson frontmatter schema`).
+- Use **Conventional Commits** (`feat`, `fix`, `docs`, `build`, `chore`, ...), optionally with a scope. Subjects are short, imperative, lowercase, and don't end in a period (for example `feat(content): add lesson frontmatter schema`).
 - Lockfile changes belong in the commit that changes the dependencies.
 
 ### Dependencies
