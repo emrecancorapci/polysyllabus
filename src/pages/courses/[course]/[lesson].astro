@@ -108,30 +108,31 @@ const contentComponents = {
               );
             })}
           </ol>
-          {
-            tocHeadings.length > 0 && (
-              <nav aria-label="On this page" class="border-border mt-4 flex flex-col gap-2 border-t pt-4">
-                <p class="text-foreground text-sm font-medium">On this page</p>
-                <ul class="flex flex-col">
-                  {tocHeadings.map((heading) => (
-                    <li>
-                      <a
-                        href={`#${heading.slug}`}
-                        class:list={[
-                          "hover:text-foreground block py-0.5 text-sm",
-                          heading.depth === 2
-                            ? "text-muted-foreground"
-                            : "text-muted-foreground/70 pl-3 text-xs",
-                        ]}
-                      >
-                        {heading.text}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            )
-          }
+          {tocHeadings.length > 0 && (
+            <nav
+              aria-label="On this page"
+              class="border-border mt-4 flex flex-col gap-2 border-t pt-4"
+            >
+              <p class="text-foreground text-sm font-medium">On this page</p>
+              <ul class="flex flex-col">
+                {tocHeadings.map((heading) => (
+                  <li>
+                    <a
+                      href={`#${heading.slug}`}
+                      class:list={[
+                        "hover:text-foreground block py-0.5 text-sm",
+                        heading.depth === 2
+                          ? "text-muted-foreground"
+                          : "text-muted-foreground/70 pl-3 text-xs",
+                      ]}
+                    >
+                      {heading.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
         </nav>
       </aside>
 

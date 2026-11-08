@@ -39,7 +39,7 @@ needsReview: false
 | `order`              | Positive integer, unique within the course; drives course page, sidebar, and prev/next order |
 | `summary`            | One sentence; shown on course cards                                                          |
 | `prerequisites`      | Lesson ids (`<course>/<slug>`); resolve to titles automatically; `[]` for the first lesson   |
-| `learningObjectives` | **Plain text only — they are not math-rendered.** Use Unicode: `fc = 1/(2πRC)`, `τ = RC`     |
+| `learningObjectives` | May contain `$…$` inline math (rendered with KaTeX); plain Unicode (`τ = RC`) also works     |
 | `estimatedTime`      | Integer minutes                                                                              |
 | `needsReview`        | `true` flags the lesson as needing a human pass                                              |
 
@@ -67,7 +67,8 @@ The allowed set and every prop are documented in `docs/content-components.md`: `
 - `Figure`: the markdown image is a **child**; alt and `caption` are required; numbering is automatic (`Figure 3.1` = lesson order + sequence). Never hand-write figure numbers.
 - `Mermaid` children are JSX: use `<br/>` (never `<br>`), and never `{` or `}`. Use ASCII arrows (`-->`), not Unicode dashes. The fenced ` ```mermaid ` form avoids all JSX parsing if a diagram needs braces.
 - `Quiz`/`NumericQuiz` results are stored per lesson; add a `quizId` to both when a lesson has more than one quiz.
-- `Playground` specs are validated at build: ranges (`min < max`, `default` inside), unique parameter names, `plot.x.variable` distinct from parameter names, and every formula must parse and produce a finite number at the defaults.
+- `Playground` specs are validated at build: ranges (`min < max`, `default` inside), unique parameter names, `plot.x.variable` distinct from parameter names, and every formula (outputs, marker positions) must parse and produce a finite number at the defaults. Parameters with `log: true` render as logarithmic sliders (positive min/max, `step` optional — used to snap to component values); use them for quantities that span decades (R, C, f).
+- Mermaid labels are **not** KaTeX-rendered: use Unicode (`√2`, `π`, `−20 dB`) or `<sub>`/`<sup>` HTML — but HTML tags require the fenced ` ```mermaid ` form, since the `<Mermaid>` component only accepts text and `<br/>` children.
 
 ## Figures (SVG authoring rules)
 
@@ -113,7 +114,7 @@ Before marking a lesson done:
 
 - [ ] Folder `<course>/<n>-<slug>/` with `doc.mdx` named exactly.
 - [ ] Frontmatter complete; `order` continues the course sequence; `prerequisites` point at real lesson ids.
-- [ ] Objectives in plain text (Unicode math).
+- [ ] Objectives checked (math renders if used).
 - [ ] Display math fenced; inline math single-`$`.
 - [ ] Figures as `<Figure>` with alt + caption; SVGs follow the theme rules.
 - [ ] At least one `Quiz` or `NumericQuiz`; math in props with single backslashes.

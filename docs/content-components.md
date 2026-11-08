@@ -106,13 +106,14 @@ Plain plot schema (Zod, all fields required unless noted):
 - `scale`: `"linear"` (default) or `"log"`
 - `series[]`: `name` (optional, required when multiple series), `points` as `[x, y]` tuples
 
-**Bode preset** (`type: "bode"`): magnitude (dB) and phase (degrees) stacked on one log frequency axis.
+**Bode preset** (`type: "bode"`): magnitude (dB) and phase (degrees) stacked on one log frequency axis. Optional `cutoff` draws the −3 dB marker on the magnitude panel.
 
 ```json
 {
   "type": "bode",
   "title": "RC low-pass frequency response",
   "frequency": { "label": "Frequency", "unit": "Hz" },
+  "cutoff": 1591.5,
   "magnitude": { "name": "|H(f)|", "points": [[1, 0], [10, -0.1]] },
   "phase": { "name": "∠H(f)", "points": [[1, 0], [10, -0.4]] }
 }
@@ -143,7 +144,7 @@ Slider-driven interactive widget from a declarative, build-validated spec. Formu
 />
 ```
 
-Spec rules: `params[].name` unique, `min < max`, `default` within range; `plot.x.variable` must not collide with a parameter name; every formula must produce a finite number at the defaults.
+Spec rules: `params[].name` unique, `min < max`, `default` within range; linear parameters need `step`, `log: true` parameters need positive bounds (`step` optional, used for snapping); `plot.x.variable` must not collide with a parameter name; every formula — outputs and `plot.markers[].xFormula` — must produce a finite number at the defaults. Markers (`{ xFormula, y, label }`) draw a dashed crosshair with a labelled dot; the y-domain always includes zero.
 
 ## `<CollapsibleSolution>`
 
