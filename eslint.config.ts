@@ -23,7 +23,10 @@ export default defineConfig([
     files: ["**/*.astro"],
     extends: [
       astro.configs["flat/recommended"],
-      tseslint.configs.recommendedTypeChecked,
+      // Not recommendedTypeChecked: astro-eslint-parser cannot run
+      // projectService (it degrades `project: true` and leaves frontmatter
+      // types unresolved), so .astro types are covered by `astro check`.
+      tseslint.configs.recommended,
     ],
     languageOptions: {
       // Re-state the parser explicitly: merging this block's languageOptions
@@ -31,7 +34,6 @@ export default defineConfig([
       parser: astroParser,
       parserOptions: {
         parser: "@typescript-eslint/parser",
-        projectService: true,
         extraFileExtensions: [".astro"],
       },
     },

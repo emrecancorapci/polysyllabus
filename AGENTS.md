@@ -63,7 +63,7 @@ A personal study tool for electrical and electronics engineering courses. A sepa
 
 ### Linting and Formatting
 
-- **ESLint** with **typescript-eslint** using the **type-aware** configuration (`recommendedTypeChecked` or stricter, with `parserOptions.projectService`) for linting TypeScript and Astro sources.
+- **ESLint** with **typescript-eslint** using the **type-aware** configuration (`recommendedTypeChecked` or stricter, with `parserOptions.projectService`) for TypeScript/JavaScript sources, plus `eslint-plugin-astro` for `.astro` sources. Type-aware rules cannot run inside `.astro` frontmatter (`astro-eslint-parser` does not support `projectService`); `astro check` covers those types instead.
 - **Biome** for formatting and additional linting. Biome is the only formatter.
 - Avoid overlapping rules: disable ESLint rules that Biome already covers (or the reverse), so the two tools do not conflict.
 - Run before every commit:
