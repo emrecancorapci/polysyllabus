@@ -1,0 +1,68 @@
+---
+import { getCourses, lessonHref } from "@/lib/courses";
+import "@/styles/global.css";
+
+export async function getStaticPaths() {
+  const courses = await getCourses();
+  return courses.map((course) => ({
+    params: { course: course.slug },
+    props: { course },
+  }));
+}
+
+const { course } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="generator" content={Astro.generator}>
+    <title>{course.title} — Study Helper</title>
+  </head>
+  <body class="bg-background text-foreground">
+    <main class="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 py-16">
+      <nav aria-label="Breadcrumb" class="text-muted-foreground text-sm">
+        <a href="/" class="hover:text-foreground">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span class="text-foreground">{course.title}</span>
+      </nav>
+      <header class="flex flex-col gap-2">
+        <h1 class="text-3xl font-semibold tracking-tight">{course.title}</h1>
+        <p class="text-muted-foreground">
+          {course.lessons.length}
+          lesson{course.lessons.length === 1 ? "" : "s"}
+          ·{" "}
+          {course.lessons.reduce(
+            (total, lesson) => total + lesson.data.estimatedTime,
+            0,
+          )}
+          min total
+        </p>
+      </header>
+      <ol class="flex flex-col gap-3">
+        {course.lessons.map((lesson) => (
+          <li>
+            <a
+              href={lessonHref(lesson)}
+              class="border-border bg-card hover:border-primary/40 flex flex-col gap-1 rounded-lg border p-5 transition-colors"
+            >
+              <span class="flex items-baseline gap-2">
+                <span class="text-muted-foreground text-sm tabular-nums">
+                  {lesson.data.order}.
+                </span>
+                <span class="text-lg font-medium">{lesson.data.title}</span>
+                <span class="text-muted-foreground ml-auto text-sm whitespace-nowrap">
+                  {lesson.data.estimatedTime} min
+                </span>
+              </span>
+              <span class="text-muted-foreground text-sm">
+                {lesson.data.summary}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </main>
+  </body>
+</html>
