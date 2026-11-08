@@ -41,7 +41,9 @@
     "@astrojs/check": "^0.9.12",
     "@biomejs/biome": "2.6.6",
     "@eslint/js": "^10.0.1",
+    "astro-eslint-parser": "^3.2.0",
     "eslint": "^10.14.0",
+    "eslint-plugin-astro": "^3.2.1",
     "jiti": "^2.7.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.1"

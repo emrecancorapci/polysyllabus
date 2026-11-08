@@ -19,7 +19,9 @@
       "preset": "recommended"
     },
     "domains": {
-      "astro": "recommended",
+      // ESLint (eslint-plugin-astro + typescript-eslint) lints .astro sources;
+      // Biome only formats them, to avoid overlapping rules (see AGENTS.md).
+      "astro": "none",
       "tailwind": "recommended",
       "project": "recommended",
       "types": "recommended",
