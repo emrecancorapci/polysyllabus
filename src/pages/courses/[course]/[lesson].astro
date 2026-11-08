@@ -8,12 +8,12 @@ import NumericQuiz from "@/components/content/NumericQuiz.astro";
 import Playground from "@/components/content/Playground.astro";
 import Quiz from "@/components/content/Quiz.astro";
 import LessonCompleteButton from "@/components/chrome/LessonCompleteButton.astro";
+import MathText from "@/components/content/react/MathText";
 import ProgressEnhance from "@/components/chrome/ProgressEnhance.astro";
 import {
   courseTitle,
   getPrevNext,
   lessonHref,
-  prerequisiteLabel,
   sortByOrder,
 } from "@/lib/courses";
 import "katex/dist/katex.min.css";
@@ -33,7 +33,8 @@ export async function getStaticPaths() {
 }
 
 const { lesson } = Astro.props;
-const { Content } = await render(lesson);
+const { Content, headings } = await render(lesson);
+const tocHeadings = headings.filter((heading) => heading.depth <= 3);
 const [courseSlug] = lesson.id.split("/");
 const allLessons = await getCollection("lessons");
 const courseLessons = sortByOrder(
@@ -107,6 +108,30 @@ const contentComponents = {
               );
             })}
           </ol>
+          {
+            tocHeadings.length > 0 && (
+              <nav aria-label="On this page" class="border-border mt-4 flex flex-col gap-2 border-t pt-4">
+                <p class="text-foreground text-sm font-medium">On this page</p>
+                <ul class="flex flex-col">
+                  {tocHeadings.map((heading) => (
+                    <li>
+                      <a
+                        href={`#${heading.slug}`}
+                        class:list={[
+                          "hover:text-foreground block py-0.5 text-sm",
+                          heading.depth === 2
+                            ? "text-muted-foreground"
+                            : "text-muted-foreground/70 pl-3 text-xs",
+                        ]}
+                      >
+                        {heading.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )
+          }
         </nav>
       </aside>
 
@@ -131,14 +156,29 @@ const contentComponents = {
           >
             <span>{lesson.data.estimatedTime} min</span>
             {lesson.data.prerequisites.length > 0 && (
-              <span>
-                · Prerequisites:{" "}
-                {lesson.data.prerequisites
-                  .map((id) => prerequisiteLabel(id, allLessons))
-                  .join(", ")}
+              <span class="flex flex-wrap items-center gap-1">
+                <span aria-hidden="true">·</span>
+                <span>Prerequisites:</span>
+                {lesson.data.prerequisites.map((id, index) => {
+                  const target = allLessons.find((entry) => entry.id === id);
+                  return (
+                    <>
+                      {index > 0 && <span aria-hidden="true">,</span>}
+                      {target ? (
+                        <a
+                          href={lessonHref(target)}
+                          class="text-primary hover:underline"
+                        >
+                          {target.data.title}
+                        </a>
+                      ) : (
+                        <span>{id}</span>
+                      )}
+                    </>
+                  );
+                })}
               </span>
             )}
-            <LessonCompleteButton lessonId={lesson.id} />
           </div>
         </header>
 
@@ -149,14 +189,22 @@ const contentComponents = {
           <h2 class="text-sm font-semibold">Learning objectives</h2>
           <ul class="list-disc pl-5 text-sm">
             {lesson.data.learningObjectives.map((objective) => (
-              <li>{objective}</li>
+              <li>
+                <MathText text={objective} />
+              </li>
             ))}
           </ul>
         </section>
 
-        <article class="flex flex-col gap-4">
+        <article
+          class="prose prose-neutral dark:prose-invert max-w-none prose-a:text-primary prose-a:no-underline prose-a:underline-offset-4 hover:prose-a:underline prose-strong:text-foreground"
+        >
           <Content components={contentComponents} />
         </article>
+
+        <div class="flex justify-end">
+          <LessonCompleteButton lessonId={lesson.id} />
+        </div>
 
         <nav
           aria-label="Lesson navigation"

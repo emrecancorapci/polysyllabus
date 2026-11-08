@@ -5,9 +5,9 @@ summary: "Combine a resistor and a capacitor into a frequency-dependent divider,
 prerequisites: ["dc-circuits/1-ohms-law", "dc-circuits/2-kirchhoffs-laws"]
 learningObjectives:
   - "Explain why the RC divider attenuates high frequencies but passes low ones"
-  - "Compute the cutoff frequency fc = 1/(2πRC)"
+  - "Compute the cutoff frequency $f_c = 1/(2\\pi R C)$"
   - "Read magnitude and phase from a Bode plot"
-  - "Predict the step response from the time constant τ = RC"
+  - "Predict the step response from the time constant $\\tau = RC$"
 estimatedTime: 30
 needsReview: false
 ---
@@ -46,12 +46,12 @@ A Bode plot shows the same story in the frequency domain: gain flat at low frequ
 
 ## Where the cutoff comes from
 
-<Mermaid>
-  flowchart LR
-    A["Impedances form a divider"] --> B["Capacitive divider<br/>V_out / V_in = Z_C / (R + Z_C)"]
-    B --> C["Magnitude drops to 1/sqrt(2)<br/>at f_c = 1 / (2 pi R C)"]
-    C --> D["Below f_c: pass<br/>Above f_c: roll off at -20 dB/decade"]
-</Mermaid>
+```mermaid
+flowchart LR
+    A["Impedances form a divider"] --> B["Capacitive divider<br/>V<sub>out</sub> / V<sub>in</sub> = Z<sub>C</sub> / (R + Z<sub>C</sub>)"]
+    B --> C["Magnitude drops to 1/√2<br/>at f<sub>c</sub> = 1 / (2πRC)"]
+    C --> D["Below f<sub>c</sub>: pass<br/>Above: roll off at −20 dB/decade"]
+```
 
 ## Explore it yourself
 

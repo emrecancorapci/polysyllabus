@@ -34,7 +34,28 @@ export default defineConfig({
       rehypePlugins: [
         rehypeKatex,
         rehypeContent,
-        [rehypeMermaid, { strategy: "inline-svg" }],
+        [
+          rehypeMermaid,
+          {
+            strategy: "inline-svg",
+            // Theme matches the light design tokens from src/styles/global.css;
+            // dark mode inverts the generated SVG via global.css.
+            mermaidOptions: {
+              theme: "base",
+              themeVariables: {
+                background: "transparent",
+                primaryColor: "oklch(1 0 0)",
+                primaryBorderColor: "oklch(0.922 0 0)",
+                primaryTextColor: "oklch(0.145 0 0)",
+                lineColor: "oklch(0.556 0 0)",
+                textColor: "oklch(0.145 0 0)",
+                mainBkg: "oklch(1 0 0)",
+                nodeBorder: "oklch(0.922 0 0)",
+                fontSize: "14px",
+              },
+            },
+          },
+        ],
       ],
     }),
   },
