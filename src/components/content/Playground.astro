@@ -1,0 +1,21 @@
+---
+import PlaygroundIsland from "./react/Playground";
+import { describeIssues } from "@/lib/plot-schema";
+import {
+  playgroundSpecSchema,
+  validateFormulas,
+} from "@/lib/playground-schema";
+
+/**
+ * Declarative interactive widget. The spec prop is validated (shape and
+ * formulas) here at build time; mathjs evaluates the formulas in the browser
+ * after hydration (no eval/Function — mathjs is an interpreter).
+ */
+const parsed = playgroundSpecSchema.safeParse(Astro.props.spec);
+if (!parsed.success) {
+  throw new Error(`[Playground] invalid spec: ${describeIssues(parsed.error)}`);
+}
+validateFormulas(parsed.data);
+---
+
+<PlaygroundIsland spec={parsed.data} client:visible />

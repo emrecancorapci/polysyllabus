@@ -53,6 +53,32 @@ A Bode plot shows the same story in the frequency domain: gain flat at low frequ
     C --> D["Below f_c: pass<br/>Above f_c: roll off at -20 dB/decade"]
 </Mermaid>
 
+## Explore it yourself
+
+Drag the sliders and watch the cutoff — and the whole magnitude curve — move. The formulas are exactly the ones above: $f_c = 1/(2\pi R C)$ and $|H| = 1/\sqrt{1 + (f/f_c)^2}$.
+
+<Playground
+  spec={{
+    title: "RC low-pass explorer",
+    params: [
+      { name: "R", symbol: "R", min: 100, max: 10000, step: 100, default: 1000, unit: "Ω" },
+      { name: "C", symbol: "C", min: 10, max: 1000, step: 10, default: 100, unit: "nF" },
+    ],
+    outputs: [
+      { name: "Cutoff frequency", formula: "1 / (2 * pi * R * C * 1e-9)", unit: "Hz" },
+      { name: "Time constant", formula: "R * C * 1e-9 * 1000", unit: "ms" },
+    ],
+    plot: {
+      x: { variable: "f", label: "Frequency", unit: "Hz", min: 1, max: 1000000, log: true },
+      y: {
+        formula: "-10 * log10(1 + (2 * pi * f * R * C * 1e-9)^2)",
+        label: "Magnitude",
+        unit: "dB",
+      },
+    },
+  }}
+/>
+
 ## Key takeaways
 
 - An RC low-pass passes low frequencies and attenuates high ones; $f_c = 1/(2\pi R C)$.
