@@ -52,6 +52,7 @@ A personal study tool for electrical and electronics engineering courses. A sepa
 - **Exception: TypeScript.** Stay on the latest 6.x. TypeScript 7.x does not yet support linters. Revisit when typescript-eslint supports it.
 - When adding a package, install it through the package manager (do not hand-edit versions), and commit it separately from feature code.
 - **pnpm 12** no longer reads the `pnpm` field in `package.json`; overrides live in `pnpm-workspace.yaml`. That file pins `@emnapi/runtime` to 1.11.3 — without the override, `pnpm typecheck` (`astro check`) crashes because pnpm auto-installs an incompatible `2.0.0-beta` peer.
+- Mermaid diagrams render **at build time** (`rehype-mermaid` + Playwright). After a fresh clone, run `pnpm exec playwright install chromium` once, or `astro build` fails.
 
 ### Planning (Scrum-like)
 
