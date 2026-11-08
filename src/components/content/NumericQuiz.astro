@@ -1,0 +1,19 @@
+---
+import NumericQuizIsland from "./react/NumericQuiz";
+import { numericQuizPropsSchema } from "@/lib/numeric-quiz";
+import { describeIssues } from "@/lib/plot-schema";
+
+const parsed = numericQuizPropsSchema.safeParse(Astro.props);
+if (!parsed.success) {
+  throw new Error(
+    `[NumericQuiz] invalid props: ${describeIssues(parsed.error)}`,
+  );
+}
+
+// Stored per lesson (+#quizId), derived from the page URL like Quiz.
+const lessonId = decodeURIComponent(Astro.url.pathname)
+  .replace(/^\/courses\//, "")
+  .replace(/\/+$/, "");
+---
+
+<NumericQuizIsland {...parsed.data} lessonId={lessonId} client:visible />

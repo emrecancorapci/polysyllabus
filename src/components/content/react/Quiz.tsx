@@ -12,6 +12,8 @@ export interface QuizProps {
   explanation: string;
   /** Lesson id (from the page URL); empty disables progress recording. */
   lessonId?: string;
+  /** Disambiguates the stored result when a lesson has several quizzes. */
+  quizId?: string;
 }
 
 export default function Quiz({
@@ -20,6 +22,7 @@ export default function Quiz({
   answer,
   explanation,
   lessonId,
+  quizId,
 }: QuizProps) {
   const [selected, setSelected] = useState<number | null>(null);
   const answered = selected !== null;
@@ -27,13 +30,23 @@ export default function Quiz({
 
   useEffect(() => {
     if (!lessonId) return;
-    const stored = getQuizResult(loadProgress(), lessonId);
+    // No quizId keeps the Sprint 6 key (lesson id) for stored results.
+    const stored = getQuizResult(
+      loadProgress(),
+      quizId ? `${lessonId}#${quizId}` : lessonId,
+    );
     if (stored) setSelected(stored.selected);
-  }, [lessonId]);
+  }, [lessonId, quizId]);
 
   function choose(index: number): void {
     setSelected(index);
-    if (lessonId) recordQuizResult(lessonId, index, index === answer);
+    if (lessonId) {
+      recordQuizResult(
+        quizId ? `${lessonId}#${quizId}` : lessonId,
+        index,
+        index === answer,
+      );
+    }
   }
 
   return (
