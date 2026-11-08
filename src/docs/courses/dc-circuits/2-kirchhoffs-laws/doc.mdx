@@ -24,7 +24,9 @@ $$
 
 The figure shows a node with one incoming and two outgoing branches:
 
-![A circuit node where current I1 flows in and currents I2 and I3 flow out](./fig-kcl-node.svg)
+<Figure caption="Charge conservation at a node: what flows in must flow out.">
+  ![A circuit node where current I1 flows in and currents I2 and I3 flow out](./fig-kcl-node.svg)
+</Figure>
 
 If $I_1 = 3\,\text{A}$ and $I_2 = 1.2\,\text{A}$, then KCL fixes the last branch immediately: $I_3 = 3 - 1.2 = 1.8\,\text{A}$.
 
@@ -47,6 +49,18 @@ A 9 V source drives a series pair: $R_1 = 100\,\Omega$ and $R_2 = 200\,\Omega$.
 3. **KVL check**: around the loop, $-9 + 3 + 6 = 0$. ✓
 
 The check step is the habit to build: every loop calculation should close back to zero.
+
+## Reading the two laws together
+
+The two laws divide the work: KCL constrains currents at junctions, KVL constrains voltages along paths.
+
+<Mermaid>
+  flowchart LR
+    A["Circuit under analysis"] --> B["KCL at nodes<br/>sums of branch currents"]
+    A --> C["KVL around loops<br/>sums of element voltages"]
+    B --> D["Solve the equations<br/>for every current and voltage"]
+    C --> D
+</Mermaid>
 
 ## Key takeaways
 

@@ -1,0 +1,66 @@
+---
+/**
+ * Numbered, captioned figure. Authors write the markdown image as the child:
+ *
+ *   <Figure caption="What the figure shows">![alt text](./fig-*.svg)</Figure>
+ *
+ * The rehype plugin (src/plugins/rehype-content.ts) validates the image,
+ * resolves `src` to a repo-absolute path, and injects `figureLabel`
+ * ("lessonOrder.figureIndex") before this component renders.
+ * SVG sources are inlined so `currentColor` follows the theme.
+ */
+
+const svgSources = import.meta.glob("/src/docs/courses/**/*.svg", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+}) as Record<string, string>;
+
+const pngSources = import.meta.glob("/src/docs/courses/**/*.png", {
+  query: "?url",
+  import: "default",
+  eager: true,
+}) as Record<string, string>;
+
+interface Props {
+  /** Repo-absolute path, injected by the rehype plugin. */
+  src: string;
+  /** Injected from the inner markdown image. */
+  alt: string;
+  /** Figure caption; the visible "Figure N.M" prefix is added automatically. */
+  caption: string;
+  /** "lessonOrder.figureIndex", injected. */
+  figureLabel?: string;
+}
+
+const { src, alt, caption, figureLabel } = Astro.props;
+
+const svg = svgSources[src];
+const png = pngSources[src];
+if (svg === undefined && png === undefined) {
+  throw new Error(`[Figure] file not found beside the lesson: ${src}`);
+}
+---
+
+<figure class="my-6 flex flex-col gap-2">
+  {svg !== undefined ? (
+    <div
+      class="text-foreground border-border bg-muted/30 flex justify-center rounded-lg border p-4 [&_svg]:h-auto [&_svg]:max-h-96 [&_svg]:w-auto [&_svg]:max-w-full"
+      role="img"
+      aria-label={alt}
+      set:html={svg}
+    />
+  ) : (
+    <img
+      src={png}
+      alt={alt}
+      class="border-border bg-muted/30 rounded-lg border p-4"
+    />
+  )}
+  <figcaption class="text-muted-foreground text-center text-sm">
+    {figureLabel && (
+      <span class="text-foreground font-medium">Figure {figureLabel}. </span>
+    )}
+    {caption}
+  </figcaption>
+</figure>
