@@ -28,6 +28,8 @@ export const bodeDataSchema = z.object({
     label: z.string().default("Frequency"),
     unit: z.string().default("Hz"),
   }),
+  /** Cutoff frequency for the −3 dB marker on the magnitude panel. */
+  cutoff: z.number().positive().optional(),
   /** Points are [frequency Hz, magnitude dB]. */
   magnitude: seriesSchema,
   /** Points are [frequency Hz, phase degrees]. */

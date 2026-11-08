@@ -8,9 +8,12 @@ export const playgroundParamSchema = z.object({
   symbol: z.string().optional(),
   min: z.number(),
   max: z.number(),
-  step: z.number().positive(),
+  /** Step size for linear sliders; ignored (optional) for log sliders. */
+  step: z.number().positive().optional(),
   default: z.number(),
   unit: z.string().optional(),
+  /** Logarithmic slider: decades span the range; useful for R, C, f. */
+  log: z.boolean().default(false),
 });
 
 export const playgroundOutputSchema = z.object({
@@ -35,6 +38,16 @@ export const playgroundPlotSchema = z.object({
     label: z.string(),
     unit: z.string().optional(),
   }),
+  /** Reference markers: dashed crosshair at (xFormula, y) with a label. */
+  markers: z
+    .array(
+      z.object({
+        xFormula: z.string().min(1),
+        y: z.number(),
+        label: z.string().min(1),
+      }),
+    )
+    .default([]),
 });
 
 export const playgroundSpecSchema = z
@@ -54,6 +67,18 @@ export const playgroundSpecSchema = z
         });
       }
       names.add(param.name);
+      if (!param.log && param.step === undefined) {
+        ctx.addIssue({
+          code: "custom",
+          message: `parameter "${param.name}": linear parameters need a step (log: true does not)`,
+        });
+      }
+      if (param.log && (param.min <= 0 || param.max <= 0)) {
+        ctx.addIssue({
+          code: "custom",
+          message: `parameter "${param.name}": log parameters need positive min/max`,
+        });
+      }
       if (param.min >= param.max) {
         ctx.addIssue({
           code: "custom",
@@ -90,7 +115,10 @@ export function validateFormulas(spec: PlaygroundSpec): void {
     scope[param.name] = param.default;
   }
 
-  const formulas = [...spec.outputs.map((output) => output.formula)];
+  const formulas = [
+    ...spec.outputs.map((output) => output.formula),
+    ...spec.plot.markers.map((marker) => marker.xFormula),
+  ];
   for (const source of formulas) {
     let value: unknown;
     try {
