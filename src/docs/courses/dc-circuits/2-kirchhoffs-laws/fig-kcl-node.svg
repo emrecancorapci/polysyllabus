@@ -1,0 +1,45 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 560 220"
+  role="img"
+  aria-labelledby="fig-title fig-desc"
+>
+  <title id="fig-title">Node with three branches</title>
+  <desc id="fig-desc">
+    Current I1 flows into a junction from the left; currents I2 and I3 flow out
+    through the upper-right and lower-right branches.
+  </desc>
+  <defs>
+    <marker
+      id="arrow"
+      viewBox="0 0 10 10"
+      refX="9"
+      refY="5"
+      markerWidth="7"
+      markerHeight="7"
+      orient="auto-start-reverse"
+    >
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="currentColor" />
+    </marker>
+  </defs>
+  <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+    <!-- incoming branch -->
+    <path d="M 60 110 H 280" marker-end="url(#arrow)" />
+    <!-- outgoing branches -->
+    <path d="M 280 110 L 500 50" marker-end="url(#arrow)" />
+    <path d="M 280 110 L 500 170" marker-end="url(#arrow)" />
+    <!-- node -->
+    <circle cx="280" cy="110" r="6" fill="currentColor" stroke="none" />
+  </g>
+  <g
+    font-family="sans-serif"
+    font-size="22"
+    fill="currentColor"
+    text-anchor="middle"
+  >
+    <text x="150" y="95">I₁</text>
+    <text x="400" y="60">I₂</text>
+    <text x="400" y="185">I₃</text>
+    <text x="280" y="145">node</text>
+  </g>
+</svg>
