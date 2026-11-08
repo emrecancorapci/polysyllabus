@@ -1,5 +1,6 @@
-import { useState } from "react";
 import { cn } from "cn";
+import { useEffect, useState } from "react";
+import { getQuizResult, loadProgress, recordQuizResult } from "@/lib/progress";
 
 export interface QuizProps {
   question: string;
@@ -8,6 +9,8 @@ export interface QuizProps {
   answer: number;
   /** Shown after answering, regardless of correctness. */
   explanation: string;
+  /** Lesson id (from the page URL); empty disables progress recording. */
+  lessonId?: string;
 }
 
 export default function Quiz({
@@ -15,10 +18,22 @@ export default function Quiz({
   options,
   answer,
   explanation,
+  lessonId,
 }: QuizProps) {
   const [selected, setSelected] = useState<number | null>(null);
   const answered = selected !== null;
   const correct = selected === answer;
+
+  useEffect(() => {
+    if (!lessonId) return;
+    const stored = getQuizResult(loadProgress(), lessonId);
+    if (stored) setSelected(stored.selected);
+  }, [lessonId]);
+
+  function choose(index: number): void {
+    setSelected(index);
+    if (lessonId) recordQuizResult(lessonId, index, index === answer);
+  }
 
   return (
     <div className="border-border bg-card flex flex-col gap-3 rounded-lg border p-5">
@@ -35,7 +50,7 @@ export default function Quiz({
               key={option}
               type="button"
               disabled={answered}
-              onClick={() => setSelected(index)}
+              onClick={() => choose(index)}
               className={cn(
                 "border-border rounded-lg border px-4 py-2 text-left text-sm transition-colors",
                 !answered &&

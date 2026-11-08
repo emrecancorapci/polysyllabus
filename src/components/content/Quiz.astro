@@ -2,6 +2,12 @@
 import QuizIsland, { type QuizProps } from "./react/Quiz";
 
 const props = Astro.props as QuizProps;
+
+// The quiz result is stored per lesson, so derive the lesson id from the page
+// URL (/courses/<course>/<lesson>/ → "<course>/<lesson>", i.e. the entry id).
+const lessonId = decodeURIComponent(Astro.url.pathname)
+  .replace(/^\/courses\//, "")
+  .replace(/\/+$/, "");
 ---
 
-<QuizIsland {...props} client:load />
+<QuizIsland {...props} lessonId={lessonId} client:load />
