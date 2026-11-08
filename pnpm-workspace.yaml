@@ -1,0 +1,6 @@
+overrides:
+  # @napi-rs/wasm-runtime's peer range (^1.7.1 || ^2.0.0-alpha.4) lets pnpm
+  # resolve @emnapi/runtime to the incompatible 2.0.0-beta line, which breaks
+  # @astrojs/check (API mismatch with @emnapi/core 1.x). Pin to the pairing
+  # Astro itself ships with @emnapi/core@1.11.3.
+  "@emnapi/runtime": 1.11.3

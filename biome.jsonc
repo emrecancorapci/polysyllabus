@@ -39,6 +39,20 @@
       }
     }
   },
+  "overrides": [
+    {
+      // SVGs in public/ are standalone assets (favicons, figures), not inline
+      // page content, so the missing <title> is not an accessibility issue.
+      "includes": ["public/**"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "noSvgWithoutTitle": "off"
+          }
+        }
+      }
+    }
+  ],
   "html": {
     "experimentalFullSupportEnabled": true,
     "formatter": {
