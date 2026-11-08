@@ -1,5 +1,12 @@
 ---
 import { getCollection, render } from "astro:content";
+import {
+  courseTitle,
+  getPrevNext,
+  lessonHref,
+  prerequisiteLabel,
+  sortByOrder,
+} from "@/lib/courses";
 import "katex/dist/katex.min.css";
 import "@/styles/global.css";
 
@@ -16,6 +23,13 @@ export async function getStaticPaths() {
 
 const { lesson } = Astro.props;
 const { Content } = await render(lesson);
+const [courseSlug] = lesson.id.split("/");
+const allLessons = await getCollection("lessons");
+const courseLessons = sortByOrder(
+  allLessons.filter((entry) => entry.id.split("/")[0] === courseSlug),
+);
+const { prev, next } = getPrevNext(courseLessons, lesson.id);
+const courseName = courseTitle(courseSlug);
 ---
 
 <html lang="en">
@@ -23,31 +37,127 @@ const { Content } = await render(lesson);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <meta name="generator" content={Astro.generator}>
-    <title>{lesson.data.title} — Study Helper</title>
+    <title>{lesson.data.title} — {courseName} — Study Helper</title>
   </head>
   <body class="bg-background text-foreground">
-    <main class="mx-auto flex max-w-2xl flex-col gap-6 px-6 py-12">
-      <header class="flex flex-col gap-2">
-        <p class="text-muted-foreground text-sm">
-          {lesson.id}
-          · {lesson.data.estimatedTime} min
-        </p>
-        <h1 class="text-3xl font-semibold tracking-tight">
-          {lesson.data.title}
-        </h1>
-        <p class="text-muted-foreground">{lesson.data.summary}</p>
-      </header>
-      <section aria-label="Learning objectives" class="flex flex-col gap-2">
-        <h2 class="text-lg font-semibold">Learning objectives</h2>
-        <ul class="list-disc pl-6">
-          {lesson.data.learningObjectives.map((objective) => (
-            <li>{objective}</li>
-          ))}
-        </ul>
-      </section>
-      <article class="prose">
-        <Content />
-      </article>
-    </main>
+    <div
+      class="mx-auto flex w-full max-w-6xl flex-col px-6 py-10 lg:flex-row lg:gap-12"
+    >
+      <aside class="hidden lg:block lg:w-64 lg:shrink-0">
+        <nav
+          aria-label="Course outline"
+          class="sticky top-10 flex flex-col gap-4"
+        >
+          <a
+            href={`/courses/${courseSlug}/`}
+            class="text-muted-foreground hover:text-foreground text-sm"
+          >
+            ← {courseName}
+          </a>
+          <ol class="flex flex-col gap-1">
+            {courseLessons.map((entry) => {
+              const current = entry.id === lesson.id;
+              return (
+                <li>
+                  <a
+                    href={lessonHref(entry)}
+                    aria-current={current ? "page" : undefined}
+                    class:list={[
+                      "flex items-baseline gap-2 rounded-md px-2 py-1.5 text-sm",
+                      current
+                        ? "bg-muted text-foreground font-medium"
+                        : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
+                    ]}
+                  >
+                    <span class="tabular-nums">{entry.data.order}.</span>
+                    <span>{entry.data.title}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ol>
+        </nav>
+      </aside>
+
+      <main class="flex min-w-0 flex-col gap-6">
+        <nav aria-label="Breadcrumb" class="text-muted-foreground text-sm">
+          <a href="/" class="hover:text-foreground">Home</a>
+          <span aria-hidden="true"> / </span>
+          <a href={`/courses/${courseSlug}/`} class="hover:text-foreground"
+            >{courseName}</a
+          >
+          <span aria-hidden="true"> / </span>
+          <span class="text-foreground">{lesson.data.title}</span>
+        </nav>
+
+        <header class="flex flex-col gap-3">
+          <h1 class="text-3xl font-semibold tracking-tight">
+            {lesson.data.title}
+          </h1>
+          <p class="text-muted-foreground">{lesson.data.summary}</p>
+          <div
+            class="text-muted-foreground flex flex-wrap items-center gap-2 text-sm"
+          >
+            <span>{lesson.data.estimatedTime} min</span>
+            {lesson.data.prerequisites.length > 0 && (
+              <span>
+                · Prerequisites:{" "}
+                {lesson.data.prerequisites
+                  .map((id) => prerequisiteLabel(id, allLessons))
+                  .join(", ")}
+              </span>
+            )}
+          </div>
+        </header>
+
+        <section
+          aria-label="Learning objectives"
+          class="border-border bg-muted/40 flex flex-col gap-2 rounded-lg border p-5"
+        >
+          <h2 class="text-sm font-semibold">Learning objectives</h2>
+          <ul class="list-disc pl-5 text-sm">
+            {lesson.data.learningObjectives.map((objective) => (
+              <li>{objective}</li>
+            ))}
+          </ul>
+        </section>
+
+        <article class="flex flex-col gap-4">
+          <Content />
+        </article>
+
+        <nav
+          aria-label="Lesson navigation"
+          class="border-border mt-4 flex items-stretch justify-between gap-4 border-t pt-6"
+        >
+          {prev ? (
+            <a
+              href={lessonHref(prev)}
+              class="border-border bg-card hover:border-primary/40 flex min-w-0 flex-col gap-1 rounded-lg border p-4"
+            >
+              <span class="text-muted-foreground text-xs">Previous</span>
+              <span class="truncate text-sm font-medium">
+                {prev.data.title}
+              </span>
+            </a>
+          ) : (
+            <span />
+          )}
+          {next ? (
+            <a
+              href={lessonHref(next)}
+              class="border-border bg-card hover:border-primary/40 flex min-w-0 flex-col items-end gap-1 rounded-lg border p-4 text-right"
+            >
+              <span class="text-muted-foreground text-xs">Next</span>
+              <span class="truncate text-sm font-medium">
+                {next.data.title}
+              </span>
+            </a>
+          ) : (
+            <span />
+          )}
+        </nav>
+      </main>
+    </div>
   </body>
 </html>
