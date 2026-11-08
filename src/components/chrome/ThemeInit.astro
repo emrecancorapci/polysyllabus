@@ -1,0 +1,19 @@
+---
+// Sets the theme class before first paint. Inline so it runs immediately,
+// with no bundle round-trip: dark preference is read from localStorage or
+// the OS.
+---
+
+<script is:inline>
+(() => {
+  try {
+    const stored = localStorage.getItem("study-helper:theme");
+    const dark = stored
+      ? stored === "dark"
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.classList.toggle("dark", dark);
+  } catch {
+    /* localStorage unavailable: stay light */
+  }
+})();
+</script>

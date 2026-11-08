@@ -1,0 +1,53 @@
+---
+import { buttonVariants } from "@/components/ui/button";
+---
+
+<button
+  id="theme-toggle"
+  type="button"
+  aria-label="Toggle dark mode"
+  class={buttonVariants({ variant: "ghost", size: "icon-sm" }) +
+    " fixed top-4 right-4 z-10"}
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="size-4 dark:hidden"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="4"></circle>
+    <path
+      d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
+    ></path>
+  </svg>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="hidden size-4 dark:block"
+    aria-hidden="true"
+  >
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+  </svg>
+</button>
+
+<script>
+const button = document.getElementById("theme-toggle");
+button?.addEventListener("click", () => {
+  const dark = document.documentElement.classList.toggle("dark");
+  try {
+    localStorage.setItem("study-helper:theme", dark ? "dark" : "light");
+  } catch {
+    /* persistence unavailable: session-only theme */
+  }
+});
+</script>

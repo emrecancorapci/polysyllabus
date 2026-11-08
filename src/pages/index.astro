@@ -1,5 +1,7 @@
 ---
 import { getCourses } from "@/lib/courses";
+import ThemeInit from "@/components/chrome/ThemeInit.astro";
+import ThemeToggle from "@/components/chrome/ThemeToggle.astro";
 import "@/styles/global.css";
 
 const courses = await getCourses();
@@ -11,8 +13,10 @@ const courses = await getCourses();
     <meta name="viewport" content="width=device-width">
     <meta name="generator" content={Astro.generator}>
     <title>Study Helper</title>
+    <ThemeInit />
   </head>
   <body class="bg-background text-foreground">
+    <ThemeToggle />
     <main class="mx-auto flex w-full max-w-3xl flex-col gap-10 px-6 py-16">
       <section class="flex flex-col items-center gap-4 text-center">
         <h1 class="text-4xl font-semibold tracking-tight">Study Helper</h1>

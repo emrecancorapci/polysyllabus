@@ -17,6 +17,8 @@ import {
   sortByOrder,
 } from "@/lib/courses";
 import "katex/dist/katex.min.css";
+import ThemeInit from "@/components/chrome/ThemeInit.astro";
+import ThemeToggle from "@/components/chrome/ThemeToggle.astro";
 import "@/styles/global.css";
 
 export async function getStaticPaths() {
@@ -59,8 +61,10 @@ const contentComponents = {
     <meta name="viewport" content="width=device-width">
     <meta name="generator" content={Astro.generator}>
     <title>{lesson.data.title} — {courseName} — Study Helper</title>
+    <ThemeInit />
   </head>
   <body class="bg-background text-foreground">
+    <ThemeToggle />
     <div
       class="mx-auto flex w-full max-w-6xl flex-col px-6 py-10 lg:flex-row lg:gap-12"
     >

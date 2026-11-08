@@ -3,6 +3,13 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 
+/* Mermaid diagrams render at build time with a light palette; site dark mode
+   is class-based, so the generated SVG cannot see it — invert the palette
+   instead. Figures avoid this by inlining currentColor SVGs. */
+.dark svg[id^="mermaid-"] {
+  filter: invert(1) hue-rotate(180deg);
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

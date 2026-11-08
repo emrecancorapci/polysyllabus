@@ -1,6 +1,8 @@
 ---
 import { getCourses, lessonHref } from "@/lib/courses";
 import ProgressEnhance from "@/components/chrome/ProgressEnhance.astro";
+import ThemeInit from "@/components/chrome/ThemeInit.astro";
+import ThemeToggle from "@/components/chrome/ThemeToggle.astro";
 import "@/styles/global.css";
 
 export async function getStaticPaths() {
@@ -20,8 +22,10 @@ const { course } = Astro.props;
     <meta name="viewport" content="width=device-width">
     <meta name="generator" content={Astro.generator}>
     <title>{course.title} — Study Helper</title>
+    <ThemeInit />
   </head>
   <body class="bg-background text-foreground">
+    <ThemeToggle />
     <main class="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 py-16">
       <nav aria-label="Breadcrumb" class="text-muted-foreground text-sm">
         <a href="/" class="hover:text-foreground">Home</a>
