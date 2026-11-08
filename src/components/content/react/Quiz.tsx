@@ -1,5 +1,6 @@
 import { cn } from "cn";
 import { useEffect, useState } from "react";
+import MathText from "./MathText";
 import { getQuizResult, loadProgress, recordQuizResult } from "@/lib/progress";
 
 export interface QuizProps {
@@ -37,7 +38,9 @@ export default function Quiz({
 
   return (
     <div className="border-border bg-card flex flex-col gap-3 rounded-lg border p-5">
-      <p className="font-medium">{question}</p>
+      <p className="font-medium">
+        <MathText text={question} />
+      </p>
       <fieldset
         aria-label="Answer options"
         className="flex flex-col gap-2 border-0 p-0"
@@ -65,7 +68,7 @@ export default function Quiz({
                 answered && !isAnswer && !isSelected && "opacity-60",
               )}
             >
-              {option}
+              <MathText text={option} />
             </button>
           );
         })}
@@ -81,7 +84,7 @@ export default function Quiz({
           >
             {correct ? "Correct." : "Not quite."}
           </span>{" "}
-          {explanation}
+          <MathText text={explanation} />
         </p>
       )}
     </div>

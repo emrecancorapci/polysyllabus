@@ -35,7 +35,7 @@ $$
 The SI unit is the **volt** (V), where 1 V = 1 J/C. A voltage is always measured *between* two points, never at a single point.
 
 <Callout variant="tip" title="Think in pairs">
-  Whenever you see "the voltage at a point", ask "relative to what?" — the reference node has to be defined first. You will use this constantly once nodal analysis shows up.
+  Whenever you see "the voltage at a point", ask "relative to what?" — the reference node has to be defined first, because $V = W/Q$ only makes sense between two points. You will use this constantly once nodal analysis shows up.
 </Callout>
 
 ## Resistance and Ohm's law
@@ -91,8 +91,13 @@ A space heater draws 4 A from a 230 V supply. What resistance does it present, a
 ## Check your understanding
 
 <Quiz
-  question="A 9 V battery is connected across a 1.8 kΩ resistor. How much current flows?"
-  options={["5 mA", "50 mA", "500 mA", "2 A"]}
+  question="Which of these follows from Ohm's law for a fixed resistance $R$?"
+  options={[
+    "Doubling $V$ doubles $I$",
+    "Doubling $V$ halves $I$",
+    "$I$ is independent of $V$",
+    "$V = I / R$",
+  ]}
   answer={0}
-  explanation="I = V / R = 9 V / 1800 Ω = 5 mA. The other options correspond to misplacing the decimal point or inverting the ratio."
+  explanation="From $V = I\\,R$ with $R$ fixed, current scales linearly with voltage: $I = V / R$."
 />
