@@ -1,6 +1,6 @@
 # Sprint 1 — Scaffold and Tooling
 
-**Status:** Not started
+**Status:** Done
 
 ## Goal
 
@@ -8,15 +8,15 @@ A runnable, fully tooled Astro project: `pnpm dev`, `pnpm build`, `pnpm lint`, `
 
 ## Backlog
 
-- [ ] S1-1 Initialize the git repo (default branch `main`) with a `.gitignore` for Node/Astro (`node_modules`, `dist`, `.astro`).
-- [ ] S1-2 Scaffold the Astro project with pnpm and strict TypeScript; verify `pnpm dev` and `pnpm build` on the default template.
-- [ ] S1-3 Pin TypeScript to the latest 6.x (not 7.x).
-- [ ] S1-4 Add Tailwind CSS and verify a utility class compiles.
-- [ ] S1-5 Add `@astrojs/react` and `@astrojs/mdx` integrations (React is required for shadcn/ui islands).
-- [ ] S1-6 Configure ESLint (flat config) with typescript-eslint `recommendedTypeChecked` or stricter, `parserOptions.projectService`, and Astro source support.
-- [ ] S1-7 Configure Biome as the only formatter; disable overlapping rules in ESLint or Biome so the two never conflict.
-- [ ] S1-8 Add `@astrojs/check` and wire scripts: `dev`, `build`, `preview`, `lint`, `format`, `typecheck` (`astro check`).
-- [ ] S1-9 Initialize shadcn/ui and add `Button` as a proof-of-life island on the demo page.
+- [x] S1-1 Initialize the git repo (default branch `main`) with a `.gitignore` for Node/Astro (`node_modules`, `dist`, `.astro`).
+- [x] S1-2 Scaffold the Astro project with pnpm and strict TypeScript; verify `pnpm dev` and `pnpm build` on the default template.
+- [x] S1-3 Pin TypeScript to the latest 6.x (not 7.x).
+- [x] S1-4 Add Tailwind CSS and verify a utility class compiles.
+- [x] S1-5 Add `@astrojs/react` and `@astrojs/mdx` integrations (React is required for shadcn/ui islands).
+- [x] S1-6 Configure ESLint (flat config) with typescript-eslint `recommendedTypeChecked` or stricter, `parserOptions.projectService`, and Astro source support.
+- [x] S1-7 Configure Biome as the only formatter; disable overlapping rules in ESLint or Biome so the two never conflict.
+- [x] S1-8 Add `@astrojs/check` and wire scripts: `dev`, `build`, `preview`, `lint`, `format`, `typecheck` (`astro check`).
+- [x] S1-9 Initialize shadcn/ui and add `Button` as a proof-of-life island on the demo page.
 
 ## Acceptance criteria
 
@@ -29,3 +29,9 @@ A runnable, fully tooled Astro project: `pnpm dev`, `pnpm build`, `pnpm lint`, `
 ## Notes
 
 - This is the only sprint allowed to leave the repo briefly non-runnable mid-flight (before the scaffold commit); it must end runnable.
+- Rule ownership split: ESLint (typescript-eslint + eslint-plugin-astro) lints `.js/.ts/.astro` sources type-aware; Biome formats everything and lints everything except `.astro` (its astro lint domain is off). Biome's `tailwind.stylesheet` points at `src/styles/global.css` so Tailwind v4 directives parse and lint rules know the theme.
+- `astro-eslint-parser` warns that it treats `projectService` as `project: true`; harmless.
+
+## Verification log
+
+- 2026-11-08: `pnpm lint`, `pnpm format`, `pnpm typecheck`, `pnpm build` all pass; `tsc --version` → 6.0.3; dev server (`astro dev --background`) serves the demo page with the Button island (`client="load"` confirmed in built HTML).

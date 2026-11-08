@@ -13,7 +13,7 @@ Sprint plans for the study-helper frontend. One file per sprint, per `AGENTS.md`
 
 | Sprint                                              | Focus                            | Status      |
 | --------------------------------------------------- | -------------------------------- | ----------- |
-| [1](./sprint-1-scaffold-and-tooling.md)             | Scaffold and tooling             | Not started |
+| [1](./sprint-1-scaffold-and-tooling.md)             | Scaffold and tooling             | Done        |
 | [2](./sprint-2-content-schema-and-sample-lesson.md) | Content schema and sample lesson | Not started |
 | [3](./sprint-3-math-and-figures.md)                 | Math and figure rendering        | Not started |
 | [4](./sprint-4-layout-and-navigation.md)            | Layout and navigation            | Not started |

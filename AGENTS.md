@@ -4,7 +4,7 @@ Guidance for AI agents (and humans) working on the **frontend** of this project.
 
 ## Project Overview
 
-A personal study tool for electrical and electronics engineering courses. A separate generation pipeline produces course material as MDX files; this frontend renders them as structured, Coursera-style courses. It may become a product later, so keep the content format independent of the frontend and keep generation separate from the site.
+A personal study tool for electrical and electronics engineering courses. A separate generation pipeline produces course material as MDX files; this frontend renders them as structured, Coursera-style courses. It may become a product later, so keep the content format independent of the frontend and keep generation separate from the site. Astro-specific agent notes (for example, dev server background mode) are in `docs/ASTRO.md`.
 
 ## Tech Stack
 
@@ -51,6 +51,7 @@ A personal study tool for electrical and electronics engineering courses. A sepa
 - Use the **latest versions** of packages.
 - **Exception: TypeScript.** Stay on the latest 6.x. TypeScript 7.x does not yet support linters. Revisit when typescript-eslint supports it.
 - When adding a package, install it through the package manager (do not hand-edit versions), and commit it separately from feature code.
+- **pnpm 12** no longer reads the `pnpm` field in `package.json`; overrides live in `pnpm-workspace.yaml`. That file pins `@emnapi/runtime` to 1.11.3 — without the override, `pnpm typecheck` (`astro check`) crashes because pnpm auto-installs an incompatible `2.0.0-beta` peer.
 
 ### Planning (Scrum-like)
 
