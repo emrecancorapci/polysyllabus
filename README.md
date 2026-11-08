@@ -1,43 +1,33 @@
-# Astro Starter Kit: Minimal
+# PolySyllabus
+
+A personal study tool that renders structured, Coursera-style courses from validated MDX content — equations, circuit figures, Bode plots, interactive playgrounds, and quizzes, with progress tracked locally.
+
+Course material is produced by a separate pipeline and organized by taxonomy (`category → subCategory → course`, e.g. `Tech → Electronics → DC Circuits` or `Philosophy → Political Philosophy → Communism`). The content format is independent of this frontend; see [`docs/lesson-authoring.md`](docs/lesson-authoring.md).
+
+## Quick start
 
 ```sh
-pnpm create astro@latest -- --template minimal
+pnpm install
+pnpm exec playwright install chromium   # once, for build-time Mermaid rendering
+pnpm dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+| Command          | Purpose                                                  |
+| ---------------- | -------------------------------------------------------- |
+| `pnpm dev`       | Dev server (use `astro dev --background`)                |
+| `pnpm build`     | Production build (validates all content against schemas) |
+| `pnpm preview`   | Serve the built site                                     |
+| `pnpm lint`      | ESLint (type-aware) + Biome                              |
+| `pnpm format`    | Biome formatting                                         |
+| `pnpm typecheck` | `astro check`                                            |
 
-## 🚀 Project Structure
+## Documentation
 
-Inside of your Astro project, you'll see the following folders and files:
+- [`AGENTS.md`](AGENTS.md) — repo conventions for agents and humans
+- [`docs/lesson-authoring.md`](docs/lesson-authoring.md) — how courses and lessons are authored
+- [`docs/content-components.md`](docs/content-components.md) — the MDX component contract
+- [`docs/plan/`](docs/plan/) — sprint plans and status
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## Stack
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                | Action                                           |
-| :--------------------- | :----------------------------------------------- |
-| `pnpm install`         | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Astro · MDX · React islands · Tailwind CSS · shadcn/ui · KaTeX · Mermaid (build-time) · Observable Plot · mathjs · Zod-validated content
