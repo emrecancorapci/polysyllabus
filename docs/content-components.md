@@ -1,6 +1,6 @@
 # Content Components
 
-The complete set of MDX components lessons may use. This file is the contract for generated content.
+The complete set of MDX components lessons may use. This file is the contract for generated content. For structure, frontmatter, math rules, and verification, see `docs/lesson-authoring.md`.
 
 ## Rules for the generation agent
 

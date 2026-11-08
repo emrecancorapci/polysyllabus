@@ -36,6 +36,7 @@ A personal study tool for electrical and electronics engineering courses. A sepa
 - Lessons may only use the small, documented set of MDX components (callouts, quizzes, collapsible solutions, interactive widgets). Do not add ad-hoc components inside content. The allowed set and its props are documented in `docs/content-components.md`; it is enforced by the components map passed to `<Content />` in the lesson route. Do not import `.astro` components from `.ts` modules — typescript-eslint cannot resolve them; wire them inside `.astro` files.
 - **Display math must use the fenced form**: `$$` on its own line, then the equation, then `$$`. A single-line `$$…$$` parses as _inline_ math (remark-math v6 grammar) and renders cramped fractions in a text line.
 - Prefer code-generated figures (SVG, CircuiTikZ to SVG, Schemdraw, matplotlib) over raster images of circuits.
+- The full authoring guide for producing lessons (structure, frontmatter, math rules, failure modes, verification) is `docs/lesson-authoring.md`; component props are in `docs/content-components.md`.
 
 ## Workflow Rules
 
