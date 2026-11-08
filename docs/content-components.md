@@ -34,7 +34,7 @@ A multiple-choice question with instant feedback. Hydrated on load (React island
 | `answer`      | `number`   | yes      | Index of the correct option (0-based)    |
 | `explanation` | `string`   | yes      | Shown after answering, for both outcomes |
 
-One attempt per page view (Sprint 6 adds persisted scores).
+Results are recorded automatically per lesson (the quiz belongs to the page it renders on) and restored on revisit; see `src/lib/progress.ts`.
 
 ```mdx
 <Quiz

@@ -16,7 +16,7 @@ A personal study tool for electrical and electronics engineering courses. A sepa
 - **KaTeX** (`remark-math` + `rehype-katex`) for equations
 - **Mermaid** for block diagrams and flowcharts
 - **TypeScript** (pinned to the latest 6.x, see Tooling)
-- No global state library. Progress tracking (completed lessons, quiz scores) uses `localStorage`, added only when that feature is built.
+- No global state library. Progress tracking (completed lessons, quiz scores) uses `localStorage` via `src/lib/progress.ts`; static navigation is decorated client-side by `src/components/chrome/ProgressEnhance.astro`, islands and the enhancer sync through a custom window event.
 
 ## Content Structure
 
