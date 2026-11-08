@@ -25,12 +25,14 @@ A personal study tool for electrical and electronics engineering courses. A sepa
   /docs
     /courses
       /<course-slug>
+        course.json
         /<n>-<module-slug>
           doc.mdx
-          fig-*.svg / *.png
+          fig-*.svg / *.png / *.json
 ```
 
 - Each lesson lives in its own folder with its assets beside it.
+- Every course declares its metadata in `course.json`: `title`, optional `summary`, `category`, `subCategory`, and `difficulty` (`beginner`/`intermediate`/`advanced`). A course with lessons but no `course.json` fails the build. The taxonomy reads `category → subCategory → title` (e.g. `Tech → Electronics → DC Circuits`); see `docs/lesson-authoring.md`.
 - Every lesson has frontmatter validated by the collection's Zod schema: title, order, summary, prerequisites, learning objectives, estimated time, and a needs-review flag.
 - Malformed content must fail `astro build`, never render silently broken.
 - Lessons may only use the small, documented set of MDX components (callouts, quizzes, collapsible solutions, interactive widgets). Do not add ad-hoc components inside content. The allowed set and its props are documented in `docs/content-components.md`; it is enforced by the components map passed to `<Content />` in the lesson route. Do not import `.astro` components from `.ts` modules — typescript-eslint cannot resolve them; wire them inside `.astro` files.

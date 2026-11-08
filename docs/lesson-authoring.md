@@ -7,15 +7,41 @@ For agents (and humans) producing course material. The component props live in `
 ## Where material lives
 
 ```
-src/docs/courses/<course-slug>/<n>-<module-slug>/
-  doc.mdx                 # the lesson (required, exact name)
-  fig-*.svg               # figures, beside the lesson
-  *.json                  # plot data, beside the lesson
+src/docs/courses/<course-slug>/
+  course.json              # course metadata (required, exact name)
+  <n>-<module-slug>/
+    doc.mdx                # the lesson (required, exact name)
+    fig-*.svg              # figures, beside the lesson
+    *.json                 # plot data, beside the lesson
 ```
 
 - The folder name is the lesson's identity: `dc-circuits/3-rc-low-pass-filter`. It forms the URL (`/courses/dc-circuits/3-rc-low-pass-filter/`) and the id used by prerequisites and progress storage. Slugs are permanent — do not rename published lessons.
-- `doc.mdx` is the only file the loader picks up; other files are assets.
+- `doc.mdx` is the only lesson file the loader picks up; other files are assets.
 - Courses are implicit: the first path segment groups lessons. All lessons of a course must share the prefix.
+
+## Course metadata
+
+Every course (any folder containing lessons) **must** have a `course.json`, or the build fails. It declares the course taxonomy — the site groups courses by category on the home page:
+
+```json
+{
+  "title": "DC Circuits",
+  "summary": "Foundations of DC circuit analysis.",
+  "category": "Tech",
+  "subCategory": "Electronics",
+  "difficulty": "beginner"
+}
+```
+
+| Field         | Rules                                                                 |
+| ------------- | --------------------------------------------------------------------- |
+| `title`       | Display name; replaces slug humanization                              |
+| `summary`     | Optional one-liner for the home and course pages                      |
+| `category`    | Top-level topic, e.g. `Tech`, `Philosophy`, `Art`                     |
+| `subCategory` | Topic within the category, e.g. `Electronics`, `Political Philosophy` |
+| `difficulty`  | `"beginner"`, `"intermediate"`, or `"advanced"`                       |
+
+The full path reads as the course's place in the taxonomy: `Tech → Electronics → DC Circuits`, or `Philosophy → Political Philosophy → Communism`. Categories and subcategories are free-form strings; use consistent capitalization so grouping and sorting stay clean.
 
 ## Frontmatter
 
@@ -89,16 +115,17 @@ Generated figures (Schemdraw, CircuiTikZ, matplotlib exports) must be readable i
 
 ## Common failure modes
 
-| Build error                                                                                | Cause                                             | Fix                                        |
-| ------------------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------------------ |
-| `[InvalidContentEntryDataError] … <field>`                                                 | Wrong/missing frontmatter type                    | Correct the field                          |
-| `` `X` is not defined ``                                                                   | Unknown component or misspelled name              | Use only the documented set                |
-| `[content] <Figure> … missing alt text / the caption prop / must contain a markdown image` | Figure misuse                                     | `![alt](./fig.svg)` child + `caption` prop |
-| `[DataPlot] invalid data file …: <path in schema>`                                         | JSON schema violation                             | Fix the named fields                       |
-| `[DataPlot] file not found`                                                                | Wrong relative path or file not beside the lesson | Check the path                             |
-| `[Playground] … Undefined symbol <name>`                                                   | Typo'd variable in a formula                      | Fix the formula                            |
-| mermaid `Parse error on line N`                                                            | Invalid diagram syntax                            | Fix the diagram                            |
-| `Expected a closing tag for <br>`                                                          | `<br>` inside JSX children                        | Use `<br/>`                                |
+| Build error                                                                                | Cause                                             | Fix                                                           |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------------------------------------- |
+| `[InvalidContentEntryDataError] … <field>`                                                 | Wrong/missing frontmatter or course.json type     | Correct the field                                             |
+| `[courses] missing course metadata: …`                                                     | A course has lessons but no `course.json`         | Create the file with title, category, subCategory, difficulty |
+| `` `X` is not defined ``                                                                   | Unknown component or misspelled name              | Use only the documented set                                   |
+| `[content] <Figure> … missing alt text / the caption prop / must contain a markdown image` | Figure misuse                                     | `![alt](./fig.svg)` child + `caption` prop                    |
+| `[DataPlot] invalid data file …: <path in schema>`                                         | JSON schema violation                             | Fix the named fields                                          |
+| `[DataPlot] file not found`                                                                | Wrong relative path or file not beside the lesson | Check the path                                                |
+| `[Playground] … Undefined symbol <name>`                                                   | Typo'd variable in a formula                      | Fix the formula                                               |
+| mermaid `Parse error on line N`                                                            | Invalid diagram syntax                            | Fix the diagram                                               |
+| `Expected a closing tag for <br>`                                                          | `<br>` inside JSX children                        | Use `<br/>`                                                   |
 
 ## Verification checklist
 
