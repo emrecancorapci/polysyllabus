@@ -14,9 +14,14 @@ function escapeHtml(text: string): string {
  * so islands that show author-written text render the math with KaTeX
  * themselves. Deterministic output, so SSR and hydration match; plain text
  * is HTML-escaped, math is rendered by KaTeX (which escapes by design).
+ *
+ * MDX does not unescape `\\` in quoted attribute values, so LaTeX written
+ * as `\\text` arrives with doubled backslashes; normalize to single. A
+ * literal `\\` (line break) is meaningless in inline math, so this is safe.
  */
 export default function MathText({ text }: { text: string }): ReactNode {
-  const html = text
+  const normalized = text.replaceAll("\\\\", "\\");
+  const html = normalized
     .split(/(\$[^$]+\$)/g)
     .map((part) =>
       part.startsWith("$") && part.endsWith("$") && part.length > 2

@@ -9,7 +9,7 @@ The complete set of MDX components lessons may use. This file is the contract fo
 - Use exactly the components below, with the documented props.
 - Write Markdown, fenced display math (`$$` on its own lines), and fenced `mermaid` code blocks.
 - Place figures (`.svg`, `.png`) and data files (`.json`) beside the lesson's `doc.mdx` and reference them with relative paths (`./fig-*.svg`, `./data-*.json`).
-- Use `$…$` inline math in Quiz/NumericQuiz question, options, and explanation strings.
+- Use `$…$` inline math in Quiz/NumericQuiz question, options, and explanation strings. **Write LaTeX commands with single backslashes** (`$R = 1\,\text{k}\Omega$`) — MDX does not unescape `\\` in quoted attributes (doubled backslashes are normalized by the renderer, but single is the canonical form).
 
 **You may not:**
 
