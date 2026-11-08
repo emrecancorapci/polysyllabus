@@ -19,4 +19,5 @@ Sprint plans for the study-helper frontend. One file per sprint, per `AGENTS.md`
 | [4](./sprint-4-layout-and-navigation.md)            | Layout and navigation            | Done        |
 | [5](./sprint-5-interactive-mdx-components.md)       | Interactive MDX components       | Done        |
 | [6](./sprint-6-progress-tracking.md)                | Progress tracking                | Done        |
-| [7](./sprint-7-figures-and-charts.md)               | Figures and charts               | In progress |
+| [7](./sprint-7-figures-and-charts.md)               | Figures and charts               | Done        |
+| [8](./sprint-8-backlog.md)                          | Backlog                          | Not started |
