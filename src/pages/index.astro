@@ -1,4 +1,5 @@
 ---
+import { Button } from "@/components/ui/button";
 import "../styles/global.css";
 ---
 
@@ -9,9 +10,20 @@ import "../styles/global.css";
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width">
     <meta name="generator" content={Astro.generator}>
-    <title>Astro</title>
+    <title>Study Helper</title>
   </head>
-  <body>
-    <h1>Astro</h1>
+  <body
+    class="bg-background flex min-h-screen flex-col items-center justify-center"
+  >
+    <main class="flex flex-col items-center gap-4 px-6 text-center">
+      <h1 class="text-3xl font-semibold tracking-tight">Study Helper</h1>
+      <p class="text-muted-foreground max-w-md">
+        Structured courses for electrical and electronics engineering. Content
+        is on the way.
+      </p>
+      <Button client:load onClick={() => alert("React islands work!")}>
+        Get started
+      </Button>
+    </main>
   </body>
 </html>
