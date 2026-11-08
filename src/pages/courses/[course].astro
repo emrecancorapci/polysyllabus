@@ -34,6 +34,22 @@ const { course } = Astro.props;
       </nav>
       <header class="flex flex-col gap-2">
         <h1 class="text-3xl font-semibold tracking-tight">{course.title}</h1>
+        <div
+          class="text-muted-foreground flex flex-wrap items-center gap-2 text-sm"
+        >
+          <span>
+            {course.category} <span aria-hidden="true">→</span>
+            {course.subCategory}
+          </span>
+          <span
+            class="bg-muted text-muted-foreground rounded-full px-2 py-0.5 text-xs capitalize"
+          >
+            {course.difficulty}
+          </span>
+        </div>
+        {course.summary && (
+          <p class="text-muted-foreground">{course.summary}</p>
+        )}
         <p class="text-muted-foreground">
           {course.lessons.length}
           lesson{course.lessons.length === 1 ? "" : "s"}

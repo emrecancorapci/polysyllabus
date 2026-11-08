@@ -1,23 +1,18 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 
 export type Lesson = CollectionEntry<"lessons">;
+export type CourseMeta = CollectionEntry<"courses">;
+
+export type Difficulty = "beginner" | "intermediate" | "advanced";
 
 export interface Course {
   slug: string;
   title: string;
+  summary?: string;
+  category: string;
+  subCategory: string;
+  difficulty: Difficulty;
   lessons: Lesson[];
-}
-
-/** "dc-circuits" -> "DC Circuits" (DC/AC kept uppercase for an EE audience). */
-export function courseTitle(slug: string): string {
-  return slug
-    .split("-")
-    .map((word) =>
-      /^(dc|ac)$/.test(word)
-        ? word.toUpperCase()
-        : word.charAt(0).toUpperCase() + word.slice(1),
-    )
-    .join(" ");
 }
 
 export function lessonHref(lesson: Lesson): string {
@@ -30,19 +25,43 @@ export function sortByOrder(lessons: Lesson[]): Lesson[] {
 }
 
 export async function getCourses(): Promise<Course[]> {
-  const lessons = await getCollection("lessons");
-  const byCourse = new Map<string, Lesson[]>();
+  const [lessons, metadata] = await Promise.all([
+    getCollection("lessons"),
+    getCollection("courses"),
+  ]);
+
+  const metadataBySlug = new Map(metadata.map((entry) => [entry.id, entry]));
+  const lessonsByCourse = new Map<string, Lesson[]>();
   for (const lesson of lessons) {
     const slug = lesson.id.split("/")[0];
-    byCourse.set(slug, [...(byCourse.get(slug) ?? []), lesson]);
+    lessonsByCourse.set(slug, [...(lessonsByCourse.get(slug) ?? []), lesson]);
   }
-  return [...byCourse.entries()]
-    .map(([slug, list]) => ({
+
+  const courses: Course[] = [];
+  for (const [slug, courseLessons] of lessonsByCourse) {
+    const meta = metadataBySlug.get(slug);
+    if (meta === undefined) {
+      throw new Error(
+        `[courses] missing course metadata: create src/docs/courses/${slug}/course.json with title, category, subCategory, and difficulty`,
+      );
+    }
+    courses.push({
       slug,
-      title: courseTitle(slug),
-      lessons: sortByOrder(list),
-    }))
-    .sort((a, b) => a.slug.localeCompare(b.slug));
+      title: meta.data.title,
+      summary: meta.data.summary,
+      category: meta.data.category,
+      subCategory: meta.data.subCategory,
+      difficulty: meta.data.difficulty,
+      lessons: sortByOrder(courseLessons),
+    });
+  }
+
+  return courses.sort(
+    (a, b) =>
+      a.category.localeCompare(b.category) ||
+      a.subCategory.localeCompare(b.subCategory) ||
+      a.title.localeCompare(b.title),
+  );
 }
 
 export async function getCourse(slug: string): Promise<Course | undefined> {

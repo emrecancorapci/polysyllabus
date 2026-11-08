@@ -5,6 +5,7 @@ import ThemeToggle from "@/components/chrome/ThemeToggle.astro";
 import "@/styles/global.css";
 
 const courses = await getCourses();
+const categories = [...new Set(courses.map((course) => course.category))];
 ---
 
 <html lang="en">
@@ -24,26 +25,43 @@ const courses = await getCourses();
           Structured courses for electrical and electronics engineering.
         </p>
       </section>
-      <section aria-label="Courses" class="flex flex-col gap-4">
-        <h2 class="text-lg font-semibold">Courses</h2>
-        {courses.map((course) => (
-          <a
-            href={`/courses/${course.slug}/`}
-            class="border-border bg-card hover:border-primary/40 flex flex-col gap-1 rounded-lg border p-5 transition-colors"
-          >
-            <span class="text-lg font-medium">{course.title}</span>
-            <span class="text-muted-foreground text-sm">
-              {course.lessons.length} lesson
-              {course.lessons.length === 1 ? "" : "s"} ·{" "}
-              {course.lessons.reduce(
-                (total, lesson) => total + lesson.data.estimatedTime,
-                0,
-              )}{" "}
-              min
-            </span>
-          </a>
-        ))}
-      </section>
+      {categories.map((category) => (
+        <section aria-label={category} class="flex flex-col gap-4">
+          <h2 class="text-lg font-semibold">{category}</h2>
+          {courses
+            .filter((course) => course.category === category)
+            .map((course) => (
+              <a
+                href={`/courses/${course.slug}/`}
+                class="border-border bg-card hover:border-primary/40 flex flex-col gap-1 rounded-lg border p-5 transition-colors"
+              >
+                <span class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                  <span class="text-lg font-medium">{course.title}</span>
+                  <span class="text-muted-foreground text-sm">
+                    {course.subCategory}
+                  </span>
+                  <span class="bg-muted text-muted-foreground ml-auto rounded-full px-2 py-0.5 text-xs capitalize">
+                    {course.difficulty}
+                  </span>
+                </span>
+                {course.summary && (
+                  <span class="text-muted-foreground text-sm">
+                    {course.summary}
+                  </span>
+                )}
+                <span class="text-muted-foreground text-sm">
+                  {course.lessons.length} lesson
+                  {course.lessons.length === 1 ? "" : "s"} ·{" "}
+                  {course.lessons.reduce(
+                    (total, lesson) => total + lesson.data.estimatedTime,
+                    0,
+                  )}{" "}
+                  min
+                </span>
+              </a>
+            ))}
+        </section>
+      ))}
     </main>
   </body>
 </html>

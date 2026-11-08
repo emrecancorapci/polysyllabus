@@ -11,7 +11,7 @@ import LessonCompleteButton from "@/components/chrome/LessonCompleteButton.astro
 import MathText from "@/components/content/react/MathText";
 import ProgressEnhance from "@/components/chrome/ProgressEnhance.astro";
 import {
-  courseTitle,
+  getCourses,
   getPrevNext,
   lessonHref,
   sortByOrder,
@@ -41,7 +41,8 @@ const courseLessons = sortByOrder(
   allLessons.filter((entry) => entry.id.split("/")[0] === courseSlug),
 );
 const { prev, next } = getPrevNext(courseLessons, lesson.id);
-const courseName = courseTitle(courseSlug);
+const course = (await getCourses()).find((entry) => entry.slug === courseSlug);
+const courseName = course?.title ?? courseSlug;
 
 // The complete set of MDX components lessons may use (docs/content-components.md).
 // Anything outside this map fails the build, which enforces the contract.
