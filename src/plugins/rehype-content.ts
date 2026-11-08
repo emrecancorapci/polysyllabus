@@ -152,6 +152,24 @@ export function rehypeContent() {
           transformFigure(child);
         } else if (
           child.type === "mdxJsxFlowElement" &&
+          child.name === "DataPlot"
+        ) {
+          const src = asText(attribute(child, "src")).trim();
+          if (src === "") {
+            fail(
+              `<DataPlot> in ${file.path ?? "unknown file"} requires src="./data.json"`,
+            );
+          }
+          child.attributes = [
+            ...(child.attributes ?? []).filter((attr) => attr.name !== "src"),
+            {
+              type: "mdxJsxAttribute",
+              name: "src",
+              value: resolveSrc(src, file),
+            },
+          ];
+        } else if (
+          child.type === "mdxJsxFlowElement" &&
           child.name === "Mermaid"
         ) {
           const diagram = dedent(

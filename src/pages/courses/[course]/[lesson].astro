@@ -2,6 +2,7 @@
 import { getCollection, render } from "astro:content";
 import Callout from "@/components/content/Callout.astro";
 import CollapsibleSolution from "@/components/content/CollapsibleSolution.astro";
+import DataPlot from "@/components/content/DataPlot.astro";
 import Figure from "@/components/content/Figure.astro";
 import Quiz from "@/components/content/Quiz.astro";
 import LessonCompleteButton from "@/components/chrome/LessonCompleteButton.astro";
@@ -39,7 +40,13 @@ const courseName = courseTitle(courseSlug);
 
 // The complete set of MDX components lessons may use (docs/content-components.md).
 // Anything outside this map fails the build, which enforces the contract.
-const contentComponents = { Callout, Quiz, CollapsibleSolution, Figure };
+const contentComponents = {
+  Callout,
+  Quiz,
+  CollapsibleSolution,
+  Figure,
+  DataPlot,
+};
 ---
 
 <html lang="en">

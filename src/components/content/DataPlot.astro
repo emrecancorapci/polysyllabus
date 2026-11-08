@@ -1,0 +1,45 @@
+---
+import BodePlot from "./react/BodePlot";
+import DataPlotIsland from "./react/DataPlot";
+import { dataPlotSchema, describeIssues } from "@/lib/plot-schema";
+
+/**
+ * Renders a validated data file beside the lesson:
+ *
+ *   <DataPlot src="./response.json" />
+ *
+ * The rehype plugin resolves `src` to a repo-absolute path. The JSON is
+ * validated here at build time, so invalid data fails `astro build`.
+ */
+
+const dataFiles = import.meta.glob("/src/docs/courses/**/*.json", {
+  eager: true,
+}) as Record<string, unknown>;
+
+interface Props {
+  /** Repo-absolute path, injected by the rehype plugin. */
+  src: string;
+}
+
+const { src } = Astro.props;
+
+const raw = dataFiles[src];
+if (raw === undefined) {
+  throw new Error(`[DataPlot] file not found beside the lesson: ${src}`);
+}
+
+const parsed = dataPlotSchema.safeParse(raw);
+if (!parsed.success) {
+  throw new Error(
+    `[DataPlot] invalid data file ${src}: ${describeIssues(parsed.error)}`,
+  );
+}
+
+const data = parsed.data;
+---
+
+{data.type === "bode" ? (
+  <BodePlot data={data} client:visible />
+) : (
+  <DataPlotIsland data={data} client:visible />
+)}

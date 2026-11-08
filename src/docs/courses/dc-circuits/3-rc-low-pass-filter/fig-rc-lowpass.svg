@@ -1,0 +1,58 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 640 240"
+  role="img"
+  aria-labelledby="fig-title fig-desc"
+>
+  <title id="fig-title">RC low-pass filter</title>
+  <desc id="fig-desc">
+    A voltage source drives a resistor in series with a capacitor; the output is
+    taken across the capacitor.
+  </desc>
+  <defs>
+    <marker
+      id="arrow"
+      viewBox="0 0 10 10"
+      refX="9"
+      refY="5"
+      markerWidth="7"
+      markerHeight="7"
+      orient="auto-start-reverse"
+    >
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="currentColor" />
+    </marker>
+  </defs>
+  <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+    <!-- top wire, interrupted by the resistor -->
+    <path d="M 80 60 H 200" />
+    <path d="M 360 60 H 470" />
+    <!-- right wire down to the output node -->
+    <path d="M 470 60 V 180 H 80 V 130" />
+    <path d="M 80 110 V 60" />
+    <!-- resistor -->
+    <rect x="200" y="45" width="160" height="30" />
+    <!-- source plates -->
+    <path d="M 55 110 H 105" />
+    <path d="M 68 130 H 92" stroke-width="5" />
+    <!-- capacitor: two plates on the right wire -->
+    <path d="M 458 130 H 482" />
+    <path d="M 458 150 H 482" />
+    <path d="M 470 130 V 180" />
+    <!-- current arrow -->
+    <path d="M 150 40 H 100" marker-end="url(#arrow)" stroke-width="2" />
+  </g>
+  <g
+    font-family="sans-serif"
+    font-size="22"
+    fill="currentColor"
+    text-anchor="middle"
+  >
+    <text x="280" y="30">R</text>
+    <text x="155" y="32">I</text>
+    <text x="36" y="126">V</text>
+    <text x="122" y="126">+</text>
+    <text x="122" y="158">−</text>
+    <text x="510" y="140">C</text>
+    <text x="470" y="216">V_out</text>
+  </g>
+</svg>

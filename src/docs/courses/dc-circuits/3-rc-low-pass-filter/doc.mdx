@@ -1,0 +1,60 @@
+---
+title: "The RC Low-Pass Filter"
+order: 3
+summary: "Combine a resistor and a capacitor into a frequency-dependent divider, and read its behavior from a Bode plot."
+prerequisites: ["dc-circuits/1-ohms-law", "dc-circuits/2-kirchhoffs-laws"]
+learningObjectives:
+  - "Explain why the RC divider attenuates high frequencies but passes low ones"
+  - "Compute the cutoff frequency $f_c = 1/(2\\pi R C)$"
+  - "Read magnitude and phase from a Bode plot"
+  - "Predict the step response from the time constant $\\tau = RC$"
+estimatedTime: 30
+needsReview: false
+---
+
+Resistors obey Ohm's law at every frequency. Capacitors do not — their impedance falls as frequency rises. Put the two in series and you get a **frequency-dependent voltage divider**: the RC low-pass filter.
+
+## The circuit
+
+<Figure caption="A series RC network driven by a source; the output is taken across the capacitor.">
+  ![A voltage source drives a resistor in series with a capacitor, output across the capacitor](./fig-rc-lowpass.svg)
+</Figure>
+
+At low frequencies the capacitor barely conducts, almost no voltage drops across $R$, and $V_{out} \approx V_{in}$. At high frequencies the capacitor is nearly a short, so $V_{out}$ collapses toward zero. The boundary is the **cutoff frequency**:
+
+$$
+f_c = \frac{1}{2 \pi R C}
+$$
+
+With $R = 1\,\text{k}\Omega$ and $C = 100\,\text{nF}$, $f_c \approx 1591.5\,\text{Hz}$.
+
+## Step response
+
+Switch the source on and the capacitor charges through the resistor with time constant $\tau = RC$. For the values above, $\tau = 0.1\,\text{ms}$ — after roughly $5\tau$ the capacitor is essentially fully charged.
+
+<DataPlot src="./charging-curve.json" />
+
+<Callout variant="note" title="Five time constants">
+  The $5\tau$ rule of thumb is where the exponential reaches $99.3\%$ of its final value — "close enough" by engineering standards.
+</Callout>
+
+## Frequency response
+
+A Bode plot shows the same story in the frequency domain: gain flat at low frequency, then rolling off at $-20\,\text{dB/decade}$ past $f_c$, with the phase swinging from $0°$ to $-90°$. Both panels share the same logarithmic frequency axis, so features line up vertically.
+
+<DataPlot src="./bode.json" />
+
+## Where the cutoff comes from
+
+<Mermaid>
+  flowchart LR
+    A["Impedances form a divider"] --> B["Capacitive divider<br/>V_out / V_in = Z_C / (R + Z_C)"]
+    B --> C["Magnitude drops to 1/sqrt(2)<br/>at f_c = 1 / (2 pi R C)"]
+    C --> D["Below f_c: pass<br/>Above f_c: roll off at -20 dB/decade"]
+</Mermaid>
+
+## Key takeaways
+
+- An RC low-pass passes low frequencies and attenuates high ones; $f_c = 1/(2\pi R C)$.
+- In time, the same circuit charges with $\tau = RC$ — the two views are one circuit.
+- The Bode magnitude and phase panels share the frequency axis by construction.
