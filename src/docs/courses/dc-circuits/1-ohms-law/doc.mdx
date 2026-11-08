@@ -1,0 +1,62 @@
+---
+title: "Ohm's Law, Voltage, and Current"
+order: 1
+summary: "Build the vocabulary of circuit analysis — charge, current, voltage, and resistance — and connect them through Ohm's law."
+prerequisites: []
+learningObjectives:
+  - "Define electric current, voltage, and resistance and give their SI units"
+  - "State Ohm's law and identify which quantities it relates"
+  - "Compute any one of V, I, or R given the other two"
+  - "Read a simple circuit diagram and label its sources and loads"
+estimatedTime: 20
+needsReview: false
+---
+
+Circuit analysis rests on three quantities — **voltage**, **current**, and **resistance** — and one law that ties them together. This lesson defines each quantity and shows how to move between them.
+
+## Charge and current
+
+Electric current is the rate of flow of electric charge. If a net charge `ΔQ` passes through a cross-section of wire in time `Δt`, the current is:
+
+`I = ΔQ / Δt`
+
+The SI unit of current is the **ampere** (A), where 1 A = 1 C/s. In metal wires the carriers are conduction electrons, but by convention current is treated as the flow of positive charge.
+
+## Voltage
+
+**Voltage** (potential difference) is the energy transferred per unit charge moving between two points:
+
+`V = W / Q`
+
+The SI unit is the **volt** (V), where 1 V = 1 J/C. A voltage is always measured *between* two points, never at a single point.
+
+## Resistance and Ohm's law
+
+**Resistance** measures how strongly a material opposes current flow; its SI unit is the **ohm** (Ω). For many materials over a wide range, the current through the material is proportional to the voltage across it:
+
+`V = I · R`
+
+This is **Ohm's law**. Materials that obey it are called *ohmic*.
+
+## The simplest circuit
+
+The figure below shows the simplest complete circuit: a voltage source `V` driving a current `I` around a single loop through a resistor `R`.
+
+![A voltage source V drives a current I clockwise around a loop through a resistor R](./fig-ohms-law-circuit.svg)
+
+The source supplies energy; the load converts it. The same current flows through every element in the loop because charge is conserved.
+
+## Worked example
+
+A 12 V battery is connected across a 220 Ω resistor. What current flows, and what power does the resistor dissipate?
+
+1. Current, from Ohm's law: `I = V / R = 12 V / 220 Ω ≈ 54.5 mA`
+2. Power: `P = V · I = 12 V × 0.0545 A ≈ 0.65 W`
+
+So a standard 0.25 W resistor would overheat here — component power ratings matter as much as resistance values.
+
+## Key takeaways
+
+- Current `I` (A) is charge flow per unit time; voltage `V` (V) is energy per unit charge; resistance `R` (Ω) opposes current.
+- Ohm's law, `V = I · R`, links the three for ohmic materials.
+- Always pair a resistance value with its power rating when choosing components.
