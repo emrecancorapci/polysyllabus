@@ -1,0 +1,35 @@
+---
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { FlaskConical, Info, Lightbulb, TriangleAlert } from "lucide-react";
+
+interface Props {
+  variant?: "note" | "warning" | "tip" | "example";
+  title?: string;
+}
+
+const { variant = "note", title } = Astro.props;
+
+const icons = {
+  note: Info,
+  warning: TriangleAlert,
+  tip: Lightbulb,
+  example: FlaskConical,
+} as const;
+const defaultTitles = {
+  note: "Note",
+  warning: "Warning",
+  tip: "Tip",
+  example: "Example",
+} as const;
+
+const Icon = icons[variant];
+---
+
+<Alert
+  variant={variant === "warning" ? "destructive" : "default"}
+  role={variant === "warning" ? "alert" : "note"}
+>
+  <Icon />
+  <AlertTitle>{title ?? defaultTitles[variant]}</AlertTitle>
+  <AlertDescription><slot /></AlertDescription>
+</Alert>

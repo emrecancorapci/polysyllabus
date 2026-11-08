@@ -1,0 +1,33 @@
+---
+interface Props {
+  title?: string;
+}
+
+const { title = "Solution" } = Astro.props;
+---
+
+<details class="border-border bg-card group flex flex-col rounded-lg border">
+  <summary
+    class="hover:bg-muted/50 flex cursor-pointer items-center justify-between gap-2 px-4 py-3 text-sm font-medium select-none"
+  >
+    {title}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="text-muted-foreground size-4 transition-transform group-open:rotate-180"
+      aria-hidden="true"
+    >
+      <path d="m6 9 6 6 6-6"></path>
+    </svg>
+  </summary>
+  <div
+    class="border-border/60 text-muted-foreground border-t px-4 py-3 text-sm"
+  >
+    <slot />
+  </div>
+</details>

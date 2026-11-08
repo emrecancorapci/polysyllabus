@@ -1,5 +1,8 @@
 ---
 import { getCollection, render } from "astro:content";
+import Callout from "@/components/content/Callout.astro";
+import CollapsibleSolution from "@/components/content/CollapsibleSolution.astro";
+import Quiz from "@/components/content/Quiz.astro";
 import {
   courseTitle,
   getPrevNext,
@@ -30,6 +33,10 @@ const courseLessons = sortByOrder(
 );
 const { prev, next } = getPrevNext(courseLessons, lesson.id);
 const courseName = courseTitle(courseSlug);
+
+// The complete set of MDX components lessons may use (docs/content-components.md).
+// Anything outside this map fails the build, which enforces the contract.
+const contentComponents = { Callout, Quiz, CollapsibleSolution };
 ---
 
 <html lang="en">
@@ -123,7 +130,7 @@ const courseName = courseTitle(courseSlug);
         </section>
 
         <article class="flex flex-col gap-4">
-          <Content />
+          <Content components={contentComponents} />
         </article>
 
         <nav

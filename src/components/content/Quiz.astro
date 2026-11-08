@@ -1,0 +1,7 @@
+---
+import QuizIsland, { type QuizProps } from "./react/Quiz";
+
+const props = Astro.props as QuizProps;
+---
+
+<QuizIsland {...props} client:load />
