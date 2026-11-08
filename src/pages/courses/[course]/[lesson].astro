@@ -3,6 +3,8 @@ import { getCollection, render } from "astro:content";
 import Callout from "@/components/content/Callout.astro";
 import CollapsibleSolution from "@/components/content/CollapsibleSolution.astro";
 import Quiz from "@/components/content/Quiz.astro";
+import LessonCompleteButton from "@/components/chrome/LessonCompleteButton.astro";
+import ProgressEnhance from "@/components/chrome/ProgressEnhance.astro";
 import {
   courseTitle,
   getPrevNext,
@@ -69,6 +71,7 @@ const contentComponents = { Callout, Quiz, CollapsibleSolution };
                   <a
                     href={lessonHref(entry)}
                     aria-current={current ? "page" : undefined}
+                    data-lesson-id={entry.id}
                     class:list={[
                       "flex items-baseline gap-2 rounded-md px-2 py-1.5 text-sm",
                       current
@@ -78,6 +81,11 @@ const contentComponents = { Callout, Quiz, CollapsibleSolution };
                   >
                     <span class="tabular-nums">{entry.data.order}.</span>
                     <span>{entry.data.title}</span>
+                    <span
+                      data-check-slot
+                      class="text-primary ml-auto"
+                      aria-hidden="true"
+                    />
                   </a>
                 </li>
               );
@@ -114,6 +122,7 @@ const contentComponents = { Callout, Quiz, CollapsibleSolution };
                   .join(", ")}
               </span>
             )}
+            <LessonCompleteButton lessonId={lesson.id} />
           </div>
         </header>
 
@@ -166,5 +175,6 @@ const contentComponents = { Callout, Quiz, CollapsibleSolution };
         </nav>
       </main>
     </div>
+    <ProgressEnhance />
   </body>
 </html>

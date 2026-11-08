@@ -1,5 +1,6 @@
 ---
 import { getCourses, lessonHref } from "@/lib/courses";
+import ProgressEnhance from "@/components/chrome/ProgressEnhance.astro";
 import "@/styles/global.css";
 
 export async function getStaticPaths() {
@@ -39,12 +40,32 @@ const { course } = Astro.props;
           )}
           min total
         </p>
+        <div class="flex flex-col gap-1">
+          <progress
+            data-course-progress
+            data-course={course.slug}
+            data-total={course.lessons.length}
+            class="h-1.5 w-full max-w-xs"
+            max={course.lessons.length}
+            value={0}
+          >
+            {course.lessons.length}
+            lessons
+          </progress>
+          <span
+            data-course-progress-label
+            class="text-muted-foreground text-xs"
+          >
+            0 of {course.lessons.length} lessons completed
+          </span>
+        </div>
       </header>
       <ol class="flex flex-col gap-3">
         {course.lessons.map((lesson) => (
           <li>
             <a
               href={lessonHref(lesson)}
+              data-lesson-id={lesson.id}
               class="border-border bg-card hover:border-primary/40 flex flex-col gap-1 rounded-lg border p-5 transition-colors"
             >
               <span class="flex items-baseline gap-2">
@@ -52,7 +73,13 @@ const { course } = Astro.props;
                   {lesson.data.order}.
                 </span>
                 <span class="text-lg font-medium">{lesson.data.title}</span>
+                <span
+                  data-check-slot
+                  class="text-primary text-sm"
+                  aria-hidden="true"
+                />
                 <span class="text-muted-foreground ml-auto text-sm whitespace-nowrap">
+                  <span data-quiz-slot class="text-xs" />
                   {lesson.data.estimatedTime} min
                 </span>
               </span>
@@ -64,5 +91,6 @@ const { course } = Astro.props;
         ))}
       </ol>
     </main>
+    <ProgressEnhance />
   </body>
 </html>

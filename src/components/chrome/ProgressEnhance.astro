@@ -1,0 +1,42 @@
+<!--
+  Decorates server-rendered navigation with progress from localStorage.
+  Static markup stays the source of truth; this only adds completion marks,
+  quiz status, and the course progress value. Listens for PROGRESS_EVENT so
+  islands (complete button, quiz) refresh it live.
+-->
+<script>
+import { loadProgress, PROGRESS_EVENT } from "@/lib/progress";
+
+function decorate(): void {
+  const data = loadProgress();
+
+  for (const el of document.querySelectorAll<HTMLElement>("[data-lesson-id]")) {
+    const id = el.dataset.lessonId;
+    if (id === undefined) continue;
+    const check = el.querySelector<HTMLElement>("[data-check-slot]");
+    if (check) check.textContent = data.completed.includes(id) ? "✓" : "";
+    const quizSlot = el.querySelector<HTMLElement>("[data-quiz-slot]");
+    if (quizSlot) {
+      const quiz = data.quiz[id];
+      quizSlot.textContent = quiz ? (quiz.correct ? "quiz ✓" : "quiz ✗") : "";
+    }
+  }
+
+  const bar = document.querySelector<HTMLElement>("[data-course-progress]");
+  if (bar) {
+    const course = bar.dataset.course ?? "";
+    const total = Number(bar.dataset.total ?? 0);
+    const done = data.completed.filter((id) =>
+      id.startsWith(`${course}/`),
+    ).length;
+    bar.setAttribute("value", String(done));
+    const label = document.querySelector<HTMLElement>(
+      "[data-course-progress-label]",
+    );
+    if (label) label.textContent = `${done} of ${total} lessons completed`;
+  }
+}
+
+decorate();
+window.addEventListener(PROGRESS_EVENT, decorate);
+</script>
