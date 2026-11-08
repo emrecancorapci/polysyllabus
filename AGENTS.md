@@ -34,6 +34,7 @@ A personal study tool for electrical and electronics engineering courses. A sepa
 - Every lesson has frontmatter validated by the collection's Zod schema: title, order, summary, prerequisites, learning objectives, estimated time, and a needs-review flag.
 - Malformed content must fail `astro build`, never render silently broken.
 - Lessons may only use the small, documented set of MDX components (callouts, quizzes, collapsible solutions, interactive widgets). Do not add ad-hoc components inside content.
+- **Display math must use the fenced form**: `$$` on its own line, then the equation, then `$$`. A single-line `$$…$$` parses as _inline_ math (remark-math v6 grammar) and renders cramped fractions in a text line.
 - Prefer code-generated figures (SVG, CircuiTikZ to SVG, Schemdraw, matplotlib) over raster images of circuits.
 
 ## Workflow Rules
