@@ -55,6 +55,9 @@
       }
     }
   ],
+  "tailwind": {
+    "stylesheet": "./src/styles/global.css"
+  },
   "html": {
     "experimentalFullSupportEnabled": true,
     "formatter": {
