@@ -14,7 +14,7 @@ Sprint plans for the study-helper frontend. One file per sprint, per `AGENTS.md`
 | Sprint                                              | Focus                            | Status      |
 | --------------------------------------------------- | -------------------------------- | ----------- |
 | [1](./sprint-1-scaffold-and-tooling.md)             | Scaffold and tooling             | Done        |
-| [2](./sprint-2-content-schema-and-sample-lesson.md) | Content schema and sample lesson | Not started |
+| [2](./sprint-2-content-schema-and-sample-lesson.md) | Content schema and sample lesson | Done        |
 | [3](./sprint-3-math-and-figures.md)                 | Math and figure rendering        | Not started |
 | [4](./sprint-4-layout-and-navigation.md)            | Layout and navigation            | Not started |
 | [5](./sprint-5-interactive-mdx-components.md)       | Interactive MDX components       | Not started |
