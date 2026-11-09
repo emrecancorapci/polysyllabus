@@ -4,7 +4,7 @@ Guidance for AI agents and humans working on the **generation pipeline**. The fr
 
 ## Purpose
 
-Turn a topic, a set of source files, or both into well structured, verified course material for electrical and electronics engineering. Correctness matters more than speed, because the person will study for exams from the output.
+Turn a topic, a set of source files, or both into well structured, verified course material for electrical and electronics engineering. Correctness matters more than speed, because the person will study for exams from the output. A course is made of lessons of 20 to 40 minutes, and every lesson is split into parts of at most 10 minutes.
 
 ## Layout
 
@@ -25,11 +25,14 @@ Turn a topic, a set of source files, or both into well structured, verified cour
     extracted/         text, figures and OCR output per source
     outline.json       approved outline
     /<lesson-slug>
-      doc.mdx
-      claims.json
+      lesson.json      lesson title, order and summary
+      /<p>-<part-slug>
+        doc.mdx        one part, at most 10 minutes
+        fig-*.svg      figures for this part
+        *.json         plot data for this part
+      claims.json      executable claims for every part of the lesson
       citations.json     source id and pages per section (the frontend has no sources field)
       figures.md       figure briefs written by the writer
-      fig-*.svg        figures
       review-math.md
       review-facts.md
       review-figures.md

@@ -169,7 +169,7 @@ def main() -> int:
 
     folder: Path = args.lesson
     claims_path = folder / "claims.json"
-    doc_path = folder / "doc.mdx"
+    doc_paths = sorted(folder.rglob("doc.mdx"))
 
     if not claims_path.is_file():
         print(f"FAIL: {claims_path} does not exist. Every lesson needs a claims.json.")
@@ -190,9 +190,14 @@ def main() -> int:
     if data.get("lesson") and data["lesson"] != folder.resolve().name:
         warnings.append(f"claims.json says lesson '{data['lesson']}' but the folder is '{folder.resolve().name}'")
 
-    doc_text = normalize_space(doc_path.read_text(encoding="utf-8")) if doc_path.is_file() else None
+    # A lesson contains one or more part folders, each with its own doc.mdx.
+    doc_text = (
+        normalize_space(" ".join(path.read_text(encoding="utf-8") for path in doc_paths))
+        if doc_paths
+        else None
+    )
     if doc_text is None:
-        warnings.append("doc.mdx not found, so claim texts were not looked up")
+        warnings.append("no doc.mdx found, so claim texts were not looked up")
 
     claims = data["claims"]
     if not claims:

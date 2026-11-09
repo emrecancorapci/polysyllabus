@@ -1,0 +1,24 @@
+---
+title: "Why High Frequencies Are Attenuated"
+order: 2
+summary: "The capacitor's falling impedance explains the roll off."
+prerequisites: ["sample-course/1-rc-low-pass-filter/1-the-rc-divider"]
+learningObjectives:
+  - "Explain why high frequencies are attenuated"
+estimatedTime: 4
+needsReview: false
+---
+
+## The capacitor at high frequency
+
+A capacitor has a lower impedance at higher frequencies. At high frequencies it acts almost like a short circuit, so very little voltage appears across it.
+
+## Check your understanding
+
+<NumericQuiz
+  question="With $R = 2.2\,\text{k}\Omega$ and $C = 47\,\text{nF}$, what is the cutoff frequency $f_c$?"
+  answer={1539.2}
+  tolerance={{ rel: 0.02 }}
+  unit="Hz"
+  explanation="Use $f_c = 1/(2\pi RC)$ with $RC = 2200 \times 47 \times 10^{-9}\,\text{s}$."
+/>
