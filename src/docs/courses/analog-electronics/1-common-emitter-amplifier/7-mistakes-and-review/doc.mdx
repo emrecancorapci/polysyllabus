@@ -1,0 +1,28 @@
+---
+title: "Common Mistakes and Review"
+order: 7
+summary: "The traps that cost points on exams, and the lesson in four sentences."
+prerequisites: ["analog-electronics/1-common-emitter-amplifier/6-unbypassed-gain"]
+learningObjectives:
+  - "Avoid the common mistakes around biasing and gain"
+  - "Recall both gain formulas and when each applies"
+estimatedTime: 4
+needsReview: true
+---
+
+## Common mistakes
+
+Watch for these on exams.
+
+- **Forgetting the junction drop.** The emitter is 0.7 V below the base, not at the base voltage.
+- **Mixing up the divider legs.** The base voltage is the fraction across $R_2$, the lower leg.
+- **Losing the minus sign.** The output moves opposite to the input, a 180 degree shift.
+- **Trusting the divider too much.** If the resistors are too large, base current pulls the base voltage down.
+- **Confusing the two grounds.** $C_E$ grounds the emitter for signals only. The bias current still flows through $R_E$.
+
+## The lesson in short
+
+- The emitter is the terminal shared by the input and output loops, which names the stage.
+- A divider plus an emitter resistor sets a bias point that barely depends on which transistor you solder in.
+- With the emitter bypassed the gain is $A_v = -g_m R_C$, large and inverted.
+- With $R_E$ unbypassed the gain is $A_v = -g_m R_C/(1 + g_m R_E)$, smaller but steadier.

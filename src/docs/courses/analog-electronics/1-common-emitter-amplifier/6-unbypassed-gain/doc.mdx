@@ -1,0 +1,51 @@
+---
+title: "The Unbypassed Emitter"
+order: 6
+summary: "Remove the bypass capacitor and negative feedback trades gain for stability."
+prerequisites: ["analog-electronics/1-common-emitter-amplifier/5-small-signal-gain"]
+learningObjectives:
+  - "Predict what happens to the gain when the emitter is unbypassed"
+  - "Explain the negative feedback mechanism"
+estimatedTime: 6
+needsReview: true
+---
+
+## Feedback from the emitter
+
+Remove $C_E$ and the emitter becomes unbypassed. The circuit now behaves differently. The input must push signal current through $R_E$ as well as through the junction.
+
+Any rise in emitter current also raises the emitter voltage. That rise pushes back against the input, because only $v_{be}$ controls the current. This opposing effect is called negative feedback.
+
+Working through the two voltage drops gives:
+
+$$
+A_v = \frac{-g_m R_C}{1 + g_m R_E}
+$$
+
+The feedback factor $1 + g_m R_E$ equals 45 here. So the gain becomes $A_v \approx -4.18$. That is a factor of 45 smaller than the bypassed gain.
+
+## Two equivalent forms
+
+An equivalent form uses the intrinsic emitter resistance $r_e = 1/g_m$. At our bias point $g_m$ is 40 mS, so $r_e$ is 25 ohm. The gain then reads $A_v = -R_C/(r_e + R_E)$. This form is easy to remember.
+
+The lost gain buys stability. The gain now depends mainly on the two resistors. It depends only weakly on $g_m$, which drifts with temperature and current. Designers often split $R_E$ into two parts and bypass only one of them. The result lands between the two extremes.
+
+## Check your understanding
+
+<Quiz
+  question="Later the bypass capacitor $C_E$ is removed. What happens to the small-signal voltage gain?"
+  options={[
+    "The gain magnitude grows, because the emitter current has no other path",
+    "Nothing changes, because the capacitor does not carry bias current",
+    "The gain magnitude drops, because $R_E$ now pushes back against the input",
+    "The gain falls to exactly zero, because the emitter blocks the signal"
+  ]}
+  answer={2}
+  explanation="Without $C_E$ the gain is $A_v = -g_m R_C/(1 + g_m R_E)$. In our example the gain went from -188 to -4.18, a factor of 45 smaller."
+  quizId="gain-behavior"
+/>
+
+## Key takeaways
+
+- Unbypassed, $A_v = -g_m R_C/(1 + g_m R_E)$, or $-R_C/(r_e + R_E)$.
+- The lost gain buys stability against temperature and current drift.

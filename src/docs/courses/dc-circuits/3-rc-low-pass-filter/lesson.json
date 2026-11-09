@@ -1,0 +1,5 @@
+{
+  "title": "The RC Low-Pass Filter",
+  "order": 3,
+  "summary": "Combine a resistor and a capacitor into a frequency-dependent divider, and read its behavior from a Bode plot."
+}

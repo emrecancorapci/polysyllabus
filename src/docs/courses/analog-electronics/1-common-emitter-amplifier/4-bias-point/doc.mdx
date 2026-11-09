@@ -1,0 +1,76 @@
+---
+title: "Finding the DC Bias Point"
+order: 4
+summary: "A worked example that walks from the divider down to the collector-emitter voltage."
+prerequisites: ["analog-electronics/1-common-emitter-amplifier/3-bias-circuit"]
+learningObjectives:
+  - "Compute the DC bias point of a voltage divider biased BJT"
+estimatedTime: 7
+needsReview: true
+---
+
+## The numbers
+
+Take a silicon BJT with the following values.
+
+- Supply: $V_{CC} = 12\,\text{V}$
+- Divider: $R_1 = 68\,\text{k}\Omega$ and $R_2 = 12\,\text{k}\Omega$
+- Collector resistor: $R_C = 4.7\,\text{k}\Omega$
+- Emitter resistor: $R_E = 1.1\,\text{k}\Omega$
+- Base-emitter junction: $V_{BE} = 0.7\,\text{V}$
+
+Three assumptions keep the arithmetic simple.
+
+1. The divider current is much larger than the base current, so base loading is ignored.
+2. The collector and emitter currents are equal, so $I_C = I_E$.
+3. The transistor stays in its active region, so it can amplify.
+
+## Four steps
+
+Step 1, the base voltage. The divider scales the supply down.
+
+$$
+V_B = V_{CC}\,\frac{R_2}{R_1 + R_2}
+$$
+
+The divider holds the base at 1.8 V.
+
+Step 2, the emitter voltage. The base-emitter junction drops about 0.7 V when it conducts.
+
+$$
+V_E = V_B - V_{BE}
+$$
+
+The emitter sits 1.1 V above ground.
+
+Step 3, the bias current. Ohm's law at the emitter gives the current directly.
+
+$$
+I_C = I_E = \frac{V_E}{R_E}
+$$
+
+With $R_E = 1.1\,\text{k}\Omega$, the collector current is 1.0 mA.
+
+Step 4, the collector-to-emitter voltage. Walk the loop from supply to ground.
+
+$$
+V_{CE} = V_{CC} - I_C R_C - I_E R_E
+$$
+
+Plugging in the numbers gives a collector-to-emitter voltage of 6.2 V. That sits near half the supply, leaving symmetric room for the output to swing.
+
+## Check your understanding
+
+<NumericQuiz
+  question="A divider biased BJT runs from $V_{CC} = 10\,\text{V}$ with $R_1 = 30\,\text{k}\Omega$, $R_2 = 10\,\text{k}\Omega$, $R_C = 6.8\,\text{k}\Omega$ and $R_E = 3.6\,\text{k}\Omega$. Assume $V_{BE} = 0.7\,\text{V}$, $I_C = I_E$ and no divider loading. Find $V_{CE}$."
+  answer={4.8}
+  tolerance={{ rel: 0.02 }}
+  unit="V"
+  explanation="Work in steps. First find $V_B = V_{CC}\,R_2/(R_1 + R_2)$. Then find $V_E = V_B - V_{BE}$ and $I_C = V_E/R_E$. Finally $V_{CE} = V_{CC} - I_C (R_C + R_E) = 4.8\,\text{V}$."
+  quizId="bias-point"
+/>
+
+## Key takeaways
+
+- Divider, junction drop, Ohm's law at the emitter, then the loop. Four steps, one bias point.
+- A healthy Q point sits near half the supply.

@@ -10,41 +10,36 @@ import Quiz from "@/components/content/Quiz.astro";
 import LessonCompleteButton from "@/components/chrome/LessonCompleteButton.astro";
 import MathText from "@/components/content/react/MathText";
 import ProgressEnhance from "@/components/chrome/ProgressEnhance.astro";
-import {
-  getCourses,
-  getPrevNext,
-  lessonHref,
-  sortByOrder,
-} from "@/lib/courses";
+import { flattenParts, getCourses, getPrevNext, partHref } from "@/lib/courses";
 import "katex/dist/katex.min.css";
 import ThemeInit from "@/components/chrome/ThemeInit.astro";
 import ThemeToggle from "@/components/chrome/ThemeToggle.astro";
 import "@/styles/global.css";
 
 export async function getStaticPaths() {
-  const lessons = await getCollection("lessons");
-  return lessons.map((lesson) => {
-    const [course, ...rest] = lesson.id.split("/");
+  const parts = await getCollection("parts");
+  return parts.map((part) => {
+    const [course, lesson, partSlug] = part.id.split("/");
     return {
-      params: { course, lesson: rest.join("/") },
-      props: { lesson },
+      params: { course, lesson, part: partSlug },
+      props: { part },
     };
   });
 }
 
-const { lesson } = Astro.props;
-const { Content, headings } = await render(lesson);
+const { part } = Astro.props;
+const { Content, headings } = await render(part);
 const tocHeadings = headings.filter((heading) => heading.depth <= 3);
-const [courseSlug] = lesson.id.split("/");
-const allLessons = await getCollection("lessons");
-const courseLessons = sortByOrder(
-  allLessons.filter((entry) => entry.id.split("/")[0] === courseSlug),
-);
-const { prev, next } = getPrevNext(courseLessons, lesson.id);
+const [courseSlug, lessonSlug] = part.id.split("/");
 const course = (await getCourses()).find((entry) => entry.slug === courseSlug);
+const lesson = course?.lessons.find((entry) => entry.slug === lessonSlug);
+const courseParts = course ? flattenParts(course) : [];
+const allParts = await getCollection("parts");
+const { prev, next } = getPrevNext(courseParts, part.id);
 const courseName = course?.title ?? courseSlug;
+const lessonName = lesson?.title ?? lessonSlug;
 
-// The complete set of MDX components lessons may use (docs/content-components.md).
+// The complete set of MDX components parts may use (docs/content-components.md).
 // Anything outside this map fails the build, which enforces the contract.
 const contentComponents = {
   Callout,
@@ -62,7 +57,7 @@ const contentComponents = {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <meta name="generator" content={Astro.generator}>
-    <title>{lesson.data.title} — {courseName} — PolySyllabus</title>
+    <title>{part.data.title} — {lessonName} — PolySyllabus</title>
     <ThemeInit />
   </head>
   <body class="bg-background text-foreground">
@@ -73,7 +68,7 @@ const contentComponents = {
       <aside class="hidden lg:block lg:w-64 lg:shrink-0">
         <nav
           aria-label="Course outline"
-          class="sticky top-10 flex flex-col gap-4"
+          class="sticky top-10 flex flex-col gap-3"
         >
           <a
             href={`/courses/${courseSlug}/`}
@@ -81,15 +76,18 @@ const contentComponents = {
           >
             ← {courseName}
           </a>
-          <ol class="flex flex-col gap-1">
-            {courseLessons.map((entry) => {
-              const current = entry.id === lesson.id;
-              return (
-                <li>
+          {course?.lessons.map((entry) => (
+            <div class="flex flex-col gap-1">
+              <p class="text-foreground mt-2 px-2 text-xs font-medium tracking-wide uppercase">
+                {entry.order}. {entry.title}
+              </p>
+              {entry.parts.map((item) => {
+                const current = item.id === part.id;
+                return (
                   <a
-                    href={lessonHref(entry)}
+                    href={partHref(item)}
                     aria-current={current ? "page" : undefined}
-                    data-lesson-id={entry.id}
+                    data-lesson-id={item.id}
                     class:list={[
                       "flex items-baseline gap-2 rounded-md px-2 py-1.5 text-sm",
                       current
@@ -97,18 +95,20 @@ const contentComponents = {
                         : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
                     ]}
                   >
-                    <span class="tabular-nums">{entry.data.order}.</span>
-                    <span>{entry.data.title}</span>
+                    <span class="tabular-nums">
+                      {entry.order}.{item.data.order}
+                    </span>
+                    <span>{item.data.title}</span>
                     <span
                       data-check-slot
                       class="text-primary ml-auto"
                       aria-hidden="true"
                     />
                   </a>
-                </li>
-              );
-            })}
-          </ol>
+                );
+              })}
+            </div>
+          ))}
           {tocHeadings.length > 0 && (
             <nav
               aria-label="On this page"
@@ -145,30 +145,36 @@ const contentComponents = {
             >{courseName}</a
           >
           <span aria-hidden="true"> / </span>
-          <span class="text-foreground">{lesson.data.title}</span>
+          <span class="text-foreground">{lessonName}</span>
+          <span aria-hidden="true"> / </span>
+          <span class="text-foreground">{part.data.title}</span>
         </nav>
 
         <header class="flex flex-col gap-3">
+          <p class="text-muted-foreground text-sm">
+            {lesson ? `${lesson.order}.${part.data.order}` : part.data.order}
+            · {lessonName}
+          </p>
           <h1 class="text-3xl font-semibold tracking-tight">
-            {lesson.data.title}
+            {part.data.title}
           </h1>
-          <p class="text-muted-foreground">{lesson.data.summary}</p>
+          <p class="text-muted-foreground">{part.data.summary}</p>
           <div
             class="text-muted-foreground flex flex-wrap items-center gap-2 text-sm"
           >
-            <span>{lesson.data.estimatedTime} min</span>
-            {lesson.data.prerequisites.length > 0 && (
+            <span>{part.data.estimatedTime} min</span>
+            {part.data.prerequisites.length > 0 && (
               <span class="flex flex-wrap items-center gap-1">
                 <span aria-hidden="true">·</span>
                 <span>Prerequisites:</span>
-                {lesson.data.prerequisites.map((id, index) => {
-                  const target = allLessons.find((entry) => entry.id === id);
+                {part.data.prerequisites.map((id, index) => {
+                  const target = allParts.find((entry) => entry.id === id);
                   return (
                     <>
                       {index > 0 && <span aria-hidden="true">,</span>}
                       {target ? (
                         <a
-                          href={lessonHref(target)}
+                          href={partHref(target)}
                           class="text-primary hover:underline"
                         >
                           {target.data.title}
@@ -190,7 +196,7 @@ const contentComponents = {
         >
           <h2 class="text-sm font-semibold">Learning objectives</h2>
           <ul class="list-disc pl-5 text-sm">
-            {lesson.data.learningObjectives.map((objective) => (
+            {part.data.learningObjectives.map((objective) => (
               <li>
                 <MathText text={objective} />
               </li>
@@ -205,16 +211,16 @@ const contentComponents = {
         </article>
 
         <div class="flex justify-end">
-          <LessonCompleteButton lessonId={lesson.id} />
+          <LessonCompleteButton lessonId={part.id} />
         </div>
 
         <nav
-          aria-label="Lesson navigation"
+          aria-label="Part navigation"
           class="border-border mt-4 flex items-stretch justify-between gap-4 border-t pt-6"
         >
           {prev ? (
             <a
-              href={lessonHref(prev)}
+              href={partHref(prev)}
               class="border-border bg-card hover:border-primary/40 flex min-w-0 flex-col gap-1 rounded-lg border p-4"
             >
               <span class="text-muted-foreground text-xs">Previous</span>
@@ -227,7 +233,7 @@ const contentComponents = {
           )}
           {next ? (
             <a
-              href={lessonHref(next)}
+              href={partHref(next)}
               class="border-border bg-card hover:border-primary/40 flex min-w-0 flex-col items-end gap-1 rounded-lg border p-4 text-right"
             >
               <span class="text-muted-foreground text-xs">Next</span>

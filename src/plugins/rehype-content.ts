@@ -10,6 +10,7 @@
  *
  * Runs on Markdown and MDX; on plain Markdown (no JSX) it is a no-op.
  */
+import { readFileSync } from "node:fs";
 import { dirname, isAbsolute, join, relative } from "node:path";
 
 interface HastNode {
@@ -87,6 +88,22 @@ function resolveSrc(src: string, file: PluginFile): string {
   return repoRelative;
 }
 
+/**
+ * Figure numbers are lesson.part.figure, so the plugin reads the lesson's
+ * order from the lesson.json two levels above the part's doc.mdx.
+ */
+function readLessonOrder(partPath: string): number {
+  const lessonJsonPath = join(dirname(dirname(partPath)), "lesson.json");
+  try {
+    const lesson = JSON.parse(readFileSync(lessonJsonPath, "utf8")) as {
+      order?: unknown;
+    };
+    return Number(lesson.order ?? Number.NaN);
+  } catch {
+    return Number.NaN;
+  }
+}
+
 export function rehypeContent() {
   return (tree: HastNode, file: PluginFile) => {
     const figureCounters = new Map<string, number>();
@@ -116,10 +133,18 @@ export function rehypeContent() {
         );
       }
 
-      const order = Number(file.data?.astro?.frontmatter?.order ?? Number.NaN);
-      if (!Number.isFinite(order)) {
+      const partOrder = Number(
+        file.data?.astro?.frontmatter?.order ?? Number.NaN,
+      );
+      if (!Number.isFinite(partOrder)) {
         fail(
-          `<Figure> "${alt}" in ${file.path ?? "unknown file"}: lesson frontmatter has no numeric order`,
+          `<Figure> "${alt}" in ${file.path ?? "unknown file"}: part frontmatter has no numeric order`,
+        );
+      }
+      const lessonOrder = readLessonOrder(file.path ?? "");
+      if (!Number.isFinite(lessonOrder)) {
+        fail(
+          `<Figure> "${alt}" in ${file.path ?? "unknown file"}: cannot read a numeric order from the lesson's lesson.json`,
         );
       }
 
@@ -140,7 +165,7 @@ export function rehypeContent() {
         {
           type: "mdxJsxAttribute",
           name: "figureLabel",
-          value: `${order}.${figureIndex}`,
+          value: `${lessonOrder}.${partOrder}.${figureIndex}`,
         },
       ];
       node.children = [];

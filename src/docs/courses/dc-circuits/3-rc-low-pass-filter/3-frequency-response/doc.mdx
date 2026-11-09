@@ -1,0 +1,65 @@
+---
+title: "The Frequency Response"
+order: 3
+summary: "Read the same circuit in the frequency domain, then explore it with sliders."
+prerequisites: ["dc-circuits/3-rc-low-pass-filter/2-step-response"]
+learningObjectives:
+  - "Read magnitude and phase from a Bode plot"
+  - "Predict how R and C move the cutoff and the curve"
+estimatedTime: 9
+needsReview: false
+---
+
+## The Bode view
+
+A Bode plot shows the same story in the frequency domain. Gain is flat at low frequency, then rolls off at $-20\,\text{dB/decade}$ past $f_c$. The phase swings from $0°$ to $-90°$. Both panels share the same logarithmic frequency axis, so features line up vertically.
+
+<DataPlot src="./bode.json" />
+
+## Explore it yourself
+
+Drag the sliders and watch the cutoff and the whole magnitude curve move. The formulas are exactly the ones above: $f_c = 1/(2\pi R C)$ and $|H| = 1/\sqrt{1 + (f/f_c)^2}$.
+
+<Playground
+  spec={{
+    title: "RC low-pass explorer",
+    params: [
+      { name: "R", min: 100, max: 10000, step: 100, default: 1000, unit: "Ω", log: true },
+      { name: "C", min: 10, max: 1000, step: 10, default: 100, unit: "nF", log: true },
+    ],
+    outputs: [
+      { name: "Cutoff frequency", formula: "1 / (2 * pi * R * C * 1e-9)", unit: "Hz" },
+      { name: "Time constant", formula: "R * C * 1e-9 * 1000", unit: "ms" },
+    ],
+    plot: {
+      x: { variable: "f", label: "Frequency", unit: "Hz", min: 1, max: 1000000, log: true },
+      y: {
+        formula: "-10 * log10(1 + (2 * pi * f * R * C * 1e-9)^2)",
+        label: "Magnitude",
+        unit: "dB",
+      },
+      markers: [
+        {
+          xFormula: "1 / (2 * pi * R * C * 1e-9)",
+          y: -3,
+          label: "−3 dB at fc",
+        },
+      ],
+    },
+  }}
+/>
+
+## Check your understanding
+
+<NumericQuiz
+  question="With $R = 1\,\text{k}\Omega$ and $C = 100\,\text{nF}$, what is the cutoff frequency $f_c$?"
+  answer={1591.5}
+  tolerance={{ rel: 0.02 }}
+  unit="Hz"
+  explanation="$f_c = 1/(2\pi R C) = 1/(2\pi \times 10^3 \times 10^{-7}) \approx 1591.5\,\text{Hz}$, about $1.59\,\text{kHz}$."
+/>
+
+## Key takeaways
+
+- Past $f_c$ the gain falls at $-20\,\text{dB/decade}$ and the phase approaches $-90°$.
+- The Bode magnitude and phase panels share the frequency axis by construction.

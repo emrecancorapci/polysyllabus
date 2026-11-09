@@ -1,0 +1,26 @@
+---
+title: "The Step Response"
+order: 2
+summary: "Switch the source on and watch the capacitor charge through the resistor."
+prerequisites: ["dc-circuits/3-rc-low-pass-filter/1-the-circuit-and-cutoff"]
+learningObjectives:
+  - "Predict the step response from the time constant $\\tau = RC$"
+  - "Apply the five time constants rule of thumb"
+estimatedTime: 7
+needsReview: false
+---
+
+## Charging through the resistor
+
+Switch the source on and the capacitor charges through the resistor with time constant $\tau = RC$. For $R = 1\,\text{k}\Omega$ and $C = 100\,\text{nF}$, $\tau = 0.1\,\text{ms}$. After roughly $5\tau$ the capacitor is essentially fully charged.
+
+<DataPlot src="./charging-curve.json" />
+
+<Callout variant="note" title="Five time constants">
+  The $5\tau$ rule of thumb is where the exponential reaches $99.3\%$ of its final value. That is close enough by engineering standards.
+</Callout>
+
+## Key takeaways
+
+- In time, the RC circuit charges with $\tau = RC$.
+- After $5\tau$ the exponential has reached 99.3 percent of its final value.

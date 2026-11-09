@@ -1,0 +1,63 @@
+---
+title: "Power and Practice"
+order: 3
+summary: "Put Ohm's law to work. Worked examples, an exercise, and a check of your understanding."
+prerequisites: ["dc-circuits/1-ohms-law/2-resistance-and-ohms-law"]
+learningObjectives:
+  - "Compute any one of V, I, or R given the other two"
+  - "Compute the power dissipated in a resistor"
+  - "Pair a resistance value with a sensible power rating"
+estimatedTime: 7
+needsReview: false
+---
+
+## Worked example
+
+A 12 V battery is connected across a 220 Ω resistor. What current flows, and what power does the resistor dissipate?
+
+1. Current, from Ohm's law: $I = V / R = 12\,\text{V} / 220\,\Omega \approx 54.5\,\text{mA}$
+2. Power: $P = V \, I = 12\,\text{V} \times 0.0545\,\text{A} \approx 0.65\,\text{W}$
+
+<Callout variant="warning">
+  A standard 0.25 W resistor would overheat in this circuit. Component power ratings matter as much as resistance values.
+</Callout>
+
+## Try it yourself
+
+A space heater draws 4 A from a 230 V supply. What resistance does it present, and how much power does it dissipate?
+
+<CollapsibleSolution>
+  Resistance: $R = V / I = 230\,\text{V} / 4\,\text{A} = 57.5\,\Omega$.
+
+  Power: $P = V \, I = 230\,\text{V} \times 4\,\text{A} = 920\,\text{W}$
+
+  Consistent with $P = V^2/R = 230^2 / 57.5$.
+</CollapsibleSolution>
+
+## Check your understanding
+
+<Quiz
+  question="Which of these follows from Ohm's law for a fixed resistance $R$?"
+  options={[
+    "Doubling $V$ doubles $I$",
+    "Doubling $V$ halves $I$",
+    "$I$ is independent of $V$",
+    "$V = I / R$",
+  ]}
+  answer={0}
+  explanation="From $V = I\,R$ with $R$ fixed, current scales linearly with voltage: $I = V / R$."
+/>
+
+<NumericQuiz
+  question="A resistor dissipates $0.5\,\text{W}$ with $12\,\text{V}$ across it. What current flows through it?"
+  answer={0.04167}
+  tolerance={{ rel: 0.02 }}
+  unit="A"
+  explanation="From $P = V\,I$: $I = P / V = 0.5 / 12 \approx 41.7\,\text{mA}$."
+/>
+
+## Key takeaways
+
+- Compute the third quantity from the other two with $V = I \, R$.
+- Power follows from $P = V \, I$.
+- Always pair a resistance value with its power rating when choosing components.

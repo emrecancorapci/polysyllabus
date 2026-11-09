@@ -1,0 +1,41 @@
+---
+title: "The Circuit and Its Cutoff"
+order: 1
+summary: "Why a series resistor and capacitor pass low frequencies and block high ones."
+prerequisites: ["dc-circuits/2-kirchhoffs-laws/3-applying-the-laws"]
+learningObjectives:
+  - "Explain why the RC divider attenuates high frequencies but passes low ones"
+  - "Compute the cutoff frequency $f_c = 1/(2\\pi R C)$"
+estimatedTime: 8
+needsReview: false
+---
+
+Resistors obey Ohm's law at every frequency. Capacitors do not. Their impedance falls as frequency rises. Put the two in series and you get a **frequency-dependent voltage divider**: the RC low-pass filter.
+
+## The circuit
+
+<Figure caption="A series RC network driven by a source. The output is taken across the capacitor.">
+  ![A voltage source drives a resistor in series with a capacitor, output across the capacitor](./fig-rc-lowpass.svg)
+</Figure>
+
+At low frequencies the capacitor barely conducts, almost no voltage drops across $R$, and $V_{out} \approx V_{in}$. At high frequencies the capacitor is nearly a short, so $V_{out}$ collapses toward zero. The boundary is the **cutoff frequency**:
+
+$$
+f_c = \frac{1}{2 \pi R C}
+$$
+
+With $R = 1\,\text{k}\Omega$ and $C = 100\,\text{nF}$, $f_c \approx 1591.5\,\text{Hz}$.
+
+## Where the cutoff comes from
+
+```mermaid
+flowchart LR
+    A["Impedances form a divider"] --> B["Capacitive divider<br/>V<sub>out</sub> / V<sub>in</sub> = Z<sub>C</sub> / (R + Z<sub>C</sub>)"]
+    B --> C["Magnitude drops to 1/√2<br/>at f<sub>c</sub> = 1 / (2πRC)"]
+    C --> D["Below f<sub>c</sub>: pass<br/>Above: roll off at −20 dB/decade"]
+```
+
+## Key takeaways
+
+- The RC pair is a frequency-dependent divider.
+- The cutoff sits at $f_c = 1/(2\pi R C)$.

@@ -1,0 +1,45 @@
+---
+title: "Resistance and Ohm's Law"
+order: 2
+summary: "The third quantity, resistance, and the one law that ties all three together."
+prerequisites: ["dc-circuits/1-ohms-law/1-charge-current-voltage"]
+learningObjectives:
+  - "Define resistance and give its SI unit"
+  - "State Ohm's law and identify which quantities it relates"
+  - "Read a simple circuit diagram and label its sources and loads"
+estimatedTime: 6
+needsReview: false
+---
+
+## Resistance and Ohm's law
+
+**Resistance** measures how strongly a material opposes current flow. Its SI unit is the **ohm** ($\Omega$). For many materials over a wide range, the current through the material is proportional to the voltage across it:
+
+$$
+V = I \, R
+$$
+
+This is **Ohm's law**. Materials that obey it are called *ohmic*.
+
+## The simplest circuit
+
+The figure below shows the simplest complete circuit: a voltage source `V` driving a current `I` around a single loop through a resistor `R`.
+
+<Figure caption="The simplest complete circuit: one source, one load, one current.">
+  ![A voltage source V drives a current I clockwise around a loop through a resistor R](./fig-ohms-law-circuit.svg)
+</Figure>
+
+The source supplies energy, and the load converts it. Because charge is conserved, the same current flows through every element in the loop. The relationship between the quantities follows one direction around the loop:
+
+```mermaid
+flowchart LR
+    V["Voltage source<br>V (volts)"] -->|pushes| I["Current<br>I (amperes)"]
+    I -->|flows through| R["Resistance<br>R (ohms)"]
+    R -->|dissipates| P["Heat<br>P = V · I (watts)"]
+```
+
+## Key takeaways
+
+- Resistance $R$ ($\Omega$) opposes current.
+- Ohm's law, $V = I \, R$, links the three quantities for ohmic materials.
+- The same current flows through every element of a single loop.

@@ -53,7 +53,24 @@ const categories = [...new Set(courses.map((course) => course.category))];
                   {course.lessons.length} lesson
                   {course.lessons.length === 1 ? "" : "s"} ·{" "}
                   {course.lessons.reduce(
-                    (total, lesson) => total + lesson.data.estimatedTime,
+                    (total, lesson) => total + lesson.parts.length,
+                    0,
+                  )}{" "}
+                  part
+                  {course.lessons.reduce(
+                    (total, lesson) => total + lesson.parts.length,
+                    0,
+                  ) === 1
+                    ? ""
+                    : "s"}{" "}
+                  ·{" "}
+                  {course.lessons.reduce(
+                    (total, lesson) =>
+                      total +
+                      lesson.parts.reduce(
+                        (sum, part) => sum + part.data.estimatedTime,
+                        0,
+                      ),
                     0,
                   )}{" "}
                   min

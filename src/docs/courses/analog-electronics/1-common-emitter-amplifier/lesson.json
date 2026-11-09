@@ -1,0 +1,5 @@
+{
+  "title": "The Common-Emitter Amplifier",
+  "order": 1,
+  "summary": "Bias a transistor, find its small-signal transconductance and compute the voltage gain of a common-emitter stage."
+}

@@ -1,0 +1,37 @@
+---
+title: "Kirchhoff's Current Law"
+order: 1
+summary: "Charge cannot pile up at a node. What flows in must flow out."
+prerequisites: ["dc-circuits/1-ohms-law/3-power-and-practice"]
+learningObjectives:
+  - "State Kirchhoff's current law (KCL)"
+  - "Explain the link between KCL and charge conservation"
+  - "Write KCL equations for a node with multiple branches"
+estimatedTime: 8
+needsReview: false
+---
+
+Ohm's law describes one element. Kirchhoff's laws describe how the whole circuit hangs together, and they follow directly from two conservation principles.
+
+## Charge conservation at a node
+
+Charge cannot pile up at an ideal node. The currents flowing **into** a node must equal the currents flowing **out**:
+
+$$
+\sum I_{\text{in}} = \sum I_{\text{out}}
+$$
+
+The figure shows a node with one incoming and two outgoing branches:
+
+<Figure caption="Charge conservation at a node: what flows in must flow out.">
+  ![A circuit node where current I1 flows in and currents I2 and I3 flow out](./fig-kcl-node.svg)
+</Figure>
+
+## Using the law
+
+If $I_1 = 3\,\text{A}$ and $I_2 = 1.2\,\text{A}$, then KCL fixes the last branch immediately: $I_3 = 3 - 1.2 = 1.8\,\text{A}$.
+
+## Key takeaways
+
+- KCL: charge conservation at a node, $\sum I_{\text{in}} = \sum I_{\text{out}}$.
+- Any single unknown branch current at a node follows from the others.

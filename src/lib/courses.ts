@@ -1,9 +1,22 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 
-export type Lesson = CollectionEntry<"lessons">;
+export type Part = CollectionEntry<"parts">;
 export type CourseMeta = CollectionEntry<"courses">;
 
 export type Difficulty = "beginner" | "intermediate" | "advanced";
+
+export interface Lesson {
+  /** Course slug, e.g. "dc-circuits". */
+  courseSlug: string;
+  /** Lesson folder slug, e.g. "1-ohms-law". */
+  slug: string;
+  /** `<course-slug>/<lesson-slug>`. */
+  id: string;
+  title: string;
+  summary?: string;
+  order: number;
+  parts: Part[];
+}
 
 export interface Course {
   slug: string;
@@ -15,31 +28,69 @@ export interface Course {
   lessons: Lesson[];
 }
 
-export function lessonHref(lesson: Lesson): string {
-  const [course, ...rest] = lesson.id.split("/");
-  return `/courses/${course}/${rest.join("/")}/`;
+/** All parts of a course in study order (lesson order, then part order). */
+export function flattenParts(course: Course): Part[] {
+  return course.lessons.flatMap((lesson) => lesson.parts);
 }
 
-export function sortByOrder(lessons: Lesson[]): Lesson[] {
-  return [...lessons].sort((a, b) => a.data.order - b.data.order);
+export function partHref(part: Part): string {
+  return `/courses/${part.id}/`;
+}
+
+export function lessonFirstPartHref(lesson: Lesson): string | undefined {
+  return lesson.parts[0] ? partHref(lesson.parts[0]) : undefined;
+}
+
+export function totalMinutes(parts: Part[]): number {
+  return parts.reduce((total, part) => total + part.data.estimatedTime, 0);
 }
 
 export async function getCourses(): Promise<Course[]> {
-  const [lessons, metadata] = await Promise.all([
-    getCollection("lessons"),
+  const [parts, courseMeta, lessonMeta] = await Promise.all([
+    getCollection("parts"),
     getCollection("courses"),
+    getCollection("lessons"),
   ]);
 
-  const metadataBySlug = new Map(metadata.map((entry) => [entry.id, entry]));
+  const courseMetaBySlug = new Map(
+    courseMeta.map((entry) => [entry.id, entry]),
+  );
+  const lessonMetaById = new Map(lessonMeta.map((entry) => [entry.id, entry]));
+
+  // courseSlug / lessonSlug -> parts
+  const partsByLesson = new Map<string, Part[]>();
+  for (const part of parts) {
+    const [courseSlug, lessonSlug] = part.id.split("/");
+    const key = `${courseSlug}/${lessonSlug}`;
+    partsByLesson.set(key, [...(partsByLesson.get(key) ?? []), part]);
+  }
+
   const lessonsByCourse = new Map<string, Lesson[]>();
-  for (const lesson of lessons) {
-    const slug = lesson.id.split("/")[0];
-    lessonsByCourse.set(slug, [...(lessonsByCourse.get(slug) ?? []), lesson]);
+  for (const [id, lessonParts] of partsByLesson) {
+    const [courseSlug, lessonSlug] = id.split("/");
+    const meta = lessonMetaById.get(id);
+    if (meta === undefined) {
+      throw new Error(
+        `[courses] missing lesson metadata: create src/docs/courses/${courseSlug}/${lessonSlug}/lesson.json with title and order`,
+      );
+    }
+    lessonsByCourse.set(courseSlug, [
+      ...(lessonsByCourse.get(courseSlug) ?? []),
+      {
+        courseSlug,
+        slug: lessonSlug,
+        id,
+        title: meta.data.title,
+        summary: meta.data.summary,
+        order: meta.data.order,
+        parts: [...lessonParts].sort((a, b) => a.data.order - b.data.order),
+      },
+    ]);
   }
 
   const courses: Course[] = [];
-  for (const [slug, courseLessons] of lessonsByCourse) {
-    const meta = metadataBySlug.get(slug);
+  for (const [slug, lessons] of lessonsByCourse) {
+    const meta = courseMetaBySlug.get(slug);
     if (meta === undefined) {
       throw new Error(
         `[courses] missing course metadata: create src/docs/courses/${slug}/course.json with title, category, subCategory, and difficulty`,
@@ -52,7 +103,7 @@ export async function getCourses(): Promise<Course[]> {
       category: meta.data.category,
       subCategory: meta.data.subCategory,
       difficulty: meta.data.difficulty,
-      lessons: sortByOrder(courseLessons),
+      lessons: lessons.sort((a, b) => a.order - b.order),
     });
   }
 
@@ -64,24 +115,18 @@ export async function getCourses(): Promise<Course[]> {
   );
 }
 
-export async function getCourse(slug: string): Promise<Course | undefined> {
-  return (await getCourses()).find((course) => course.slug === slug);
-}
-
 export function getPrevNext(
-  lessons: Lesson[],
+  parts: Part[],
   id: string,
-): { prev?: Lesson; next?: Lesson } {
-  const sorted = sortByOrder(lessons);
-  const index = sorted.findIndex((lesson) => lesson.id === id);
+): { prev?: Part; next?: Part } {
+  const index = parts.findIndex((part) => part.id === id);
   return {
-    prev: index > 0 ? sorted[index - 1] : undefined,
-    next:
-      index >= 0 && index < sorted.length - 1 ? sorted[index + 1] : undefined,
+    prev: index > 0 ? parts[index - 1] : undefined,
+    next: index >= 0 && index < parts.length - 1 ? parts[index + 1] : undefined,
   };
 }
 
-/** Resolve prerequisite lesson ids to titles; unknown ids pass through as-is. */
-export function prerequisiteLabel(id: string, lessons: Lesson[]): string {
-  return lessons.find((lesson) => lesson.id === id)?.data.title ?? id;
+/** Resolve prerequisite part ids to titles; unknown ids pass through as-is. */
+export function prerequisiteLabel(id: string, parts: Part[]): string {
+  return parts.find((part) => part.id === id)?.data.title ?? id;
 }

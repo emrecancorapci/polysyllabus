@@ -1,0 +1,50 @@
+---
+title: "The Small-Signal Gain"
+order: 5
+summary: "Freeze the bias, replace the transistor with one number, and the gain falls out."
+prerequisites: ["analog-electronics/1-common-emitter-amplifier/4-bias-point"]
+learningObjectives:
+  - "Compute the transconductance from the bias current"
+  - "Compute the small-signal voltage gain with $A_v = -g_m R_C$"
+estimatedTime: 6
+needsReview: true
+---
+
+## The small-signal view
+
+Now freeze the bias and ask how the circuit responds to small wiggles.
+
+For signals the transistor simplifies to one number, its transconductance $g_m$. Transconductance says how much the collector current changes for each volt of change between base and emitter.
+
+$$
+g_m = \frac{I_C}{V_T}
+$$
+
+Here $V_T$ is the thermal voltage set by the physics of the junction. We assume $V_T = 25\,\text{mV}$, the usual room-temperature value.
+
+At the bias point of the previous part, $I_C = 1.0\,\text{mA}$. The transconductance is 40 mS.
+
+The siemens, symbol S, is the unit of conductance. One siemens is one ampere per volt.
+
+For gain we also ignore the transistor's output resistance. The collector behaves as an ideal current source for signals.
+
+## The gain with the emitter bypassed
+
+With $C_E$ in place, the emitter is a signal ground. The whole input appears across the base-emitter junction, so $v_{in} = v_{be}$.
+
+A positive wiggle at the base increases the collector current. The extra current through $R_C$ pulls the collector voltage down. So a positive input wiggle gives a negative output wiggle.
+
+Writing the output as the drop across $R_C$ gives the gain.
+
+$$
+A_v = \frac{v_{out}}{v_{in}} = -g_m R_C
+$$
+
+With $g_m = 40\,\text{mS}$ and $R_C = 4.7\,\text{k}\Omega$, the gain is $A_v = -188$.
+
+The minus sign is the inversion. It means the output is 180 degrees out of phase with the input.
+
+## Key takeaways
+
+- $g_m = I_C / V_T$ collapses the transistor into one number for signals.
+- With the emitter bypassed, $A_v = -g_m R_C$. Large, and inverted.
