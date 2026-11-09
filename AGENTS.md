@@ -82,6 +82,9 @@ The planning rule (start with the lowest-numbered sprint whose status is not Don
   - `pnpm format` (Biome)
   - `pnpm typecheck` (`astro check`)
   - `pnpm build` (validates content against the Zod schemas)
+
+For content changes also run `pnpm lint:content`. It calls the factory's style linter over `src/docs/courses` with the same rule set the Writer agents follow. It needs only `python3` on PATH.
+
 - Do not suppress lint errors without a short comment explaining why.
 
 ## Definition of Done

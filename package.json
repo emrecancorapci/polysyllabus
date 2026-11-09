@@ -11,6 +11,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint . && biome lint .",
+    "lint:content": "python3 course-factory/tools/style_lint.py src/docs/courses",
     "format": "biome format --write .",
     "typecheck": "astro check"
   },
