@@ -8,20 +8,26 @@ For agents (and humans) producing course material. The component props live in `
 
 ```
 src/docs/courses/<course-slug>/
-  course.json              # course metadata (required, exact name)
-  <n>-<module-slug>/
-    doc.mdx                # the lesson (required, exact name)
-    fig-*.svg              # figures, beside the lesson
-    *.json                 # plot data, beside the lesson
+  course.json                     # course metadata (required, exact name)
+  <n>-<lesson-slug>/              # lesson = a chapter of 20 to 40 minutes
+    lesson.json                   # lesson metadata (required, exact name)
+    <p>-<part-slug>/              # part = a study page of at most 10 minutes
+      doc.mdx                     # the part (required, exact name)
+      fig-*.svg                   # figures, beside the part that uses them
+      *.json                      # plot data, beside the part that uses it
 ```
 
-- The folder name is the lesson's identity: `dc-circuits/3-rc-low-pass-filter`. It forms the URL (`/courses/dc-circuits/3-rc-low-pass-filter/`) and the id used by prerequisites and progress storage. Slugs are permanent — do not rename published lessons.
-- `doc.mdx` is the only lesson file the loader picks up; other files are assets.
-- Courses are implicit: the first path segment groups lessons. All lessons of a course must share the prefix.
+- The full path is `category → subCategory → course → lesson → part`, e.g. `Tech → Electronics → Analog Electronics → The Common-Emitter Amplifier → Why amplify with a transistor?`.
+- The part folder is the permanent id: `analog-electronics/1-common-emitter-amplifier/1-why-amplify`. It forms the URL (`/courses/<course>/<lesson>/<part>/`) and the id used by prerequisites and progress storage. Never rename published folders.
+- A part covers exactly one concept and takes **at most 10 minutes**; the build rejects longer `estimatedTime`. Split, do not shrink the coverage.
+- Prefer question-style part titles ("Why amplify with a transistor?"). A reader should know what a part answers from the title alone.
+- Lessons group parts into a chapter: 20 to 40 minutes each, ordered by `lesson.json`.
 
-## Course metadata
+## Course and lesson metadata
 
-Every course (any folder containing lessons) **must** have a `course.json`, or the build fails. It declares the course taxonomy — the site groups courses by category on the home page:
+Every course **must** have a `course.json`, and every lesson **must** have a `lesson.json`, or the build fails with a message naming the missing file.
+
+`course.json` declares the taxonomy — the site groups courses by category on the home page:
 
 ```json
 {
@@ -41,33 +47,47 @@ Every course (any folder containing lessons) **must** have a `course.json`, or t
 | `subCategory` | Topic within the category, e.g. `Electronics`, `Political Philosophy` |
 | `difficulty`  | `"beginner"`, `"intermediate"`, or `"advanced"`                       |
 
-The full path reads as the course's place in the taxonomy: `Tech → Electronics → DC Circuits`, or `Philosophy → Political Philosophy → Communism`. Categories and subcategories are free-form strings; use consistent capitalization so grouping and sorting stay clean.
+`lesson.json` declares the chapter:
 
-## Frontmatter
+```json
+{
+  "title": "The Common-Emitter Amplifier",
+  "order": 1,
+  "summary": "Bias a transistor and compute the gain of a common-emitter stage."
+}
+```
+
+| Field     | Rules                                       |
+| --------- | ------------------------------------------- |
+| `title`   | Display name of the lesson                  |
+| `order`   | Unique positive integer within the course   |
+| `summary` | Optional one-liner shown on the course page |
+
+## Part frontmatter
 
 ```yaml
 ---
-title: "The RC Low-Pass Filter"
-order: 3
-summary: "One sentence describing the lesson."
-prerequisites: ["dc-circuits/1-ohms-law", "dc-circuits/2-kirchhoffs-laws"]
+title: "Why amplify with a transistor?"
+order: 1
+summary: "One sentence describing the part."
+prerequisites: ["analog-electronics/1-common-emitter-amplifier/1-why-amplify"]
 learningObjectives:
   - "Explain why …"
   - "Compute …"
-estimatedTime: 30
+estimatedTime: 4
 needsReview: false
 ---
 ```
 
-| Field                | Rules                                                                                        |
-| -------------------- | -------------------------------------------------------------------------------------------- |
-| `title`              | Plain text, no math                                                                          |
-| `order`              | Positive integer, unique within the course; drives course page, sidebar, and prev/next order |
-| `summary`            | One sentence; shown on course cards                                                          |
-| `prerequisites`      | Lesson ids (`<course>/<slug>`); resolve to titles automatically; `[]` for the first lesson   |
-| `learningObjectives` | May contain `$…$` inline math (rendered with KaTeX); plain Unicode (`τ = RC`) also works     |
-| `estimatedTime`      | Integer minutes                                                                              |
-| `needsReview`        | `true` flags the lesson as needing a human pass                                              |
+| Field                | Rules                                                                                     |
+| -------------------- | ----------------------------------------------------------------------------------------- |
+| `title`              | Plain text, no math; question style preferred                                             |
+| `order`              | Positive integer, unique within the lesson; drives sidebar and prev/next order            |
+| `summary`            | One sentence; shown on the course page                                                    |
+| `prerequisites`      | Part ids (`<course>/<lesson>/<part>`); resolve to links automatically; `[]` for the first |
+| `learningObjectives` | May contain `$…$` inline math (rendered with KaTeX); plain Unicode (`τ = RC`) also works  |
+| `estimatedTime`      | Integer minutes, **1 to 10**; longer parts fail the build                                 |
+| `needsReview`        | `true` flags the part as needing a human pass                                             |
 
 Frontmatter is validated by Zod at build; wrong types fail with `[InvalidContentEntryDataError]` naming the field.
 
@@ -83,14 +103,14 @@ Frontmatter is validated by Zod at build; wrong types fail with `[InvalidContent
   ```
 
 - In component string props (Quiz/NumericQuiz `question`, `options`, `explanation`), write LaTeX with **single backslashes**: `$R = 1\,\text{k}\Omega$`.
-- Frontmatter fields (objectives, summary) are not math-rendered — use Unicode symbols there.
+- `summary` and `title` are plain text; objectives may use `$…$` math.
 
 ## Components
 
 The allowed set and every prop are documented in `docs/content-components.md`: `Callout`, `Quiz`, `NumericQuiz`, `CollapsibleSolution`, `Figure`, `Mermaid`, `DataPlot`, `Playground`. Rules that bite:
 
 - Components are available **without imports**. Anything outside the set fails the build with "`X` is not defined".
-- `Figure`: the markdown image is a **child**; alt and `caption` are required; numbering is automatic (`Figure 3.1` = lesson order + sequence). Never hand-write figure numbers.
+- `Figure`: the markdown image is a **child**; alt and `caption` are required; numbering is automatic (`Figure 3.2.1` = lesson order, part order, figure index). Never hand-write figure numbers.
 - `Mermaid` children are JSX: use `<br/>` (never `<br>`), and never `{` or `}`. Use ASCII arrows (`-->`), not Unicode dashes. The fenced ` ```mermaid ` form avoids all JSX parsing if a diagram needs braces.
 - `Quiz`/`NumericQuiz` results are stored per lesson; add a `quizId` to both when a lesson has more than one quiz.
 - `Playground` specs are validated at build: ranges (`min < max`, `default` inside), unique parameter names, `plot.x.variable` distinct from parameter names, and every formula (outputs, marker positions) must parse and produce a finite number at the defaults. Parameters with `log: true` render as logarithmic sliders (positive min/max, `step` optional — used to snap to component values); use them for quantities that span decades (R, C, f).
@@ -117,8 +137,9 @@ Generated figures (Schemdraw, CircuiTikZ, matplotlib exports) must be readable i
 
 | Build error                                                                                | Cause                                             | Fix                                                           |
 | ------------------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------------------------------------- |
-| `[InvalidContentEntryDataError] … <field>`                                                 | Wrong/missing frontmatter or course.json type     | Correct the field                                             |
-| `[courses] missing course metadata: …`                                                     | A course has lessons but no `course.json`         | Create the file with title, category, subCategory, difficulty |
+| `[InvalidContentEntryDataError] … <field>`                                                 | Wrong/missing frontmatter or metadata type        | Correct the field                                             |
+| `[courses] missing course metadata: …`                                                     | A course has parts but no `course.json`           | Create the file with title, category, subCategory, difficulty |
+| `[courses] missing lesson metadata: …`                                                     | A lesson has parts but no `lesson.json`           | Create the file with title and order                          |
 | `` `X` is not defined ``                                                                   | Unknown component or misspelled name              | Use only the documented set                                   |
 | `[content] <Figure> … missing alt text / the caption prop / must contain a markdown image` | Figure misuse                                     | `![alt](./fig.svg)` child + `caption` prop                    |
 | `[DataPlot] invalid data file …: <path in schema>`                                         | JSON schema violation                             | Fix the named fields                                          |
@@ -131,19 +152,20 @@ Generated figures (Schemdraw, CircuiTikZ, matplotlib exports) must be readable i
 
 Before marking a lesson done:
 
-1. `pnpm build` passes (this validates frontmatter, figures, data files, specs, diagrams, and components).
+1. `pnpm build` passes (this validates frontmatter, metadata, figures, data files, specs, diagrams, and components).
 2. **Numeric results are verified** — recompute every worked example and quiz answer independently (do not copy numbers between the two). Quiz answers must sit inside their tolerance; check the tolerance makes sense (±2 % of the value, or an absolute value that matches the significant figures given).
-3. Open the lesson in the browser (`pnpm dev` or `astro preview --background`): display math is centered and full-size, figures render in light and dark mode, each quiz answers correctly _and_ incorrectly.
+3. Open the parts in the browser (`pnpm dev` or `astro preview --background`): display math is centered and full-size, figures render in light and dark mode, each quiz answers correctly _and_ incorrectly.
 4. Data files: spot-check first/last points against the formula.
-5. Commit per repo conventions (`AGENTS.md`): content insertion is exempt from the size limit; imperative Conventional Commits, e.g. `feat(content): add series-parallel resistors lesson`.
+5. Commit per repo conventions (`AGENTS.md`): content insertion is exempt from the size limit; imperative Conventional Commits, e.g. `feat(content): add common emitter lesson parts`.
 
 ## Authoring checklist for a new lesson
 
-- [ ] Folder `<course>/<n>-<slug>/` with `doc.mdx` named exactly.
-- [ ] Frontmatter complete; `order` continues the course sequence; `prerequisites` point at real lesson ids.
+- [ ] `lesson.json` with `title`, `order`, optional `summary`; every part at most 10 minutes, one concept each.
+- [ ] Part folders `<p>-<slug>/` with `doc.mdx` named exactly; `order` unique within the lesson.
+- [ ] Part `prerequisites` point at real part ids; every prerequisite comes earlier.
 - [ ] Objectives checked (math renders if used).
 - [ ] Display math fenced; inline math single-`$`.
-- [ ] Figures as `<Figure>` with alt + caption; SVGs follow the theme rules.
-- [ ] At least one `Quiz` or `NumericQuiz`; math in props with single backslashes.
+- [ ] Figures as `<Figure>` with alt + caption; SVGs follow the theme rules; assets sit beside the part that uses them.
+- [ ] At least one `Quiz` or `NumericQuiz` per lesson; math in props with single backslashes.
 - [ ] Data files computed externally and validated by the build.
 - [ ] `pnpm build` green; browser check done; numbers verified.
