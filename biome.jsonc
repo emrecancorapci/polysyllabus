@@ -6,7 +6,10 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignoreUnknown": false
+    "ignoreUnknown": false,
+    // course-factory has its own Python and prose tooling; frontend lint and
+    // format must not touch it (see docs/plan/merge-course-factory.md M2-7).
+    "includes": ["**", "!course-factory"]
   },
   "formatter": {
     "enabled": true,

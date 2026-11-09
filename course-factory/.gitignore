@@ -7,4 +7,5 @@ work/*/sources/*
 !work/*/sources/sources.json
 work/*/extracted/
 work/*/*/screenshot.png
-work/*/*/claims-report.json
+work/*/*/screenshot.png
+claims-report.json

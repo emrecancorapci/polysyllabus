@@ -36,7 +36,7 @@ Turn a topic, a set of source files, or both into well structured, verified cour
       review-edit.md
 ```
 
-The frontend location is read from `FRONTEND_DIR` (default `../frontend`). Its `docs/lesson-authoring.md` (structure, frontmatter, math and figure rules, failure modes) and `docs/content-components.md` (allowed MDX components and props) are the contract for lessons. Read both before writing a lesson. They change over time, so do not copy their rules into prompts. Point to them.
+The frontend is the repository root, one level up. Its location is read from `FRONTEND_DIR` (default `..`). The contract for lessons is `docs/lesson-authoring.md` (structure, frontmatter, math and figure rules, failure modes) and `docs/content-components.md` (allowed MDX components and props), both under `FRONTEND_DIR`. Read both before writing a lesson. They change over time, so do not copy their rules into prompts. Point to them.
 
 Golden rule from the frontend: content never contains imports, chart code or JavaScript. Every course needs a `course.json` (title, summary, category, subCategory, difficulty) or the build fails. Lesson folder names are permanent ids.
 

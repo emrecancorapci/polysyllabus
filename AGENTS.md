@@ -6,6 +6,12 @@ Guidance for AI agents (and humans) working on the **frontend** of this project.
 
 A personal study tool for electrical and electronics engineering courses. A separate generation pipeline produces course material as MDX files; this frontend renders them as structured, Coursera-style courses. It may become a product later, so keep the content format independent of the frontend and keep generation separate from the site. Astro-specific agent notes (for example, dev server background mode) are in `docs/ASTRO.md`.
 
+## Repo Layout
+
+This repository has two parts. The frontend lives at the repo root and follows this file. The course generation pipeline lives in `course-factory/`. It has its own `AGENTS.md`, Python tools and sprint plans in `course-factory/docs/plan/`. Work inside that folder follows its rules.
+
+The planning rule (start with the lowest-numbered sprint whose status is not Done) applies per folder. `docs/plan/` for the frontend, `course-factory/docs/plan/` for the factory. `docs/plan/merge-course-factory.md` is a one-off plan that spans both.
+
 ## Tech Stack
 
 - **pnpm** is the package manager; run all installs and scripts through it.

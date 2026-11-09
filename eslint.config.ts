@@ -9,7 +9,8 @@ import tseslint from "typescript-eslint";
 export default defineConfig([
   // Generated files: not lintable (dist output is not part of the TS project,
   // .astro types are machine-generated). Must be a lone object to act globally.
-  { ignores: ["dist/", ".astro/"] },
+  // course-factory is a Python pipeline with its own tooling (AGENTS.md there).
+  { ignores: ["dist/", ".astro/", "course-factory/"] },
   {
     files: ["**/*.{js,ts}"],
     extends: [js.configs.recommended, tseslint.configs.recommendedTypeChecked],
