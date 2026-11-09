@@ -1,0 +1,43 @@
+---
+title: "The RC Low-Pass Filter"
+order: 1
+summary: "Find the cutoff frequency of a series RC filter."
+prerequisites: []
+learningObjectives:
+  - "Compute the cutoff frequency $f_c$ of an RC low-pass filter"
+  - "Explain why high frequencies are attenuated"
+estimatedTime: 10
+needsReview: false
+---
+
+A resistor and a capacitor in series form a simple filter. The output is taken across the capacitor.
+
+<Figure caption="A series RC network. The output is taken across the capacitor.">
+  ![A source drives a resistor R in series with a capacitor C to ground](./fig-rc.svg)
+</Figure>
+
+## Cutoff frequency
+
+The cutoff frequency is where the output power drops to half of its low frequency value. For this filter it is:
+
+$$
+f_c = \frac{1}{2\pi RC}
+$$
+
+With $R = 1\,\text{k}\Omega$ and $C = 100\,\text{nF}$, the cutoff frequency is about 1591.5 Hz.
+
+The time constant is $\tau = RC$. Here it is 0.1 ms.
+
+## Why high frequencies are attenuated
+
+A capacitor has a lower impedance at higher frequencies. At high frequencies it acts almost like a short circuit, so very little voltage appears across it.
+
+## Check your understanding
+
+<NumericQuiz
+  question="With $R = 2.2\,\text{k}\Omega$ and $C = 47\,\text{nF}$, what is the cutoff frequency $f_c$?"
+  answer={1539.2}
+  tolerance={{ rel: 0.02 }}
+  unit="Hz"
+  explanation="Use $f_c = 1/(2\pi RC)$ with $RC = 2200 \times 47 \times 10^{-9}\,\text{s}$."
+/>

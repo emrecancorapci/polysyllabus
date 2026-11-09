@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 320 140" role="img">
+  <rect width="320" height="140" style="fill:none" />
+  <g style="stroke:currentColor;fill:none;stroke-width:2">
+    <path d="M20 70 L60 70 L70 55 L90 85 L110 55 L130 85 L140 70 L180 70" />
+    <path d="M180 70 L260 70" />
+    <path d="M230 70 L230 90 M215 90 L245 90 M215 98 L245 98 M230 98 L230 120" />
+  </g>
+  <text x="85" y="45" fill="currentColor" font-size="14">R</text>
+  <text x="250" y="97" fill="currentColor" font-size="14">C</text>
+</svg>

@@ -1,0 +1,45 @@
+{
+  "lesson": "1-rc-low-pass-filter",
+  "claims": [
+    {
+      "id": "cutoff-frequency",
+      "kind": "worked-example",
+      "text": "1591.5 Hz",
+      "quantities": [
+        { "name": "R", "value": 1000, "unit": "ohm" },
+        { "name": "C", "value": 1e-7, "unit": "farad" }
+      ],
+      "code": "R = 1e3\nC = 100e-9\nresult = 1 / (2 * math.pi * R * C)",
+      "expected": 1591.5,
+      "unit": "Hz",
+      "tolerance": { "relative": 0.0001 }
+    },
+    {
+      "id": "time-constant",
+      "kind": "worked-example",
+      "text": "0.1 ms",
+      "quantities": [
+        { "name": "R", "value": 1000, "unit": "ohm" },
+        { "name": "C", "value": 1e-7, "unit": "farad" }
+      ],
+      "code": "R = 1e3\nC = 100e-9\nresult = R * C * 1e3",
+      "expected": 0.1,
+      "unit": "ms",
+      "tolerance": { "relative": 0.0001 }
+    },
+    {
+      "id": "quiz-cutoff",
+      "kind": "quiz",
+      "text": "answer={1539.2}",
+      "quantities": [
+        { "name": "R", "value": 2200, "unit": "ohm" },
+        { "name": "C", "value": 4.7e-8, "unit": "farad" }
+      ],
+      "code": "R = 2.2e3\nC = 47e-9\nresult = 1 / (2 * math.pi * R * C)",
+      "expected": 1539.2,
+      "unit": "Hz",
+      "tolerance": { "relative": 0.0001 },
+      "source": "NumericQuiz answer. The quiz tolerance is rel 0.02."
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lesson citations",
+  "description": "Which source and pages each section of a lesson learned from. Stays in the work folder. The frontend has no sources field.",
+  "type": "object",
+  "required": ["lesson", "citations"],
+  "additionalProperties": false,
+  "properties": {
+    "lesson": { "type": "string" },
+    "citations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["section", "source", "pages"],
+        "additionalProperties": false,
+        "properties": {
+          "section": { "type": "string", "description": "The heading in doc.mdx that used this source." },
+          "source": { "type": "string", "pattern": "^S[0-9]+$" },
+          "pages": { "type": "string", "description": "For example 45-47, or slide 12." },
+          "note": { "type": "string" }
+        }
+      }
+    }
+  }
+}

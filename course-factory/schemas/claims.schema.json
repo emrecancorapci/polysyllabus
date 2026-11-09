@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lesson claims",
+  "description": "Machine-checkable numbers and results in a lesson. Run by tools/run_claims.py.",
+  "type": "object",
+  "required": ["lesson", "claims"],
+  "additionalProperties": false,
+  "properties": {
+    "lesson": { "type": "string" },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "text", "code", "expected"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "kind": {
+            "enum": ["worked-example", "quiz", "equation", "figure", "text"]
+          },
+          "text": {
+            "type": "string",
+            "description": "The result exactly as it appears in the lesson."
+          },
+          "quantities": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "value", "unit"],
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "number" },
+                "unit": { "type": "string" }
+              }
+            }
+          },
+          "code": {
+            "type": "string",
+            "description": "Python snippet. May use math, numpy as np and scipy. Must assign the result to a variable called result."
+          },
+          "expected": {
+            "type": "number",
+            "description": "The number written in the lesson."
+          },
+          "unit": { "type": "string" },
+          "tolerance": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "relative": { "type": "number", "minimum": 0 },
+              "absolute": { "type": "number", "minimum": 0 }
+            }
+          },
+          "source": {
+            "type": "string",
+            "description": "Optional source id and page for the formula, for example S1 p.45."
+          }
+        }
+      }
+    }
+  }
+}

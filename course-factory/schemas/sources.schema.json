@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Course sources",
+  "type": "object",
+  "required": ["course", "sources"],
+  "additionalProperties": false,
+  "properties": {
+    "course": { "type": "string" },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "kind", "license", "use"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^S[0-9]+$" },
+          "title": { "type": "string" },
+          "authors": { "type": "array", "items": { "type": "string" } },
+          "kind": {
+            "enum": [
+              "user-file",
+              "open-textbook",
+              "course-notes",
+              "datasheet",
+              "paper",
+              "web-page",
+              "reference-title"
+            ]
+          },
+          "path": { "type": "string" },
+          "url": { "type": "string" },
+          "license": {
+            "type": "string",
+            "description": "For example CC-BY-4.0, user-provided, manufacturer, unknown."
+          },
+          "use": {
+            "enum": ["learn-and-cite", "reference-only", "figures-allowed"],
+            "description": "learn-and-cite is the default. figures-allowed only if the license permits reusing images."
+          },
+          "attribution": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+
+# Downloaded and extracted material stays local. Keep the source registry.
+work/*/sources/*
+!work/*/sources/sources.json
+work/*/extracted/
+work/*/*/screenshot.png
+work/*/*/claims-report.json
