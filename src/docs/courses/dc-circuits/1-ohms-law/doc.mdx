@@ -1,7 +1,7 @@
 ---
 title: "Ohm's Law, Voltage, and Current"
 order: 1
-summary: "Build the vocabulary of circuit analysis — charge, current, voltage, and resistance — and connect them through Ohm's law."
+summary: "Build the vocabulary of circuit analysis, from charge and current to voltage and resistance, and connect them through Ohm's law."
 prerequisites: []
 learningObjectives:
   - "Define electric current, voltage, and resistance and give their SI units"
@@ -12,7 +12,7 @@ estimatedTime: 20
 needsReview: false
 ---
 
-Circuit analysis rests on three quantities — **voltage**, **current**, and **resistance** — and one law that ties them together. This lesson defines each quantity and shows how to move between them.
+Circuit analysis rests on three quantities, **voltage**, **current**, and **resistance**, and on one law that ties them together. This lesson defines each quantity and shows how to move between them.
 
 ## Charge and current
 
@@ -35,12 +35,12 @@ $$
 The SI unit is the **volt** (V), where 1 V = 1 J/C. A voltage is always measured *between* two points, never at a single point.
 
 <Callout variant="tip" title="Think in pairs">
-  Whenever you see "the voltage at a point", ask "relative to what?" — the reference node has to be defined first, because $V = W/Q$ only makes sense between two points. You will use this constantly once nodal analysis shows up.
+  Whenever you see "the voltage at a point", ask "relative to what?". The reference node has to be defined first, because $V = W/Q$ only makes sense between two points. You will use this constantly once nodal analysis shows up.
 </Callout>
 
 ## Resistance and Ohm's law
 
-**Resistance** measures how strongly a material opposes current flow; its SI unit is the **ohm** ($\Omega$). For many materials over a wide range, the current through the material is proportional to the voltage across it:
+**Resistance** measures how strongly a material opposes current flow. Its SI unit is the **ohm** ($\Omega$). For many materials over a wide range, the current through the material is proportional to the voltage across it:
 
 $$
 V = I \, R
@@ -56,7 +56,7 @@ The figure below shows the simplest complete circuit: a voltage source `V` drivi
   ![A voltage source V drives a current I clockwise around a loop through a resistor R](./fig-ohms-law-circuit.svg)
 </Figure>
 
-The source supplies energy; the load converts it. The same current flows through every element in the loop because charge is conserved. The relationship between the quantities follows one direction around the loop:
+The source supplies energy, and the load converts it. Because charge is conserved, the same current flows through every element in the loop. The relationship between the quantities follows one direction around the loop:
 
 ```mermaid
 flowchart LR
@@ -73,7 +73,7 @@ A 12 V battery is connected across a 220 Ω resistor. What current flows, and wh
 2. Power: $P = V \, I = 12\,\text{V} \times 0.0545\,\text{A} \approx 0.65\,\text{W}$
 
 <Callout variant="warning">
-  A standard 0.25 W resistor would overheat in this circuit — component power ratings matter as much as resistance values.
+  A standard 0.25 W resistor would overheat in this circuit. Component power ratings matter as much as resistance values.
 </Callout>
 
 ## Try it yourself
@@ -90,7 +90,7 @@ A space heater draws 4 A from a 230 V supply. What resistance does it present, a
 
 ## Key takeaways
 
-- Current $I$ (A) is charge flow per unit time; voltage $V$ (V) is energy per unit charge; resistance $R$ ($\Omega$) opposes current.
+- Current $I$ (A) is charge flow per unit time. Voltage $V$ (V) is energy per unit charge. Resistance $R$ ($\Omega$) opposes current.
 - Ohm's law, $V = I \, R$, links the three for ohmic materials.
 - Always pair a resistance value with its power rating when choosing components.
 

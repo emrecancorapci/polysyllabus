@@ -12,11 +12,11 @@ estimatedTime: 30
 needsReview: false
 ---
 
-Resistors obey Ohm's law at every frequency. Capacitors do not — their impedance falls as frequency rises. Put the two in series and you get a **frequency-dependent voltage divider**: the RC low-pass filter.
+Resistors obey Ohm's law at every frequency. Capacitors do not. Their impedance falls as frequency rises. Put the two in series and you get a **frequency-dependent voltage divider**: the RC low-pass filter.
 
 ## The circuit
 
-<Figure caption="A series RC network driven by a source; the output is taken across the capacitor.">
+<Figure caption="A series RC network driven by a source. The output is taken across the capacitor.">
   ![A voltage source drives a resistor in series with a capacitor, output across the capacitor](./fig-rc-lowpass.svg)
 </Figure>
 
@@ -30,17 +30,17 @@ With $R = 1\,\text{k}\Omega$ and $C = 100\,\text{nF}$, $f_c \approx 1591.5\,\tex
 
 ## Step response
 
-Switch the source on and the capacitor charges through the resistor with time constant $\tau = RC$. For the values above, $\tau = 0.1\,\text{ms}$ — after roughly $5\tau$ the capacitor is essentially fully charged.
+Switch the source on and the capacitor charges through the resistor with time constant $\tau = RC$. For the values above, $\tau = 0.1\,\text{ms}$. After roughly $5\tau$ the capacitor is essentially fully charged.
 
 <DataPlot src="./charging-curve.json" />
 
 <Callout variant="note" title="Five time constants">
-  The $5\tau$ rule of thumb is where the exponential reaches $99.3\%$ of its final value — "close enough" by engineering standards.
+  The $5\tau$ rule of thumb is where the exponential reaches $99.3\%$ of its final value. That is close enough by engineering standards.
 </Callout>
 
 ## Frequency response
 
-A Bode plot shows the same story in the frequency domain: gain flat at low frequency, then rolling off at $-20\,\text{dB/decade}$ past $f_c$, with the phase swinging from $0°$ to $-90°$. Both panels share the same logarithmic frequency axis, so features line up vertically.
+A Bode plot shows the same story in the frequency domain. Gain is flat at low frequency, then rolls off at $-20\,\text{dB/decade}$ past $f_c$. The phase swings from $0°$ to $-90°$. Both panels share the same logarithmic frequency axis, so features line up vertically.
 
 <DataPlot src="./bode.json" />
 
@@ -55,7 +55,7 @@ flowchart LR
 
 ## Explore it yourself
 
-Drag the sliders and watch the cutoff — and the whole magnitude curve — move. The formulas are exactly the ones above: $f_c = 1/(2\pi R C)$ and $|H| = 1/\sqrt{1 + (f/f_c)^2}$.
+Drag the sliders and watch the cutoff and the whole magnitude curve move. The formulas are exactly the ones above: $f_c = 1/(2\pi R C)$ and $|H| = 1/\sqrt{1 + (f/f_c)^2}$.
 
 <Playground
   spec={{
@@ -93,11 +93,11 @@ Drag the sliders and watch the cutoff — and the whole magnitude curve — move
   answer={1591.5}
   tolerance={{ rel: 0.02 }}
   unit="Hz"
-  explanation="$f_c = 1/(2\pi R C) = 1/(2\pi \times 10^3 \times 10^{-7}) \approx 1591.5\,\text{Hz}$ — about $1.59\,\text{kHz}$."
+  explanation="$f_c = 1/(2\pi R C) = 1/(2\pi \times 10^3 \times 10^{-7}) \approx 1591.5\,\text{Hz}$, about $1.59\,\text{kHz}$."
 />
 
 ## Key takeaways
 
-- An RC low-pass passes low frequencies and attenuates high ones; $f_c = 1/(2\pi R C)$.
-- In time, the same circuit charges with $\tau = RC$ — the two views are one circuit.
+- An RC low-pass passes low frequencies and attenuates high ones. The cutoff is $f_c = 1/(2\pi R C)$.
+- In time, the same circuit charges with $\tau = RC$. The two views are one circuit.
 - The Bode magnitude and phase panels share the frequency axis by construction.
