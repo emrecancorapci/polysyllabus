@@ -19,8 +19,10 @@ Create these files in `work/<slug>/<lesson>/`:
 
 - `doc.mdx`: frontmatter with exactly these fields: `title`, `order`, `summary`, `prerequisites` (lesson ids like `<course>/<slug>`, or `[]`), `learningObjectives`, `estimatedTime` (integer minutes) and `needsReview`. Then the lesson. Suggested flow: motivation, core idea, derivation, worked example, common mistakes, quiz, key takeaways. Use only documented components, without imports. Never write chart code.
 - `claims.json`: matches `schemas/claims.schema.json`. Add an entry for every computed number, equation result, worked example and quiz answer. Each entry has the text as shown, the quantities with units, and a Python snippet that computes the value. For a NumericQuiz, the claim `expected` is the `answer` prop.
-- `citations.json`: matches `schemas/citations.schema.json`. List the source id and pages used for each section. The frontend has no sources field, so citations live here and not in the frontmatter.
-- `figures.md`: one brief per figure with id, what it shows, labels and symbols, the expected direction of currents and polarity, and alt text.
+  - Claim `text` must appear verbatim in `doc.mdx` (whitespace is normalized, nothing else). Write each result so the plain number is present in the text, for example a sentence like "The divider holds the base at 1.8 V" with text `"1.8 V"`, or a quiz prop with text `"answer={4.8}"`. A number written only inside LaTeX as `\frac{1.8}{7}` cannot be matched.
+  - Every NumericQuiz answer gets a `kind: "quiz"` claim. A multiple choice `Quiz` gets a claim only when the correct option is itself a computed number. Conceptual multiple choice questions get no claim. Never add placeholder claims such as `result = 2` for an option index.
+- `citations.json`: matches `schemas/citations.schema.json`. List the source id and pages used for each section. The frontend has no sources field, so citations live here and not in the frontmatter. With no sources, write an empty `citations` array.
+- `figures.md`: one brief per figure with id, what it shows, labels and symbols, the expected direction of currents and polarity, and alt text. Write the briefs even when no figure files are produced yet. The Figure maker implements them later, so mark briefs that are deferred.
 - Data for `DataPlot` is not written by you. Put a data brief in `figures.md` (type, axes, formula, range) and the Figure maker computes the JSON.
 
 ## Rules
