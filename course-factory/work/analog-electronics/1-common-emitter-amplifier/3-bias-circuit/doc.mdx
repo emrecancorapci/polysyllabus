@@ -1,0 +1,40 @@
+---
+title: "The Circuit and Its Bias"
+order: 3
+summary: "A transistor needs the right resting voltages. Four resistors and three capacitors set them."
+prerequisites: ["analog-electronics/1-common-emitter-amplifier/2-common-emitter"]
+learningObjectives:
+  - "Explain what a bias point is and why it matters"
+  - "Name the role of each of the four resistors"
+  - "Distinguish coupling capacitors from the bypass capacitor"
+estimatedTime: 5
+needsReview: true
+---
+
+## Biasing
+
+A transistor needs the right resting voltages before it can amplify anything. Setting those resting values is called biasing. The resting values together form the bias point, also called the Q point.
+
+A transistor must also stay in its active region. That is the range where it amplifies rather than acting as a switch.
+
+Around the transistor sit four resistors and three capacitors.
+
+- $R_1$ runs from the positive supply $V_{CC}$ down to the base.
+- $R_2$ runs from the base down to ground.
+- $R_1$ and $R_2$ together form a voltage divider that fixes the base voltage.
+- $R_C$ runs from the supply to the collector and converts current back into voltage.
+- $R_E$ runs from the emitter to ground and stabilizes the bias current.
+- $C_{in}$ and $C_{out}$ are coupling capacitors. They pass signal but block DC.
+- $C_E$ is the bypass capacitor, placed across $R_E$.
+
+## Two kinds of capacitor
+
+A coupling capacitor lets signal variations through while blocking DC. That keeps this stage's bias from disturbing the source and the load.
+
+The bypass capacitor does a different job. At signal frequencies it effectively shorts $R_E$. The emitter then becomes a signal ground. The DC bias current through $R_E$ is unchanged.
+
+## Key takeaways
+
+- Biasing sets the resting point, and the Q point must sit in the active region.
+- The divider fixes the base voltage, $R_C$ converts current to voltage, and $R_E$ stabilizes the bias.
+- Coupling capacitors block DC. The bypass capacitor grounds the emitter for signals only.

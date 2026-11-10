@@ -12,18 +12,94 @@
       "slug": "1-common-emitter-amplifier",
       "order": 1,
       "title": "The Common-Emitter Amplifier",
-      "summary": "Bias a BJT, build the small-signal model and compute voltage gain.",
-      "objectives": [
-        "Explain why the emitter is common to input and output",
-        "Compute the DC bias point of a voltage divider biased BJT",
-        "Compute small-signal voltage gain with $A_v = -g_m R_C$",
-        "Predict what happens to gain when the emitter is unbypassed"
-      ],
-      "prerequisites": [],
-      "estimatedMinutes": 30,
-      "sources": [],
-      "plannedFigures": "No external figure files in this run. The Figure maker is not part of sprint 1. Use the Mermaid component for a signal path diagram if it helps.",
-      "plannedPractice": "One worked DC bias example, one worked gain example, one NumericQuiz on bias and one Quiz on gain behavior."
+      "summary": "Bias a transistor, find its small-signal transconductance and compute the voltage gain of a common-emitter stage.",
+      "estimatedMinutes": 36,
+      "parts": [
+        {
+          "slug": "1-why-amplify",
+          "order": 1,
+          "title": "Why amplify with a transistor?",
+          "summary": "Signals start small. The transistor is the part that makes them large without wrecking their shape.",
+          "minutes": 4,
+          "objectives": ["Explain what an amplifier stage does", "Name the three terminals of a BJT"],
+          "prerequisites": [],
+          "sources": [],
+          "plannedFigures": "Deferred Mermaid signal path diagram.",
+          "plannedPractice": "None."
+        },
+        {
+          "slug": "2-common-emitter",
+          "order": 2,
+          "title": "Why the emitter is called common",
+          "summary": "Both the input loop and the output loop share the emitter node. That shared node names the stage.",
+          "minutes": 4,
+          "objectives": ["Explain why the emitter node is common to the input and the output"],
+          "prerequisites": ["analog-electronics/1-common-emitter-amplifier/1-why-amplify"],
+          "sources": [],
+          "plannedFigures": "Mermaid signal path diagram.",
+          "plannedPractice": "None."
+        },
+        {
+          "slug": "3-bias-circuit",
+          "order": 3,
+          "title": "The Circuit and Its Bias",
+          "summary": "A transistor needs the right resting voltages. Four resistors and three capacitors set them.",
+          "minutes": 5,
+          "objectives": ["Explain the role of each bias resistor and capacitor"],
+          "prerequisites": ["analog-electronics/1-common-emitter-amplifier/2-common-emitter"],
+          "sources": [],
+          "plannedFigures": "Deferred circuit schematic brief (fig-ce-stage).",
+          "plannedPractice": "None."
+        },
+        {
+          "slug": "4-bias-point",
+          "order": 4,
+          "title": "Finding the DC Bias Point",
+          "summary": "A worked example that walks from the divider down to the collector-emitter voltage.",
+          "minutes": 7,
+          "objectives": ["Compute the DC bias point of a voltage divider biased BJT"],
+          "prerequisites": ["analog-electronics/1-common-emitter-amplifier/3-bias-circuit"],
+          "sources": [],
+          "plannedFigures": "Deferred load line brief (fig-loadline).",
+          "plannedPractice": "One worked DC bias example with four claims."
+        },
+        {
+          "slug": "5-small-signal-gain",
+          "order": 5,
+          "title": "The Small-Signal Gain",
+          "summary": "Freeze the bias, replace the transistor with one number, and the gain falls out.",
+          "minutes": 6,
+          "objectives": ["Compute small-signal voltage gain with $A_v = -g_m R_C$"],
+          "prerequisites": ["analog-electronics/1-common-emitter-amplifier/4-bias-point"],
+          "sources": [],
+          "plannedFigures": "Deferred small-signal model brief (fig-small-signal).",
+          "plannedPractice": "Worked gain example and a NumericQuiz on the bias point."
+        },
+        {
+          "slug": "6-unbypassed-gain",
+          "order": 6,
+          "title": "The Unbypassed Emitter",
+          "summary": "Remove the bypass capacitor and negative feedback trades gain for stability.",
+          "minutes": 6,
+          "objectives": ["Predict what happens to the gain when the emitter is unbypassed"],
+          "prerequisites": ["analog-electronics/1-common-emitter-amplifier/5-small-signal-gain"],
+          "sources": [],
+          "plannedFigures": "None.",
+          "plannedPractice": "Worked unbypassed gain example."
+        },
+        {
+          "slug": "7-mistakes-and-review",
+          "order": 7,
+          "title": "Common Mistakes and Review",
+          "summary": "The traps that cost points on exams, and the lesson in four sentences.",
+          "minutes": 4,
+          "objectives": ["Avoid the standard common-emitter exam mistakes"],
+          "prerequisites": ["analog-electronics/1-common-emitter-amplifier/6-unbypassed-gain"],
+          "sources": [],
+          "plannedFigures": "None.",
+          "plannedPractice": "One Quiz on gain behavior."
+        }
+      ]
     }
   ]
 }

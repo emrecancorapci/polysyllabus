@@ -1,0 +1,34 @@
+---
+title: "Why the emitter is called common"
+order: 2
+summary: "Both the input loop and the output loop share the emitter node. That shared node names the stage."
+prerequisites: ["analog-electronics/1-common-emitter-amplifier/1-why-amplify"]
+learningObjectives:
+  - "Explain why the emitter node is common to the input and the output"
+  - "Identify where the input and output signals are applied"
+estimatedTime: 4
+needsReview: true
+---
+
+## One node, two loops
+
+The input signal is applied between the base and the emitter. The output signal is taken between the collector and the emitter. Both loops share the emitter node. That shared node gives the stage its name.
+
+In practice the emitter is grounded for signals. So the input enters at the base and the output appears at the collector.
+
+<Mermaid>
+  flowchart LR
+    Vin["v_in"] --> B["Base"]
+    B --> Q["Q1"]
+    Q --> C["Collector"]
+    C --> Vout["v_out"]
+    Q --> E["Emitter"]
+    E --> G["Signal ground"]
+</Mermaid>
+
+The diagram shows the plan. Signal enters at the base and leaves at the collector. The emitter is shared by both paths.
+
+## Key takeaways
+
+- Input loop: base to emitter. Output loop: collector to emitter.
+- The shared emitter node gives the common-emitter stage its name.
