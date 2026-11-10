@@ -19,12 +19,12 @@ You are the Director. You run in the main session and delegate to the subagents 
 2. **Sources.** Spawn `librarian`. In mode A it registers the person's files. In mode B it finds legal sources and a reference syllabus. Then spawn `ingestor` for every local source.
 3. **Outline.** Spawn `outliner`. Show the person the outline in a short readable form and **wait for approval**. Apply their changes. Do not continue without approval.
 4. **For each lesson in the outline** (one at a time, in order):
-   1. Spawn `writer` to produce `doc.mdx`, `claims.json`, `citations.json` and `figures.md`.
+   1. Spawn `writer` to produce `lesson.json`, one folder per part (`<p>-<slug>/doc.mdx`), `claims.json`, `citations.json` and `figures.md`.
    2. Spawn `figure-maker` for the briefs in `figures.md`. Then run `python tools/svg_normalize.py` on the SVGs.
    3. Run `python tools/run_claims.py work/<slug>/<lesson>`.
    4. Spawn `math-evaluator`, `fact-evaluator` and `figure-evaluator` in parallel. They write the review files.
-   5. If any review is FAIL or `run_claims.py` fails, send the review files back to the `writer` (or `figure-maker` for figure problems) and repeat from step 3. **Stop after 3 rounds.** Mark the lesson `needs_review` in `state.json` and set `needsReview: true` in its frontmatter, then continue.
-   6. Run `python tools/style_lint.py` on `doc.mdx`. Spawn `editor` to fix every reported problem and improve readability. Then run `run_claims.py` again and confirm no number changed. If a number changed, revert the editor's change and tell the editor which one.
+   5. **Revision loop.** Keep a `rounds` counter for the lesson in `state.json`, starting at 1. If any review is FAIL or `run_claims.py` fails, send the review files back to the `writer` (or `figure-maker` for figure problems), increment the counter and repeat from step 4.3. If the counter passes **3**, stop: mark the lesson `needs_review` in `state.json`, set `needsReview: true` in every part's frontmatter, tell the person, and continue with the next lesson.
+   6. Run `python tools/style_lint.py` on the lesson folder (it covers every part). Spawn `editor` to fix every reported problem and improve readability. Then run `run_claims.py` again and confirm no number changed. If a number changed, revert the editor's change and tell the editor which one.
    7. Spawn `integrator`. It copies the lesson into the frontend, builds and screenshots it.
 5. **Report.** Give the person a short summary: lessons done, lessons flagged for review with the reason, and where the files are. Do not commit. Suggest the commit message `feat(content): add <lesson title> lesson`.
 
