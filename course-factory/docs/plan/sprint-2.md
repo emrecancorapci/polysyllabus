@@ -8,7 +8,7 @@ Wrong math is caught before it reaches a lesson. The Writer emits `claims.json`,
 
 ## Backlog
 
-- [ ] S2-1 Teach the Writer to emit complete `claims.json` files. Measure coverage: every number in `doc.mdx` should have a claim.
+- [ ] S2-1 Teach the Writer to emit complete `claims.json` files. Measure coverage: every number in the lesson's part files should have a claim.
 - [ ] S2-2 Run the Math evaluator with a different model than the Writer. Compare results on the same lesson.
 - [ ] S2-3 Blind quiz recomputation: the evaluator solves quiz questions from the question text only.
 - [ ] S2-4 Add sympy derivation checks and `pint` unit checks to the evaluator workflow. Write small helper scripts in `tools/` if the agent keeps rewriting the same code.
@@ -24,6 +24,7 @@ Wrong math is caught before it reaches a lesson. The Writer emits `claims.json`,
 
 ## Notes
 
+- The lesson and part structure applies (frontend sprint 9): `claims.json` and the review files live at the lesson level, and claim texts are matched across all `doc.mdx` files of the lesson's parts.
 - Mutation test set: take a correct lesson and change one thing per copy. Examples: drop a factor of 2 or pi, swap a sign, change a prefix (k to M), wrong quiz answer key, wrong limit behavior, wrong unit.
 - The evaluator must never edit the lesson. Check this by diffing the lesson folder before and after.
 - Executable claims catch numeric errors. They do not catch a wrong explanation, so the Fact evaluator in Sprint 5 still matters.
