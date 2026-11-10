@@ -6,145 +6,265 @@
       "kind": "worked-example",
       "text": "1.8 V",
       "quantities": [
-        { "name": "V_CC", "value": 12, "unit": "V" },
-        { "name": "R1", "value": 68, "unit": "kΩ" },
-        { "name": "R2", "value": 12, "unit": "kΩ" }
+        {
+          "name": "V_CC",
+          "value": 12,
+          "unit": "V"
+        },
+        {
+          "name": "R1",
+          "value": 68,
+          "unit": "kΩ"
+        },
+        {
+          "name": "R2",
+          "value": 12,
+          "unit": "kΩ"
+        }
       ],
       "code": "VCC = 12.0\nR1 = 68e3\nR2 = 12e3\nresult = VCC * R2 / (R1 + R2)",
       "expected": 1.8,
       "unit": "V",
-      "tolerance": { "relative": 0.0001 }
+      "tolerance": {
+        "relative": 0.0001
+      }
     },
     {
       "id": "bias-emitter-voltage",
       "kind": "worked-example",
       "text": "1.1 V",
       "quantities": [
-        { "name": "V_B", "value": 1.8, "unit": "V" },
-        { "name": "V_BE", "value": 0.7, "unit": "V" }
+        {
+          "name": "V_B",
+          "value": 1.8,
+          "unit": "V"
+        },
+        {
+          "name": "V_BE",
+          "value": 0.7,
+          "unit": "V"
+        }
       ],
       "code": "VB = 1.8\nVBE = 0.7\nresult = VB - VBE",
       "expected": 1.1,
       "unit": "V",
-      "tolerance": { "relative": 0.0001 }
+      "tolerance": {
+        "relative": 0.0001
+      }
     },
     {
       "id": "bias-collector-current",
       "kind": "worked-example",
       "text": "1.0 mA",
       "quantities": [
-        { "name": "V_E", "value": 1.1, "unit": "V" },
-        { "name": "R_E", "value": 1.1, "unit": "kΩ" }
+        {
+          "name": "V_E",
+          "value": 1.1,
+          "unit": "V"
+        },
+        {
+          "name": "R_E",
+          "value": 1.1,
+          "unit": "kΩ"
+        }
       ],
       "code": "VE = 1.1\nRE = 1.1e3\nresult = VE / RE * 1e3",
       "expected": 1.0,
       "unit": "mA",
-      "tolerance": { "relative": 0.0001 }
+      "tolerance": {
+        "relative": 0.0001
+      }
     },
     {
       "id": "bias-vce",
       "kind": "worked-example",
       "text": "6.2 V",
       "quantities": [
-        { "name": "V_CC", "value": 12, "unit": "V" },
-        { "name": "I_C", "value": 1.0, "unit": "mA" },
-        { "name": "R_C", "value": 4.7, "unit": "kΩ" },
-        { "name": "R_E", "value": 1.1, "unit": "kΩ" }
+        {
+          "name": "V_CC",
+          "value": 12,
+          "unit": "V"
+        },
+        {
+          "name": "I_C",
+          "value": 1.0,
+          "unit": "mA"
+        },
+        {
+          "name": "R_C",
+          "value": 4.7,
+          "unit": "kΩ"
+        },
+        {
+          "name": "R_E",
+          "value": 1.1,
+          "unit": "kΩ"
+        }
       ],
       "code": "VCC = 12.0\nIC = 1.0e-3\nRC = 4.7e3\nRE = 1.1e3\nresult = VCC - IC * RC - IC * RE",
       "expected": 6.2,
       "unit": "V",
-      "tolerance": { "relative": 0.0001 }
+      "tolerance": {
+        "relative": 0.0001
+      }
     },
     {
       "id": "small-signal-gm",
       "kind": "equation",
       "text": "40 mS",
       "quantities": [
-        { "name": "I_C", "value": 1.0, "unit": "mA" },
-        { "name": "V_T", "value": 25, "unit": "mV" }
+        {
+          "name": "I_C",
+          "value": 1.0,
+          "unit": "mA"
+        },
+        {
+          "name": "V_T",
+          "value": 25,
+          "unit": "mV"
+        }
       ],
       "code": "IC = 1.0e-3\nVT = 25e-3\nresult = IC / VT * 1e3",
       "expected": 40,
       "unit": "mS",
-      "tolerance": { "relative": 0.0001 }
+      "tolerance": {
+        "relative": 0.0001
+      }
     },
     {
       "id": "gain-bypassed",
       "kind": "worked-example",
       "text": "-188",
       "quantities": [
-        { "name": "g_m", "value": 40, "unit": "mS" },
-        { "name": "R_C", "value": 4.7, "unit": "kΩ" }
+        {
+          "name": "g_m",
+          "value": 40,
+          "unit": "mS"
+        },
+        {
+          "name": "R_C",
+          "value": 4.7,
+          "unit": "kΩ"
+        }
       ],
       "code": "gm = 1.0e-3 / 25e-3\nRC = 4.7e3\nresult = -gm * RC",
       "expected": -188,
       "unit": "V/V",
-      "tolerance": { "relative": 0.0001 }
+      "tolerance": {
+        "relative": 0.0001
+      }
     },
     {
       "id": "gain-feedback-factor",
       "kind": "equation",
       "text": "45",
       "quantities": [
-        { "name": "g_m", "value": 40, "unit": "mS" },
-        { "name": "R_E", "value": 1.1, "unit": "kΩ" }
+        {
+          "name": "g_m",
+          "value": 40,
+          "unit": "mS"
+        },
+        {
+          "name": "R_E",
+          "value": 1.1,
+          "unit": "kΩ"
+        }
       ],
       "code": "gm = 1.0e-3 / 25e-3\nRE = 1.1e3\nresult = 1 + gm * RE",
       "expected": 45,
-      "tolerance": { "relative": 0.0001 }
+      "tolerance": {
+        "relative": 0.0001
+      }
     },
     {
       "id": "gain-unbypassed",
       "kind": "worked-example",
       "text": "-4.18",
       "quantities": [
-        { "name": "g_m", "value": 40, "unit": "mS" },
-        { "name": "R_C", "value": 4.7, "unit": "kΩ" },
-        { "name": "R_E", "value": 1.1, "unit": "kΩ" }
+        {
+          "name": "g_m",
+          "value": 40,
+          "unit": "mS"
+        },
+        {
+          "name": "R_C",
+          "value": 4.7,
+          "unit": "kΩ"
+        },
+        {
+          "name": "R_E",
+          "value": 1.1,
+          "unit": "kΩ"
+        }
       ],
       "code": "gm = 1.0e-3 / 25e-3\nRC = 4.7e3\nRE = 1.1e3\nresult = -gm * RC / (1 + gm * RE)",
       "expected": -4.18,
       "unit": "V/V",
-      "tolerance": { "relative": 0.005 }
+      "tolerance": {
+        "relative": 0.005
+      }
     },
     {
       "id": "intrinsic-emitter-resistance",
       "kind": "equation",
       "text": "25 ohm",
       "quantities": [
-        { "name": "g_m", "value": 40, "unit": "mS" }
+        {
+          "name": "g_m",
+          "value": 40,
+          "unit": "mS"
+        }
       ],
       "code": "gm = 40e-3\nresult = 1 / gm",
       "expected": 25,
       "unit": "ohm",
-      "tolerance": { "relative": 0.0001 }
+      "tolerance": {
+        "relative": 0.0001
+      }
     },
     {
       "id": "quiz-bias-vce",
       "kind": "quiz",
       "text": "answer={4.8}",
       "quantities": [
-        { "name": "V_CC", "value": 10, "unit": "V" },
-        { "name": "R1", "value": 30, "unit": "kΩ" },
-        { "name": "R2", "value": 10, "unit": "kΩ" },
-        { "name": "R_C", "value": 6.8, "unit": "kΩ" },
-        { "name": "R_E", "value": 3.6, "unit": "kΩ" },
-        { "name": "V_BE", "value": 0.7, "unit": "V" }
+        {
+          "name": "V_CC",
+          "value": 10,
+          "unit": "V"
+        },
+        {
+          "name": "R1",
+          "value": 30,
+          "unit": "kΩ"
+        },
+        {
+          "name": "R2",
+          "value": 10,
+          "unit": "kΩ"
+        },
+        {
+          "name": "R_C",
+          "value": 6.8,
+          "unit": "kΩ"
+        },
+        {
+          "name": "R_E",
+          "value": 3.6,
+          "unit": "kΩ"
+        },
+        {
+          "name": "V_BE",
+          "value": 0.7,
+          "unit": "V"
+        }
       ],
       "code": "VCC = 10.0\nR1 = 30e3\nR2 = 10e3\nRC = 6.8e3\nRE = 3.6e3\nVBE = 0.7\nVB = VCC * R2 / (R1 + R2)\nVE = VB - VBE\nIC = VE / RE\nresult = VCC - IC * RC - IC * RE",
       "expected": 4.8,
       "unit": "V",
-      "tolerance": { "relative": 0.0001 },
+      "tolerance": {
+        "relative": 0.0001
+      },
       "source": "NumericQuiz answer. The quiz tolerance is rel 0.02."
-    },
-    {
-      "id": "quiz-gain-behavior",
-      "kind": "quiz",
-      "text": "answer={2}",
-      "code": "result = 2",
-      "expected": 2,
-      "source": "Quiz option index, not a computed value. Option 2 says the gain magnitude drops because R_E pushes back against the input."
     }
   ]
 }

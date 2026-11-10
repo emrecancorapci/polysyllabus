@@ -87,9 +87,13 @@ All tools are plain Python, need no network and no LLM, and return exit code 0 o
 python tools/run_claims.py work/<course>/<lesson>        # run claims.json, writes claims-report.json
 python tools/style_lint.py work/<course>/<lesson>        # style rules, add --errors-only to ignore warnings
 python tools/svg_normalize.py work/<course>/<lesson>     # theme friendly SVG, add --check to only test
+python tools/circuit_check.py <netlist.json>             # nodal analysis, DC or one AC frequency, --selftest
+python tools/run_mutations.py                            # mutation catch table over tests/mutations/generated
 ```
 
 Try them on `examples/sample-course/1-rc-low-pass-filter` first. Claim snippets run with restricted builtins and imports and a 10 second limit. This is a guard rail, not a security sandbox.
+
+`circuit_check.py` needs numpy. `run_mutations.py` first needs `tests/mutations/generate.py`, which seeds the mutation set from a base lesson. The evaluator half of the mutation report is not deterministic, it runs the math evaluator agent per mutant.
 
 ## Setup
 

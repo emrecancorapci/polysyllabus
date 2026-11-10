@@ -9,3 +9,4 @@ work/*/extracted/
 work/*/*/screenshot.png
 work/*/*/screenshot.png
 claims-report.json
+tests/mutations/generated/
