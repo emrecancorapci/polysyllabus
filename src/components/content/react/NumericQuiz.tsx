@@ -44,7 +44,7 @@ export default function NumericQuiz({
   }
 
   return (
-    <div className="border-border bg-card not-prose flex flex-col gap-3 rounded-lg border p-5">
+    <div className="border-border bg-card not-prose content-block flex flex-col gap-3 rounded-lg border p-5">
       <p className="font-medium">
         <MathText text={question} />
       </p>

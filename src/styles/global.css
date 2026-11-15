@@ -250,6 +250,14 @@
   color: var(--muted-foreground);
 }
 
+/* ---- Content component rhythm ----------------------------------------
+   Block-level MDX components opt out of prose spacing with not-prose;
+   this restores the vertical rhythm between them and the surrounding
+   flow (1.5rem, matching Figure and the plot components' my-6). */
+.article-prose :where(.content-block) {
+  margin-block: 1.5rem;
+}
+
 /* ---- Syllabus dotted leaders ------------------------------------------
    Guide the eye from a title to its right-aligned count, the way a
    syllabus or book table of contents does. */

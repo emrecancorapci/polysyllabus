@@ -28,7 +28,7 @@ const Icon = icons[variant];
 <Alert
   variant={variant === "warning" ? "destructive" : "default"}
   role={variant === "warning" ? "alert" : "note"}
-  className="not-prose"
+  className="not-prose content-block"
 >
   <Icon />
   <AlertTitle>{title ?? defaultTitles[variant]}</AlertTitle>
