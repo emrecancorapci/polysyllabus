@@ -18,7 +18,9 @@ export default function CompleteButton({ lessonId }: Props) {
     <Button
       variant={completed ? "outline" : "default"}
       size="sm"
-      className={completed ? "border-success/40 text-success" : undefined}
+      className={
+        completed ? "border-success/40 bg-success/10 text-success" : undefined
+      }
       onClick={() => setCompleted(setLessonCompleted(lessonId, !completed))}
     >
       {completed && <Check data-icon="inline-start" />}

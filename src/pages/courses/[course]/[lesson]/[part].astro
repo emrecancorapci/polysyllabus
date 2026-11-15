@@ -141,7 +141,10 @@ function outlineLink(
       </nav>
     </aside>
 
-    <main id="main" class="flex min-w-0 flex-1 flex-col gap-6">
+    <main
+      id="main"
+      class="flex min-w-0 flex-1 flex-col gap-6 max-lg:mx-auto max-lg:w-full max-lg:max-w-[42rem]"
+    >
       <nav aria-label="Breadcrumb" class="text-muted-foreground text-sm">
         <a
           href="/"
@@ -281,36 +284,41 @@ function outlineLink(
         <Content components={contentComponents} />
       </article>
 
-      <div
-        class="border-border mt-8 grid grid-cols-1 items-center gap-4 border-t pt-6 sm:grid-cols-[1fr_auto_1fr]"
-      >
-        {prev ? (
-          <a
-            href={partHref(prev)}
-            class="border-border bg-card hover:border-primary/40 flex min-w-0 flex-col gap-0.5 rounded-lg border p-3.5 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
-          >
-            <span class="text-muted-foreground text-xs">Previous</span>
-            <span class="truncate text-sm font-medium">{prev.data.title}</span>
-          </a>
-        ) : (
-          <span aria-hidden="true" />
-        )}
-        <div
-          class="flex justify-center max-sm:order-first max-sm:justify-start"
-        >
+      <div class="border-border mt-8 flex flex-col gap-5 border-t pt-6">
+        <div class="flex justify-center">
           <LessonCompleteButton lessonId={part.id} />
         </div>
-        {next ? (
-          <a
-            href={partHref(next)}
-            class="border-border bg-card hover:border-primary/40 flex min-w-0 flex-col items-end gap-0.5 rounded-lg border p-3.5 text-right focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none max-sm:items-start max-sm:text-left"
-          >
-            <span class="text-muted-foreground text-xs">Next</span>
-            <span class="truncate text-sm font-medium">{next.data.title}</span>
-          </a>
-        ) : (
-          <span aria-hidden="true" />
-        )}
+        <nav
+          aria-label="Part navigation"
+          class="grid grid-cols-1 gap-4 sm:grid-cols-2"
+        >
+          {prev ? (
+            <a
+              href={partHref(prev)}
+              class="border-border bg-card hover:border-primary/40 flex min-w-0 flex-col gap-0.5 rounded-lg border p-3.5 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+            >
+              <span class="text-muted-foreground text-xs">Previous</span>
+              <span class="truncate text-sm font-medium">
+                {prev.data.title}
+              </span>
+            </a>
+          ) : (
+            <span aria-hidden="true" />
+          )}
+          {next ? (
+            <a
+              href={partHref(next)}
+              class="border-border bg-card hover:border-primary/40 flex min-w-0 flex-col items-end gap-0.5 rounded-lg border p-3.5 text-right focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none max-sm:items-start max-sm:text-left"
+            >
+              <span class="text-muted-foreground text-xs">Next</span>
+              <span class="truncate text-sm font-medium">
+                {next.data.title}
+              </span>
+            </a>
+          ) : (
+            <span aria-hidden="true" />
+          )}
+        </nav>
       </div>
     </main>
 
