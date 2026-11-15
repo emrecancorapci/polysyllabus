@@ -1,0 +1,78 @@
+---
+/**
+ * Shared page shell: document head, theme bootstrapping, skip link, and the
+ * sticky site header (wordmark + theme toggle). Every page composes this
+ * instead of repeating the html/body boilerplate.
+ */
+import ThemeInit from "@/components/chrome/ThemeInit.astro";
+import ThemeToggle from "@/components/chrome/ThemeToggle.astro";
+import "@/styles/global.css";
+
+interface Props {
+  title: string;
+  /** Human summary for search engines; one sentence. */
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="generator" content={Astro.generator}>
+    <title>{title}</title>
+    {description && <meta name="description" content={description}>}
+    <meta
+      name="theme-color"
+      content="oklch(0.985 0.005 250)"
+      data-theme-color-light="oklch(0.985 0.005 250)"
+      data-theme-color-dark="oklch(0.165 0.012 260)"
+    >
+    <ThemeInit />
+  </head>
+  <body class="bg-background text-foreground flex min-h-screen flex-col">
+    <a
+      href="#main"
+      class="bg-primary text-primary-foreground sr-only focus-visible:not-sr-only focus-visible:absolute focus-visible:top-3 focus-visible:left-3 focus-visible:z-50 focus-visible:rounded-md focus-visible:px-3 focus-visible:py-2 focus-visible:text-sm focus-visible:font-medium focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+    >
+      Skip to content
+    </a>
+    <header
+      class="border-border bg-background/80 sticky top-0 z-40 border-b backdrop-blur"
+    >
+      <div
+        class="mx-auto flex h-14 w-full max-w-6xl items-center justify-between gap-4 px-6"
+      >
+        <a
+          href="/"
+          class="text-foreground flex items-center gap-2.5 rounded-sm focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+          aria-label="PolySyllabus home"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 32 16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="text-primary h-3.5 w-7 shrink-0"
+            aria-hidden="true"
+          >
+            <path d="M1 8h4l3-6 4 12 4-12 4 12 4-12 3 6h4"></path>
+          </svg>
+          <span
+            class="font-heading text-lg leading-none font-semibold tracking-tight"
+          >
+            PolySyllabus
+          </span>
+        </a>
+        <ThemeToggle />
+      </div>
+    </header>
+    <slot name="body" />
+    <slot />
+  </body>
+</html>

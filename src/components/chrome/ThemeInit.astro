@@ -1,17 +1,23 @@
 ---
 // Sets the theme class before first paint. Inline so it runs immediately,
 // with no bundle round-trip: dark preference is read from localStorage or
-// the OS.
+// the OS. Also syncs `color-scheme` (native controls, scrollbars) and the
+// `theme-color` meta with the active theme.
 ---
 
 <script is:inline>
 (() => {
+  const LIGHT = "oklch(0.985 0.005 250)";
+  const DARK = "oklch(0.165 0.012 260)";
   try {
     const stored = localStorage.getItem("study-helper:theme");
     const dark = stored
       ? stored === "dark"
       : window.matchMedia("(prefers-color-scheme: dark)").matches;
     document.documentElement.classList.toggle("dark", dark);
+    document.documentElement.style.colorScheme = dark ? "dark" : "light";
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", dark ? DARK : LIGHT);
   } catch {
     /* localStorage unavailable: stay light */
   }

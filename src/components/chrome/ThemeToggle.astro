@@ -6,8 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
   id="theme-toggle"
   type="button"
   aria-label="Toggle dark mode"
-  class={buttonVariants({ variant: "ghost", size: "icon-sm" }) +
-    " fixed top-4 right-4 z-10"}
+  class={buttonVariants({ variant: "ghost", size: "icon-sm" })}
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -42,8 +41,20 @@ import { buttonVariants } from "@/components/ui/button";
 
 <script>
 const button = document.getElementById("theme-toggle");
+const LIGHT = "oklch(0.985 0.005 250)";
+const DARK = "oklch(0.165 0.012 260)";
+
+function apply(dark: boolean): void {
+  document.documentElement.classList.toggle("dark", dark);
+  document.documentElement.style.colorScheme = dark ? "dark" : "light";
+  document
+    .querySelector('meta[name="theme-color"]')
+    ?.setAttribute("content", dark ? DARK : LIGHT);
+}
+
 button?.addEventListener("click", () => {
-  const dark = document.documentElement.classList.toggle("dark");
+  const dark = !document.documentElement.classList.contains("dark");
+  apply(dark);
   try {
     localStorage.setItem("study-helper:theme", dark ? "dark" : "light");
   } catch {
