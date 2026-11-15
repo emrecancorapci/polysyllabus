@@ -1,84 +1,181 @@
 ---
-import { getCourses } from "@/lib/courses";
-import ThemeInit from "@/components/chrome/ThemeInit.astro";
-import ThemeToggle from "@/components/chrome/ThemeToggle.astro";
-import "@/styles/global.css";
+import Base from "@/layouts/Base.astro";
+import { getCourses, partHref, totalMinutes, type Course } from "@/lib/courses";
 
 const courses = await getCourses();
 const categories = [...new Set(courses.map((course) => course.category))];
+const partCount = (course: Course) =>
+  course.lessons.reduce((total, lesson) => total + lesson.parts.length, 0);
+const minutesOf = (course: Course) =>
+  totalMinutes(course.lessons.flatMap((lesson) => lesson.parts));
+
+/** Flattened study order for the "continue studying" decorator. */
+const index = courses.flatMap((course) =>
+  course.lessons.flatMap((lesson) =>
+    lesson.parts.map((part) => ({
+      id: part.id,
+      href: partHref(part),
+      position: `${lesson.order}.${part.data.order}`,
+      title: part.data.title,
+      course: course.title,
+      minutes: part.data.estimatedTime,
+    })),
+  ),
+);
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <meta name="generator" content={Astro.generator}>
-    <title>PolySyllabus</title>
-    <ThemeInit />
-  </head>
-  <body class="bg-background text-foreground">
-    <ThemeToggle />
-    <main class="mx-auto flex w-full max-w-3xl flex-col gap-10 px-6 py-16">
-      <section class="flex flex-col items-center gap-4 text-center">
-        <h1 class="text-4xl font-semibold tracking-tight">PolySyllabus</h1>
-        <p class="text-muted-foreground max-w-md">
-          Structured courses for electrical and electronics engineering.
-        </p>
-      </section>
-      {categories.map((category) => (
-        <section aria-label={category} class="flex flex-col gap-4">
-          <h2 class="text-lg font-semibold">{category}</h2>
+<Base
+  title="PolySyllabus — engineering courses"
+  description="Structured courses in electrical and electronics engineering: read short parts, test yourself, keep your place."
+>
+  <main
+    id="main"
+    class="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-12 px-6 py-14"
+  >
+    <section class="flex flex-col gap-3">
+      <h1
+        class="font-heading text-5xl leading-tight font-semibold tracking-tight"
+      >
+        PolySyllabus
+      </h1>
+      <p class="text-muted-foreground max-w-md">
+        Structured courses in electrical and electronics engineering — short
+        parts, worked examples, and your place kept across sessions.
+      </p>
+    </section>
+
+    <section
+      aria-label="Continue studying"
+      data-continue
+      class="flex flex-col gap-1 rounded-lg border border-border bg-card px-5 py-4"
+    >
+      <p class="text-muted-foreground text-xs">
+        Continue in <span data-continue-course>{index[0].course}</span>
+      </p>
+      <a
+        data-continue-link
+        href={index[0].href}
+        class="group flex items-baseline gap-3 rounded-sm focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+      >
+        <span
+          class="text-muted-foreground text-sm tabular-nums"
+          data-continue-position
+          >{index[0].position}</span
+        >
+        <span
+          class="group-hover:text-primary font-heading text-xl font-medium transition-colors"
+          data-continue-title
+          >{index[0].title}</span
+        >
+        <span class="leader" aria-hidden="true"></span>
+        <span
+          class="text-muted-foreground text-sm whitespace-nowrap tabular-nums"
+          data-continue-minutes
+          >{index[0].minutes}
+          min</span
+        >
+      </a>
+    </section>
+
+    {categories.map((category) => (
+      <section aria-label={category} class="flex flex-col gap-5">
+        <div class="flex items-baseline gap-3">
+          <h2 class="font-heading text-2xl font-semibold tracking-tight">
+            {category}
+          </h2>
+          <span class="text-muted-foreground text-sm tabular-nums">
+            {courses.filter((course) => course.category === category).length}{" "}
+            {courses.filter((course) => course.category === category).length ===
+            1
+              ? "course"
+              : "courses"}
+          </span>
+        </div>
+        <ul class="flex flex-col">
           {courses
             .filter((course) => course.category === category)
             .map((course) => (
-              <a
-                href={`/courses/${course.slug}/`}
-                class="border-border bg-card hover:border-primary/40 flex flex-col gap-1 rounded-lg border p-5 transition-colors"
-              >
-                <span class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-                  <span class="text-lg font-medium">{course.title}</span>
-                  <span class="text-muted-foreground text-sm">
-                    {course.subCategory}
+              <li class="border-border not-last:border-b">
+                <a
+                  href={`/courses/${course.slug}/`}
+                  class="group -mx-3 flex flex-col gap-1 rounded-md px-3 py-4 transition-colors hover:bg-muted/50 focus-visible:bg-muted/50 focus-visible:outline-none"
+                >
+                  <span class="flex items-baseline gap-3">
+                    <span class="text-lg leading-snug font-medium group-hover:text-primary transition-colors">
+                      {course.title}
+                    </span>
+                    <span class="leader" aria-hidden="true"></span>
+                    <span class="text-muted-foreground text-sm whitespace-nowrap tabular-nums">
+                      {minutesOf(course)} min
+                    </span>
                   </span>
-                  <span class="bg-muted text-muted-foreground ml-auto rounded-full px-2 py-0.5 text-xs capitalize">
-                    {course.difficulty}
+                  {course.summary && (
+                    <span class="text-muted-foreground text-sm max-sm:line-clamp-3">
+                      {course.summary}
+                    </span>
+                  )}
+                  <span class="text-muted-foreground/80 text-xs">
+                    <span class="capitalize">{course.difficulty}</span>,{" "}
+                    {course.lessons.length}
+                    {course.lessons.length === 1 ? "lesson" : "lessons"},{" "}
+                    {partCount(course)}
+                    {partCount(course) === 1 ? "part" : "parts"}
                   </span>
-                </span>
-                {course.summary && (
-                  <span class="text-muted-foreground text-sm">
-                    {course.summary}
-                  </span>
-                )}
-                <span class="text-muted-foreground text-sm">
-                  {course.lessons.length} lesson
-                  {course.lessons.length === 1 ? "" : "s"} ·{" "}
-                  {course.lessons.reduce(
-                    (total, lesson) => total + lesson.parts.length,
-                    0,
-                  )}{" "}
-                  part
-                  {course.lessons.reduce(
-                    (total, lesson) => total + lesson.parts.length,
-                    0,
-                  ) === 1
-                    ? ""
-                    : "s"}{" "}
-                  ·{" "}
-                  {course.lessons.reduce(
-                    (total, lesson) =>
-                      total +
-                      lesson.parts.reduce(
-                        (sum, part) => sum + part.data.estimatedTime,
-                        0,
-                      ),
-                    0,
-                  )}{" "}
-                  min
-                </span>
-              </a>
+                </a>
+              </li>
             ))}
-        </section>
-      ))}
-    </main>
-  </body>
-</html>
+        </ul>
+      </section>
+    ))}
+  </main>
+</Base>
+
+<script
+  type="application/json"
+  set:html={JSON.stringify(index)}
+  data-part-index
+/>
+
+<script>
+import { loadProgress, PROGRESS_EVENT } from "@/lib/progress";
+
+interface IndexEntry {
+  id: string;
+  href: string;
+  position: string;
+  title: string;
+  course: string;
+  minutes: number;
+}
+
+const section = document.querySelector<HTMLElement>("[data-continue]");
+const entries: IndexEntry[] = JSON.parse(
+  document.querySelector("[data-part-index]")?.textContent ?? "[]",
+);
+const courseLabel = section?.querySelector("[data-continue-course]");
+const link = section?.querySelector<HTMLAnchorElement>("[data-continue-link]");
+const position = section?.querySelector("[data-continue-position]");
+const title = section?.querySelector("[data-continue-title]");
+const minutes = section?.querySelector("[data-continue-minutes]");
+
+function decorate(): void {
+  if (!section || !link || !position || !title || !minutes || !courseLabel) {
+    return;
+  }
+  const completed = loadProgress().completed;
+  const next = entries.find((entry) => !completed.includes(entry.id));
+  if (!next) {
+    section.classList.add("hidden");
+    return;
+  }
+  section.classList.remove("hidden");
+  courseLabel.textContent = next.course;
+  link.href = next.href;
+  position.textContent = next.position;
+  title.textContent = next.title;
+  minutes.textContent = `${next.minutes} min`;
+}
+
+decorate();
+window.addEventListener(PROGRESS_EVENT, decorate);
+</script>
