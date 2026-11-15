@@ -44,29 +44,35 @@ export default function NumericQuiz({
   }
 
   return (
-    <div className="border-border bg-card flex flex-col gap-3 rounded-lg border p-5">
+    <div className="border-border bg-card not-prose flex flex-col gap-3 rounded-lg border p-5">
       <p className="font-medium">
         <MathText text={question} />
       </p>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <input
           type="text"
           inputMode="decimal"
-          placeholder="e.g. 1.59k or 1591.5"
+          autoComplete="off"
+          spellCheck={false}
+          placeholder="e.g. 1.59k or 1591.5…"
           value={input}
           disabled={result !== null}
           onChange={(event) => setInput(event.target.value)}
           onKeyDown={(event) => {
             if (event.key === "Enter" && result === null) submit();
           }}
-          aria-label="Numeric answer"
+          aria-label={`Numeric answer${unit ? ` in ${unit}` : ""}`}
           className={cn(
-            "border-border bg-background rounded-lg border px-3 py-2 text-sm",
+            "border-border bg-background min-w-0 flex-1 rounded-lg border px-3 py-2 text-sm sm:max-w-56",
             result !== null && "opacity-60",
           )}
         />
-        {unit && <span className="text-muted-foreground text-sm">{unit}</span>}
-        {result === null ? (
+        {unit && (
+          <span className="text-muted-foreground text-sm tabular-nums">
+            {unit}
+          </span>
+        )}
+        {result === null && (
           <Button
             size="sm"
             disabled={parseEngineering(input) === null}
@@ -74,31 +80,22 @@ export default function NumericQuiz({
           >
             Check
           </Button>
-        ) : (
-          <span
-            className={cn(
-              "text-sm font-medium",
-              result.correct ? "text-primary" : "text-destructive",
-            )}
-          >
-            {result.correct
-              ? "Correct."
-              : `Not within tolerance — expected ≈ ${answer}${unit ? ` ${unit}` : ""}.`}
-          </span>
         )}
       </div>
       {result !== null && (
-        <p role="status" className="text-muted-foreground text-sm">
-          <span
-            className={
-              result.correct
-                ? "text-primary font-medium"
-                : "text-destructive font-medium"
-            }
-          >
-            {result.correct ? "Correct." : "Not quite."}
-          </span>{" "}
-          <MathText text={explanation} />
+        <p
+          role="status"
+          className={cn(
+            "text-sm font-medium",
+            result.correct ? "text-success" : "text-destructive",
+          )}
+        >
+          {result.correct
+            ? "Correct."
+            : `Not within tolerance — expected ≈ ${answer}${unit ? ` ${unit}` : ""}.`}{" "}
+          <span className="text-muted-foreground font-normal">
+            <MathText text={explanation} />
+          </span>
         </p>
       )}
     </div>

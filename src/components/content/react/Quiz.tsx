@@ -50,7 +50,7 @@ export default function Quiz({
   }
 
   return (
-    <div className="border-border bg-card flex flex-col gap-3 rounded-lg border p-5">
+    <div className="border-border bg-card not-prose flex flex-col gap-3 rounded-lg border p-5">
       <p className="font-medium">
         <MathText text={question} />
       </p>
@@ -99,7 +99,7 @@ export default function Quiz({
           <span
             className={
               correct
-                ? "text-primary font-medium"
+                ? "text-success font-medium"
                 : "text-destructive font-medium"
             }
           >
