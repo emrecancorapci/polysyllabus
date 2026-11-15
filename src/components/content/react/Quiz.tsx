@@ -68,7 +68,7 @@ export default function Quiz({
               disabled={answered}
               onClick={() => choose(index)}
               className={cn(
-                "border-border rounded-lg border px-4 py-2 text-left text-sm transition-colors",
+                "border-border flex items-start gap-3 rounded-lg border px-4 py-2.5 text-left text-sm transition-colors",
                 !answered &&
                   "hover:border-primary/60 hover:bg-muted/50 cursor-pointer",
                 answered &&
@@ -81,7 +81,15 @@ export default function Quiz({
                 answered && !isAnswer && !isSelected && "opacity-60",
               )}
             >
-              <MathText text={option} />
+              <span
+                aria-hidden="true"
+                className="text-muted-foreground/70 mt-0.5 shrink-0 font-mono text-xs"
+              >
+                {String.fromCharCode(97 + index)}
+              </span>
+              <span>
+                <MathText text={option} />
+              </span>
             </button>
           );
         })}

@@ -10,6 +10,9 @@
  * SVG sources are inlined so `currentColor` follows the theme.
  */
 
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 const svgSources = import.meta.glob("/src/docs/courses/**/*.svg", {
   query: "?raw",
   import: "default",
@@ -40,22 +43,38 @@ const png = pngSources[src];
 if (svg === undefined && png === undefined) {
   throw new Error(`[Figure] file not found beside the lesson: ${src}`);
 }
+
+/** Read the IHDR header so the <img> reserves space and never shifts layout. */
+function pngDimensions(path: string): { width: number; height: number } {
+  const bytes = readFileSync(join(process.cwd(), path));
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  return { width: view.getUint32(16), height: view.getUint32(20) };
+}
 ---
 
 <figure class="my-6 flex flex-col gap-2">
   {svg !== undefined ? (
     <div
-      class="text-foreground border-border bg-muted/30 flex justify-center rounded-lg border p-4 [&_svg]:h-auto [&_svg]:max-h-96 [&_svg]:w-auto [&_svg]:max-w-full"
+      class="text-foreground grid-paper border-border bg-card flex justify-center rounded-lg border p-4 [&_svg]:h-auto [&_svg]:max-h-96 [&_svg]:w-auto [&_svg]:max-w-full"
       role="img"
       aria-label={alt}
       set:html={svg}
     />
   ) : (
-    <img
-      src={png}
-      alt={alt}
-      class="border-border bg-muted/30 rounded-lg border p-4"
-    />
+    (() => {
+      const { width, height } = pngDimensions(src);
+      return (
+        <img
+          src={png}
+          alt={alt}
+          width={width}
+          height={height}
+          loading="lazy"
+          decoding="async"
+          class="border-border bg-card grid-paper mx-auto rounded-lg border p-4"
+        />
+      );
+    })()
   )}
   <figcaption class="text-muted-foreground text-center text-sm">
     {figureLabel && (
