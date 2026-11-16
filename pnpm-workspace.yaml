@@ -4,3 +4,8 @@ overrides:
   # @astrojs/check (API mismatch with @emnapi/core 1.x). Pin to the pairing
   # Astro itself ships with @emnapi/core@1.11.3.
   "@emnapi/runtime": 1.11.3
+  # rehype-katex pulls katex 0.16, whose HTML uses the old "sizing" class,
+  # while the direct katex 0.19 ships CSS that only styles the renamed
+  # "katex-sizing" class — mismatched versions left subscripts unsized.
+  # One katex everywhere keeps markup and CSS in step.
+  katex: ^0.19.1
