@@ -4,6 +4,8 @@ export type Part = CollectionEntry<"parts">;
 export type CourseMeta = CollectionEntry<"courses">;
 
 export type Difficulty = "beginner" | "intermediate" | "advanced";
+/** Kind of study page; mirrors the `type` enum in `src/content.config.ts`. */
+export type PartType = Part["data"]["type"];
 
 export interface Lesson {
   /** Course slug, e.g. "dc-circuits". */
@@ -25,12 +27,35 @@ export interface Course {
   category: string;
   subCategory: string;
   difficulty: Difficulty;
+  /** BCP-47 language tag of the course content, e.g. "en" or "tr". */
+  language: string;
   lessons: Lesson[];
 }
 
 /** All parts of a course in study order (lesson order, then part order). */
 export function flattenParts(course: Course): Part[] {
   return course.lessons.flatMap((lesson) => lesson.parts);
+}
+
+const LANGUAGE_LABELS: Record<string, string> = {
+  en: "English",
+  tr: "Türkçe",
+};
+
+/** Human-readable language name for a BCP-47 tag; falls back to the tag. */
+export function languageLabel(tag: string): string {
+  return LANGUAGE_LABELS[tag.toLowerCase()] ?? tag;
+}
+
+const PART_TYPE_LABELS: Record<PartType, string> = {
+  course: "Course part",
+  "cheat-sheet": "Cheat sheet",
+  questions: "Question set",
+};
+
+/** Display name for a part type; used to badge non-regular parts. */
+export function partTypeLabel(type: PartType): string {
+  return PART_TYPE_LABELS[type];
 }
 
 export function partHref(part: Part): string {
@@ -93,7 +118,7 @@ export async function getCourses(): Promise<Course[]> {
     const meta = courseMetaBySlug.get(slug);
     if (meta === undefined) {
       throw new Error(
-        `[courses] missing course metadata: create src/docs/courses/${slug}/course.json with title, category, subCategory, and difficulty`,
+        `[courses] missing course metadata: create src/docs/courses/${slug}/course.json with title, category, subCategory, difficulty, and language`,
       );
     }
     courses.push({
@@ -103,6 +128,7 @@ export async function getCourses(): Promise<Course[]> {
       category: meta.data.category,
       subCategory: meta.data.subCategory,
       difficulty: meta.data.difficulty,
+      language: meta.data.language,
       lessons: lessons.sort((a, b) => a.order - b.order),
     });
   }

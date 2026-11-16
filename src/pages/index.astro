@@ -1,6 +1,12 @@
 ---
 import Base from "@/layouts/Base.astro";
-import { getCourses, partHref, totalMinutes, type Course } from "@/lib/courses";
+import {
+  getCourses,
+  languageLabel,
+  partHref,
+  totalMinutes,
+  type Course,
+} from "@/lib/courses";
 
 const courses = await getCourses();
 const categories = [...new Set(courses.map((course) => course.category))];
@@ -116,7 +122,7 @@ const index = courses.flatMap((course) =>
                   )}
                   <span class="text-muted-foreground/80 text-xs">
                     <span class="capitalize">{course.difficulty}</span>,{" "}
-                    {course.lessons.length}
+                    {languageLabel(course.language)}, {course.lessons.length}
                     {course.lessons.length === 1 ? "lesson" : "lessons"},{" "}
                     {partCount(course)}
                     {partCount(course) === 1 ? "part" : "parts"}

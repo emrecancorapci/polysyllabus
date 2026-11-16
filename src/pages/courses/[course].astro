@@ -2,6 +2,7 @@
 import Base from "@/layouts/Base.astro";
 import {
   getCourses,
+  languageLabel,
   lessonFirstPartHref,
   partHref,
   totalMinutes,
@@ -27,7 +28,11 @@ const stats = [
 ].join(", ");
 ---
 
-<Base title={`${course.title} — PolySyllabus`} description={course.summary}>
+<Base
+  title={`${course.title} — PolySyllabus`}
+  description={course.summary}
+  lang={course.language}
+>
   <main
     id="main"
     class="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-10 px-6 py-12"
@@ -59,6 +64,11 @@ const stats = [
           class="bg-muted text-muted-foreground rounded-full px-2 py-0.5 text-xs capitalize"
         >
           {course.difficulty}
+        </span>
+        <span
+          class="bg-muted text-muted-foreground rounded-full px-2 py-0.5 text-xs"
+        >
+          {languageLabel(course.language)}
         </span>
       </div>
       {course.summary && (

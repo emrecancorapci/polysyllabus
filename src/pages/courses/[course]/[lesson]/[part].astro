@@ -11,7 +11,13 @@ import Quiz from "@/components/content/Quiz.astro";
 import LessonCompleteButton from "@/components/chrome/LessonCompleteButton.astro";
 import MathText from "@/components/content/react/MathText";
 import ProgressEnhance from "@/components/chrome/ProgressEnhance.astro";
-import { flattenParts, getCourses, getPrevNext, partHref } from "@/lib/courses";
+import {
+  flattenParts,
+  getCourses,
+  getPrevNext,
+  partHref,
+  partTypeLabel,
+} from "@/lib/courses";
 import "katex/dist/katex.min.css";
 
 export async function getStaticPaths() {
@@ -69,6 +75,7 @@ function outlineLink(
 <Base
   title={`${part.data.title} — ${lessonName} — PolySyllabus`}
   description={part.data.summary}
+  lang={course?.language}
 >
   <div
     class="mx-auto flex w-full max-w-6xl flex-1 flex-col px-6 py-8 lg:flex-row lg:gap-10"
@@ -177,6 +184,11 @@ function outlineLink(
           {part.data.summary}
         </p>
         <p class="text-muted-foreground text-sm">
+          {part.data.type !== "course" && (
+            <span class="bg-muted text-muted-foreground me-2 inline-block rounded-full px-2 py-0.5 text-xs align-middle font-medium">
+              {partTypeLabel(part.data.type)}
+            </span>
+          )}
           <span>About {part.data.estimatedTime} min</span>
           {part.data.prerequisites.length > 0 && (
             <span>
