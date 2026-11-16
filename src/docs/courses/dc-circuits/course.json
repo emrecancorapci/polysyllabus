@@ -3,5 +3,6 @@
   "summary": "Foundations of DC circuit analysis: Ohm's law, Kirchhoff's laws, and first RC circuits.",
   "category": "Tech",
   "subCategory": "Electronics",
-  "difficulty": "beginner"
+  "difficulty": "beginner",
+  "language": "en"
 }

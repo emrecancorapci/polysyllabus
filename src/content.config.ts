@@ -18,6 +18,10 @@ export const collections = {
       category: z.string().min(1),
       subCategory: z.string().min(1),
       difficulty: z.enum(["beginner", "intermediate", "advanced"]),
+      /** BCP-47 language tag of the course content, e.g. "en" or "tr". */
+      language: z.string().regex(/^[a-z]{2,3}(-[A-Za-z0-9]{1,8})*$/, {
+        message: "Use a BCP-47 language tag, e.g. en or tr",
+      }),
     }),
   }),
   /**
@@ -39,9 +43,11 @@ export const collections = {
     }),
   }),
   /**
-   * Parts (the study pages, ≤10 min) live at
+   * Parts (the study pages) live at
    * `src/docs/courses/<course-slug>/<n>-<lesson-slug>/<p>-<part-slug>/doc.mdx`,
    * so each entry id is `<course-slug>/<lesson-slug>/<part-slug>`.
+   * Regular course parts are short (≤10 min); cheat sheets and question
+   * sets may run longer.
    */
   parts: defineCollection({
     loader: glob({
@@ -52,15 +58,32 @@ export const collections = {
       generateId: ({ entry }) =>
         entry.replace(/\.mdx$/, "").replace(/\/doc$/, ""),
     }),
-    schema: z.object({
-      title: z.string(),
-      order: z.number().int().positive(),
-      summary: z.string(),
-      prerequisites: z.array(z.string()).default([]),
-      learningObjectives: z.array(z.string()).min(1),
-      /** Time in minutes. Parts are short: split anything longer. */
-      estimatedTime: z.number().int().positive().max(10),
-      needsReview: z.boolean().default(false),
-    }),
+    schema: z
+      .object({
+        title: z.string(),
+        order: z.number().int().positive(),
+        summary: z.string(),
+        prerequisites: z.array(z.string()).default([]),
+        learningObjectives: z.array(z.string()).min(1),
+        /**
+         * Kind of study page. `course` parts teach one concept and are
+         * capped at 10 minutes; `cheat-sheet` parts are long-form reference
+         * material; `questions` parts are practice/exam question sets.
+         */
+        type: z.enum(["course", "cheat-sheet", "questions"]).default("course"),
+        /** Time in minutes. Course parts are short: split anything longer. */
+        estimatedTime: z.number().int().positive(),
+        needsReview: z.boolean().default(false),
+      })
+      .superRefine((data, ctx) => {
+        if (data.type === "course" && data.estimatedTime > 10) {
+          ctx.addIssue({
+            code: "custom",
+            input: data.estimatedTime,
+            path: ["estimatedTime"],
+            message: `Course parts take at most 10 minutes (got ${data.estimatedTime}); split the part, or set type to cheat-sheet or questions for long-form material.`,
+          });
+        }
+      }),
   }),
 };
