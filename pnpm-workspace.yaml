@@ -1,3 +1,15 @@
+minimumReleaseAgeExclude:
+  - "@typescript-eslint/eslint-plugin@8.73.0"
+  - "@typescript-eslint/parser@8.73.0"
+  - "@typescript-eslint/project-service@8.73.0"
+  - "@typescript-eslint/scope-manager@8.73.0"
+  - "@typescript-eslint/tsconfig-utils@8.73.0"
+  - "@typescript-eslint/type-utils@8.73.0"
+  - "@typescript-eslint/types@8.73.0"
+  - "@typescript-eslint/typescript-estree@8.73.0"
+  - "@typescript-eslint/utils@8.73.0"
+  - "@typescript-eslint/visitor-keys@8.73.0"
+  - typescript-eslint@8.73.0
 overrides:
   # @napi-rs/wasm-runtime's peer range (^1.7.1 || ^2.0.0-alpha.4) lets pnpm
   # resolve @emnapi/runtime to the incompatible 2.0.0-beta line, which breaks
