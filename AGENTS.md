@@ -39,10 +39,10 @@ The planning rule (start with the lowest-numbered sprint whose status is not Don
             fig-*.svg / *.png / *.json
 ```
 
-- The hierarchy is course → lesson → part: lessons are chapters of 20–40 minutes, parts are study pages of at most 10 minutes (enforced by the build). The full taxonomy reads `category → subCategory → course → lesson → part`.
+- The hierarchy is course → lesson → part: lessons are chapters of 20–40 minutes, parts are study pages — regular `course` parts take at most 10 minutes (enforced by the build); `cheat-sheet` and `questions` parts are exempt. The full taxonomy reads `category → subCategory → course → lesson → part`.
 - Each part lives in its own folder with its assets beside it.
-- Every course declares its metadata in `course.json`: `title`, optional `summary`, `category`, `subCategory`, and `difficulty` (`beginner`/`intermediate`/`advanced`). Every lesson declares `title`, `order`, and optional `summary` in `lesson.json`. Missing metadata fails the build. See `docs/lesson-authoring.md`.
-- Every part has frontmatter validated by the collection's Zod schema: title, order, summary, prerequisites (part ids), learning objectives, estimated time (1–10 minutes), and a needs-review flag.
+- Every course declares its metadata in `course.json`: `title`, optional `summary`, `category`, `subCategory`, `difficulty` (`beginner`/`intermediate`/`advanced`), and `language` (BCP-47 tag such as `en` or `tr`). Every lesson declares `title`, `order`, and optional `summary` in `lesson.json`. Missing metadata fails the build. See `docs/lesson-authoring.md`.
+- Every part has frontmatter validated by the collection's Zod schema: title, order, summary, prerequisites (part ids), learning objectives, type (`course` — the default — `cheat-sheet`, or `questions`), estimated time (positive minutes; only `course` parts are capped at 10), and a needs-review flag.
 - Malformed content must fail `astro build`, never render silently broken.
 - Lessons may only use the small, documented set of MDX components (callouts, quizzes, collapsible solutions, interactive widgets). Do not add ad-hoc components inside content. The allowed set and its props are documented in `docs/content-components.md`; it is enforced by the components map passed to `<Content />` in the lesson route. Do not import `.astro` components from `.ts` modules — typescript-eslint cannot resolve them; wire them inside `.astro` files.
 - **Display math must use the fenced form**: `$$` on its own line, then the equation, then `$$`. A single-line `$$…$$` parses as _inline_ math (remark-math v6 grammar) and renders cramped fractions in a text line.
