@@ -258,6 +258,14 @@
   margin-block: 1.5rem;
 }
 
+/* ---- Math sizing -------------------------------------------------------
+   KaTeX defaults to 1.21em, which overshoots the Newsreader body size;
+   1.05em optically matches math to its surrounding text. :root doubles
+   specificity so this wins over katex.min.css regardless of bundle order. */
+:root .katex {
+  font-size: 1.05em;
+}
+
 /* ---- Syllabus dotted leaders ------------------------------------------
    Guide the eye from a title to its right-aligned count, the way a
    syllabus or book table of contents does. */
