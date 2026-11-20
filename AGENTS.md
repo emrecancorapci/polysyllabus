@@ -22,7 +22,7 @@ The planning rule (start with the lowest-numbered sprint whose status is not Don
 - **KaTeX** (`remark-math` + `rehype-katex`) for equations
 - **Mermaid** for block diagrams and flowcharts
 - **TypeScript** (pinned to the latest 6.x, see Tooling)
-- No global state library. Progress tracking (completed lessons, quiz scores) uses `localStorage` via `src/lib/progress.ts`; static navigation is decorated client-side by `src/components/chrome/ProgressEnhance.astro`, islands and the enhancer sync through a custom window event.
+- No global state library. Progress tracking (completed lessons, quiz scores) uses `localStorage` via `src/lib/progress.ts`; text annotations (highlights, bookmarks, notes) use `localStorage` via `src/lib/annotations.ts` with DOM anchoring in `src/lib/annotation-anchor.ts` (client engine: `src/lib/annotations-client.ts`, chrome markup: `src/components/chrome/Annotations.astro`). Static navigation is decorated client-side by `src/components/chrome/ProgressEnhance.astro`, islands and the enhancer sync through a custom window event.
 
 ## Content Structure
 
