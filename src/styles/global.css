@@ -438,6 +438,9 @@ html[data-fullwidth] .reading-layout {
    One <dialog> reused for every zoomable figure; clones drop the column's
    size caps and scale to the viewport. */
 dialog#figure-lightbox {
+  /* Tailwind's preflight resets margins, which would defeat the UA
+     stylesheet's `margin: auto` centering for modal dialogs. */
+  margin: auto;
   width: min(94vw, 110rem);
   max-height: 92vh;
   background: var(--card);

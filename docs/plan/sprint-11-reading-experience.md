@@ -83,4 +83,9 @@ when the mouse moves close to the screen edge) and a **text size** cycler for th
   id-scoped internal stylesheet (black boxes) — the id is now kept and the max-width released
   instead; (3) `role="button"` wrappers failed a11y lint — replaced with real `<button>`
   elements, and the lightbox clones the visual child instead of the button.
+- 2026-11-20: user report — the lightbox opened top-left instead of centered. Cause: Tailwind
+  v4's preflight resets `margin` on every element, defeating the UA stylesheet's
+  `margin: auto` centering for modal dialogs. Fixed with `margin: auto` on
+  `dialog#figure-lightbox`; verified the dialog's left/right and top/bottom viewports margins
+  are equal (43px each) in the built site.
 - 2026-11-20: `pnpm lint`, `pnpm format`, `pnpm typecheck`, `pnpm build` all pass.
