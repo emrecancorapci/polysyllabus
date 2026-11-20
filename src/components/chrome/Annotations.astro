@@ -1,0 +1,210 @@
+---
+/**
+ * Text annotation chrome. Renders the "Bookmarks & notes" icon templates on
+ * every page that lists annotations, plus the selection popover on part
+ * pages. All behaviour lives in src/lib/annotations-client.ts (decorate-
+ * static-markup pattern, like ProgressEnhance).
+ */
+import { HIGHLIGHT_COLORS } from "@/lib/annotations";
+
+interface Props {
+  /**
+   * Part id the popover annotates. Omit on pages without an article
+   * (course/home); they only get the panel icons and the client script.
+   */
+  partId?: string;
+}
+
+const { partId } = Astro.props;
+const iconClass = "size-3.5 shrink-0 text-muted-foreground";
+---
+
+<template data-icon-bookmark>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class={iconClass}
+    aria-hidden="true"
+  >
+    <path
+      d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"
+    ></path>
+  </svg>
+</template>
+
+<template data-icon-note>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class={iconClass}
+    aria-hidden="true"
+  >
+    <path
+      d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"
+    ></path>
+    <path d="M15 3v5a1 1 0 0 0 1 1h5"></path>
+  </svg>
+</template>
+
+{partId && (
+  <div
+    id="annotation-popover"
+    data-part-id={partId}
+    hidden
+    role="toolbar"
+    aria-label="Annotate text"
+    class="bg-popover text-popover-foreground border-border fixed z-50 w-max max-w-[calc(100vw-1rem)] rounded-lg border p-1 shadow-lg"
+  >
+    <div data-toolbar class="flex items-center gap-0.5">
+      <div class="border-border flex items-stretch rounded-md border">
+        <button
+          type="button"
+          data-action="highlight"
+          aria-label="Highlight selection and bookmark it"
+          title="Highlight and bookmark"
+          class="hover:bg-accent flex flex-col items-center gap-0.5 rounded-s-md px-2 py-1.5 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="size-4"
+            aria-hidden="true"
+          >
+            <path d="m9 11-6 6v3h9l3-3"></path>
+            <path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"></path>
+          </svg>
+          <span
+            data-color-dot
+            class="annotation-swatch-yellow h-1 w-5 rounded-full"
+            aria-hidden="true"
+          ></span>
+        </button>
+        <span class="bg-border w-px" aria-hidden="true"></span>
+        <button
+          type="button"
+          data-action="palette"
+          aria-label="Change highlight color"
+          aria-expanded="false"
+          class="hover:bg-accent rounded-e-md px-1.5 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="size-3.5"
+            aria-hidden="true"
+          >
+            <path d="m6 9 6 6 6-6"></path>
+          </svg>
+        </button>
+      </div>
+      <button
+        type="button"
+        data-action="note"
+        class="hover:bg-accent flex items-center gap-1.5 rounded-md px-2 py-2 text-xs font-medium focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="size-4"
+          aria-hidden="true"
+        >
+          <path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"></path>
+          <path d="M15 3v5a1 1 0 0 0 1 1h5"></path>
+        </svg>
+        <span data-note-label>Note</span>
+      </button>
+      <span
+        data-remove-divider
+        class="bg-border hidden w-px self-stretch"
+        aria-hidden="true"
+      ></span>
+      <button
+        type="button"
+        data-action="remove"
+        hidden
+        class="text-destructive hover:bg-destructive/10 rounded-md px-2 py-2 text-xs font-medium focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+      >
+        Remove
+      </button>
+    </div>
+    <div
+      data-palette
+      hidden
+      class="border-border mt-1 flex items-center gap-1.5 border-t px-1 pt-2 pb-1"
+    >
+      {HIGHLIGHT_COLORS.map((color) => (
+        <button
+          type="button"
+          data-color={color}
+          aria-label={`${color} highlight`}
+          aria-pressed="false"
+          class={`annotation-swatch-${color} size-5 rounded-full border border-border/40 transition-transform hover:scale-110 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none`}
+        />
+      ))}
+    </div>
+    <div
+      data-editor
+      hidden
+      class="border-border mt-1 flex w-72 max-w-[calc(100vw-1.5rem)] flex-col gap-2 border-t px-1 pt-2 pb-1"
+    >
+      <textarea
+        data-note-input
+        rows="4"
+        aria-label="Note"
+        placeholder="Add a note…"
+        class="border-input bg-background placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full resize-y rounded-md border px-2 py-1.5 text-sm focus-visible:ring-3 focus-visible:outline-none"
+      ></textarea>
+      <div class="flex items-center justify-between gap-1.5">
+        <span class="text-muted-foreground text-[0.7rem]">
+          Ctrl+Enter saves
+        </span>
+        <div class="flex items-center gap-1.5">
+          <button
+            type="button"
+            data-action="note-cancel"
+            class="hover:bg-accent rounded-md px-2 py-1 text-xs font-medium focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            data-action="note-save"
+            class="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-2.5 py-1 text-xs font-medium focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+<script>
+import { initAnnotations } from "@/lib/annotations-client";
+initAnnotations();
+</script>

@@ -8,6 +8,7 @@ import {
   totalMinutes,
 } from "@/lib/courses";
 import ProgressEnhance from "@/components/chrome/ProgressEnhance.astro";
+import Annotations from "@/components/chrome/Annotations.astro";
 
 export async function getStaticPaths() {
   const courses = await getCourses();
@@ -163,9 +164,36 @@ const stats = [
               Start lesson
             </a>
           )}
+          <div
+            data-annotation-section
+            hidden
+            class="bg-card border-border mt-3 flex flex-col gap-1 rounded-lg border p-2"
+          >
+            <p class="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+              Bookmarks &amp; notes
+            </p>
+            <ul
+              data-annotation-list
+              data-lesson={lesson.id}
+              class="flex flex-col gap-0.5"
+            ></ul>
+            {/* Part titles/hrefs as static metadata for the client script;
+                 it re-renders the list above, so these live outside it. */}
+            {lesson.parts.map((part) => (
+              <span
+                data-annotation-part
+                data-part-id={part.id}
+                data-part-title={part.data.title}
+                data-part-href={partHref(part)}
+                hidden
+                aria-hidden="true"
+              />
+            ))}
+          </div>
         </section>
       ))}
     </div>
   </main>
+  <Annotations />
   <ProgressEnhance />
 </Base>

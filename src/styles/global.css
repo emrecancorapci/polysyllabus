@@ -149,6 +149,12 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* Chrome components toggle the `hidden` attribute on elements that also
+     carry display utilities (flex); keep the UA rule authoritative. */
+  [hidden] {
+    /* biome-ignore lint/complexity/noImportantStyles: must beat utility classes */
+    display: none !important;
+  }
   /* Anchored headings must clear the sticky header when jumped to. */
   [id] {
     scroll-margin-top: 4.5rem;
@@ -285,6 +291,83 @@
     linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
   background-size: 1.25rem 1.25rem;
+}
+
+/* ---- Text annotations ---------------------------------------------------
+   Highlights are <mark> elements painted client-side over the article
+   (annotations-client.ts). Marker-like tints in light mode; dimmed paper
+   colors in dark mode so body text stays readable. */
+:root {
+  --hl-yellow: oklch(0.93 0.1 102);
+  --hl-green: oklch(0.9 0.1 150);
+  --hl-blue: oklch(0.9 0.07 240);
+  --hl-pink: oklch(0.91 0.08 350);
+  --hl-orange: oklch(0.91 0.09 70);
+}
+.dark {
+  --hl-yellow: oklch(0.35 0.055 102);
+  --hl-green: oklch(0.34 0.06 150);
+  --hl-blue: oklch(0.33 0.06 245);
+  --hl-pink: oklch(0.34 0.06 350);
+  --hl-orange: oklch(0.35 0.06 70);
+}
+mark.annotation {
+  color: inherit;
+  padding: 0.1em 0;
+  border-radius: 0.25rem;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  cursor: pointer;
+}
+.annotation-yellow,
+.annotation-swatch-yellow {
+  background-color: var(--hl-yellow);
+}
+.annotation-green,
+.annotation-swatch-green {
+  background-color: var(--hl-green);
+}
+.annotation-blue,
+.annotation-swatch-blue {
+  background-color: var(--hl-blue);
+}
+.annotation-pink,
+.annotation-swatch-pink {
+  background-color: var(--hl-pink);
+}
+.annotation-orange,
+.annotation-swatch-orange {
+  background-color: var(--hl-orange);
+}
+/* Annotations carrying a note are visually distinct until opened. */
+mark.annotation[data-has-note] {
+  text-decoration: underline dotted;
+  text-decoration-color: color-mix(
+    in oklab,
+    var(--foreground) 55%,
+    transparent
+  );
+  text-underline-offset: 3px;
+}
+/* Panel/bookmark links target the first mark of an annotation: flash it. */
+mark.annotation:target {
+  animation: annotation-flash 1.6s ease-out 1;
+}
+@keyframes annotation-flash {
+  0%,
+  35% {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+  100% {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+}
+/* Active color in the popover palette. */
+#annotation-popover [aria-pressed="true"] {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
 }
 
 @media (prefers-reduced-motion: reduce) {

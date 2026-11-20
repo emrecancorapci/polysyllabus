@@ -9,6 +9,7 @@ import NumericQuiz from "@/components/content/NumericQuiz.astro";
 import Playground from "@/components/content/Playground.astro";
 import Quiz from "@/components/content/Quiz.astro";
 import LessonCompleteButton from "@/components/chrome/LessonCompleteButton.astro";
+import Annotations from "@/components/chrome/Annotations.astro";
 import MathText from "@/components/content/react/MathText";
 import ProgressEnhance from "@/components/chrome/ProgressEnhance.astro";
 import {
@@ -296,6 +297,38 @@ function outlineLink(
         <Content components={contentComponents} />
       </article>
 
+      <details
+        data-annotation-section
+        hidden
+        class="border-border bg-card group rounded-lg border xl:hidden"
+      >
+        <summary
+          class="flex cursor-pointer select-none items-center justify-between px-4 py-3 text-sm font-medium focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+        >
+          Bookmarks &amp; notes
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="size-4 transition-transform group-open:rotate-180"
+            aria-hidden="true"
+          >
+            <path d="m6 9 6 6 6-6"></path>
+          </svg>
+        </summary>
+        <div class="border-border border-t px-2 py-2">
+          <ul
+            data-annotation-panel
+            data-part-id={part.id}
+            class="flex flex-col gap-0.5"
+          ></ul>
+        </div>
+      </details>
+
       <div class="border-border mt-8 flex flex-col gap-5 border-t pt-6">
         <div class="flex justify-center">
           <LessonCompleteButton lessonId={part.id} />
@@ -334,33 +367,43 @@ function outlineLink(
       </div>
     </main>
 
-    {tocHeadings.length > 0 && (
-      <aside class="hidden w-52 shrink-0 xl:block">
-        <nav
-          aria-label="On this page"
-          class="sticky top-20 flex flex-col gap-2 pt-2"
-        >
-          <p class="text-foreground text-sm font-medium">On this page</p>
-          <ul class="flex flex-col">
-            {tocHeadings.map((heading) => (
-              <li>
-                <a
-                  href={`#${heading.slug}`}
-                  class:list={[
-                    "text-muted-foreground hover:text-foreground block border-border border-l py-1 text-sm transition-colors focus-visible:border-primary focus-visible:text-foreground focus-visible:outline-none",
-                    heading.depth === 2
-                      ? "pl-3"
-                      : "text-muted-foreground/70 border-l-transparent pl-6 text-xs",
-                  ]}
-                >
-                  {heading.text}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </aside>
-    )}
+    <aside class="hidden w-52 shrink-0 xl:block">
+      <div class="sticky top-20 flex flex-col gap-6 pt-2">
+        {tocHeadings.length > 0 && (
+          <nav aria-label="On this page" class="flex flex-col gap-2">
+            <p class="text-foreground text-sm font-medium">On this page</p>
+            <ul class="flex flex-col">
+              {tocHeadings.map((heading) => (
+                <li>
+                  <a
+                    href={`#${heading.slug}`}
+                    class:list={[
+                      "text-muted-foreground hover:text-foreground block border-border border-l py-1 text-sm transition-colors focus-visible:border-primary focus-visible:text-foreground focus-visible:outline-none",
+                      heading.depth === 2
+                        ? "pl-3"
+                        : "text-muted-foreground/70 border-l-transparent pl-6 text-xs",
+                    ]}
+                  >
+                    {heading.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+        <section data-annotation-section hidden class="flex flex-col gap-2">
+          <p class="text-foreground text-sm font-medium">
+            Bookmarks &amp; notes
+          </p>
+          <ul
+            data-annotation-panel
+            data-part-id={part.id}
+            class="flex flex-col gap-0.5"
+          ></ul>
+        </section>
+      </div>
+    </aside>
   </div>
+  <Annotations partId={part.id} />
   <ProgressEnhance />
 </Base>
