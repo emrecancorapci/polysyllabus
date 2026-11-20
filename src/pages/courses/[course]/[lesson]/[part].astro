@@ -79,9 +79,11 @@ function outlineLink(
   lang={course?.language}
 >
   <div
-    class="mx-auto flex w-full max-w-6xl flex-1 flex-col px-6 py-8 lg:flex-row lg:gap-10"
+    class="reading-layout mx-auto flex w-full max-w-6xl flex-1 flex-col px-6 py-8 lg:flex-row lg:gap-10"
   >
-    <aside class="hidden lg:block lg:w-60 lg:shrink-0">
+    <aside
+      class="reading-rail reading-rail-left hidden lg:block lg:w-60 lg:shrink-0"
+    >
       <nav
         aria-label="Course outline"
         class="sticky top-20 flex flex-col gap-6 max-lg:py-2"
@@ -367,7 +369,9 @@ function outlineLink(
       </div>
     </main>
 
-    <aside class="hidden w-52 shrink-0 xl:block">
+    <aside
+      class="reading-rail reading-rail-right hidden w-52 shrink-0 xl:block"
+    >
       <div class="sticky top-20 flex flex-col gap-6 pt-2">
         {tocHeadings.length > 0 && (
           <nav aria-label="On this page" class="flex flex-col gap-2">

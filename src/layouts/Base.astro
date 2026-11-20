@@ -6,6 +6,8 @@
  */
 import ThemeInit from "@/components/chrome/ThemeInit.astro";
 import ThemeToggle from "@/components/chrome/ThemeToggle.astro";
+import ReadingControls from "@/components/chrome/ReadingControls.astro";
+import FigureLightbox from "@/components/chrome/FigureLightbox.astro";
 import "@/styles/global.css";
 
 interface Props {
@@ -71,10 +73,14 @@ const { title, description, lang = "en" } = Astro.props;
             PolySyllabus
           </span>
         </a>
-        <ThemeToggle />
+        <div class="flex items-center gap-0.5">
+          <ReadingControls />
+          <ThemeToggle />
+        </div>
       </div>
     </header>
     <slot name="body" />
     <slot />
+    <FigureLightbox />
   </body>
 </html>

@@ -1,8 +1,9 @@
 ---
-// Sets the theme class before first paint. Inline so it runs immediately,
-// with no bundle round-trip: dark preference is read from localStorage or
-// the OS. Also syncs `color-scheme` (native controls, scrollbars) and the
-// `theme-color` meta with the active theme.
+// Sets preferences before first paint. Inline so it runs immediately, with
+// no bundle round-trip: dark preference from localStorage or the OS, plus
+// the reading preferences (full-width mode, article text size) written by
+// ReadingControls. Also syncs `color-scheme` (native controls, scrollbars)
+// and the `theme-color` meta with the active theme.
 ---
 
 <script is:inline>
@@ -18,8 +19,15 @@
     document.documentElement.style.colorScheme = dark ? "dark" : "light";
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute("content", dark ? DARK : LIGHT);
+    const size = localStorage.getItem("study-helper:text-size");
+    if (size === "lg" || size === "xl") {
+      document.documentElement.setAttribute("data-text-size", size);
+    }
+    if (localStorage.getItem("study-helper:fullwidth") === "1") {
+      document.documentElement.setAttribute("data-fullwidth", "");
+    }
   } catch {
-    /* localStorage unavailable: stay light */
+    /* localStorage unavailable: stay light with defaults */
   }
 })();
 </script>

@@ -1,0 +1,176 @@
+---
+/**
+ * Reading controls next to the theme toggle: full-width mode and article
+ * text size. Both persist to localStorage and are applied before first
+ * paint by ThemeInit, so reloads never shift layout. The full-width script
+ * also drives the hover-reveal of the side rails (see the full-width rules
+ * in global.css and the reading-rail hooks on the part page).
+ */
+import { buttonVariants } from "@/components/ui/button";
+---
+
+<div class="flex items-center gap-0.5">
+  <button
+    id="fullwidth-toggle"
+    type="button"
+    aria-label="Toggle full-width reading mode"
+    aria-pressed="false"
+    title="Full-width reading"
+    class={buttonVariants({ variant: "ghost", size: "icon-sm" })}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="size-4"
+      aria-hidden="true"
+    >
+      <path d="M16 12h6"></path>
+      <path d="M8 12H2"></path>
+      <path d="M12 2v2"></path>
+      <path d="M12 8v2"></path>
+      <path d="M12 14v2"></path>
+      <path d="M12 20v2"></path>
+      <path d="m19 15 3-3-3-3"></path>
+      <path d="m5 9-3 3 3 3"></path>
+    </svg>
+  </button>
+  <button
+    id="text-size-toggle"
+    type="button"
+    aria-label="Reading text size: medium"
+    title="Reading text size"
+    class={buttonVariants({ variant: "ghost", size: "icon-sm" })}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="size-4"
+      aria-hidden="true"
+    >
+      <path d="m15 16 2.536-7.328a1.02 1.02 1 0 1 1.928 0L22 16"></path>
+      <path d="M15.697 14h5.606"></path>
+      <path d="m2 16 4.039-9.69a.5.5 0 0 1 .923 0L11 16"></path>
+      <path d="M3.304 13h6.392"></path>
+    </svg>
+  </button>
+</div>
+
+<script>
+// Preference keys share the "study-helper:" prefix; ThemeInit reads them
+// before first paint.
+const FULLWIDTH_KEY = "study-helper:fullwidth";
+const TEXT_SIZE_KEY = "study-helper:text-size";
+
+const SIZES = ["md", "lg", "xl"] as const;
+type TextSize = (typeof SIZES)[number];
+const SIZE_LABELS: Record<TextSize, string> = {
+  md: "medium",
+  lg: "large",
+  xl: "extra large",
+};
+
+const root = document.documentElement;
+const fullwidthButton = document.getElementById("fullwidth-toggle");
+const sizeButton = document.getElementById("text-size-toggle");
+
+function store(key: string, value: string | null): void {
+  try {
+    if (value === null) localStorage.removeItem(key);
+    else localStorage.setItem(key, value);
+  } catch {
+    /* persistence unavailable: session-only preference */
+  }
+}
+
+// ---- Text size -----------------------------------------------------
+
+function isTextSize(value: string | null): value is TextSize {
+  return (SIZES as readonly string[]).includes(value ?? "");
+}
+
+function currentSize(): TextSize {
+  const value = root.getAttribute("data-text-size");
+  return isTextSize(value) ? value : "md";
+}
+
+function applySize(size: TextSize): void {
+  if (size === "md") root.removeAttribute("data-text-size");
+  else root.setAttribute("data-text-size", size);
+  store(TEXT_SIZE_KEY, size === "md" ? null : size);
+  sizeButton?.setAttribute(
+    "aria-label",
+    `Reading text size: ${SIZE_LABELS[size]}`,
+  );
+}
+
+sizeButton?.addEventListener("click", () => {
+  const at = SIZES.indexOf(currentSize());
+  applySize(SIZES[(at + 1) % SIZES.length]);
+});
+applySize(currentSize()); // sync the label with ThemeInit's applied state
+
+// ---- Full-width mode -------------------------------------------------
+
+function applyFullwidth(on: boolean): void {
+  root.toggleAttribute("data-fullwidth", on);
+  if (!on) {
+    root.removeAttribute("data-rail-left");
+    root.removeAttribute("data-rail-right");
+  }
+  fullwidthButton?.setAttribute("aria-pressed", String(on));
+  store(FULLWIDTH_KEY, on ? "1" : null);
+}
+
+fullwidthButton?.addEventListener("click", () => {
+  applyFullwidth(!root.hasAttribute("data-fullwidth"));
+});
+// Sync with the state ThemeInit applied before first paint.
+fullwidthButton?.setAttribute(
+  "aria-pressed",
+  String(root.hasAttribute("data-fullwidth")),
+);
+
+// Hover-reveal rails: rAF-throttled mousemove sets data-rail-left/right
+// when the pointer comes close to the corresponding screen edge; CSS
+// slides the fixed overlays in and out.
+let pendingFrame = 0;
+let pointerX = Number.NEGATIVE_INFINITY;
+
+function applyRails(): void {
+  const width = window.innerWidth;
+  root.toggleAttribute("data-rail-left", pointerX <= 272);
+  root.toggleAttribute("data-rail-right", width - pointerX <= 240);
+}
+
+function scheduleRails(): void {
+  if (pendingFrame) return;
+  pendingFrame = requestAnimationFrame(() => {
+    pendingFrame = 0;
+    if (root.hasAttribute("data-fullwidth")) applyRails();
+  });
+}
+
+window.addEventListener(
+  "mousemove",
+  (event) => {
+    if (!root.hasAttribute("data-fullwidth")) return;
+    pointerX = event.clientX;
+    scheduleRails();
+  },
+  { passive: true },
+);
+document.documentElement.addEventListener("mouseleave", () => {
+  pointerX = Number.NEGATIVE_INFINITY;
+  scheduleRails();
+});
+</script>

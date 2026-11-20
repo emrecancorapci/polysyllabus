@@ -370,6 +370,125 @@ mark.annotation:target {
   outline-offset: 1px;
 }
 
+/* ---- Reading text size --------------------------------------------------
+   The header control cycles the article prose size; chrome stays fixed.
+   Math, code, and figures scale along (em-based sizing inside prose). */
+html[data-text-size="lg"] .article-prose {
+  font-size: 1.1875rem;
+}
+html[data-text-size="xl"] .article-prose {
+  font-size: 1.3125rem;
+}
+
+/* ---- Full-width reading mode -------------------------------------------
+   data-fullwidth (header toggle, persisted) widens the part-page layout and
+   turns the side rails into fixed overlays that slide in from the screen
+   edges. data-rail-left/right are set by the pointer handler in
+   ReadingControls when the mouse nears an edge; :focus-within keeps the
+   rails reachable by keyboard. */
+html[data-fullwidth] .reading-layout {
+  max-width: none;
+}
+@media (min-width: 1024px) {
+  html[data-fullwidth] .reading-rail {
+    position: fixed;
+    top: 5rem;
+    bottom: 1rem;
+    z-index: 30;
+    overflow-y: auto;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: color-mix(in oklab, var(--background) 92%, transparent);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 12px 32px oklch(0 0 0 / 14%);
+    transition:
+      transform 0.25s ease,
+      opacity 0.2s ease;
+  }
+  html[data-fullwidth] .reading-rail-left {
+    left: 1rem;
+    width: 15rem;
+    transform: translateX(calc(-100% - 1.5rem));
+    opacity: 0;
+  }
+  html[data-fullwidth] .reading-rail-right {
+    right: 1rem;
+    width: 13rem;
+    transform: translateX(calc(100% + 1.5rem));
+    opacity: 0;
+  }
+  html[data-fullwidth][data-rail-left] .reading-rail-left,
+  html[data-fullwidth] .reading-rail-left:focus-within {
+    transform: none;
+    opacity: 1;
+  }
+  html[data-fullwidth][data-rail-right] .reading-rail-right,
+  html[data-fullwidth] .reading-rail-right:focus-within {
+    transform: none;
+    opacity: 1;
+  }
+  /* Sticky inner navs make no sense inside a fixed scroll container. */
+  html[data-fullwidth] .reading-rail .sticky {
+    position: static;
+  }
+}
+
+/* ---- Figure lightbox -----------------------------------------------------
+   One <dialog> reused for every zoomable figure; clones drop the column's
+   size caps and scale to the viewport. */
+dialog#figure-lightbox {
+  width: min(94vw, 110rem);
+  max-height: 92vh;
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem;
+}
+dialog#figure-lightbox::backdrop {
+  background: oklch(0 0 0 / 65%);
+}
+#figure-lightbox [data-lightbox-content] {
+  max-height: calc(92vh - 4rem);
+}
+#figure-lightbox svg,
+#figure-lightbox img {
+  max-width: 100%;
+  max-height: calc(88vh - 4rem);
+  width: auto;
+  height: auto;
+  cursor: auto;
+}
+dialog#figure-lightbox[open] {
+  animation: lightbox-in 0.2s ease-out;
+}
+dialog#figure-lightbox[open]::backdrop {
+  animation: lightbox-backdrop 0.2s ease-out;
+}
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+@keyframes lightbox-backdrop {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Zoomable figures: affordance + keyboard focus ring (Mermaid diagrams get
+   tabindex from the lightbox script). :is() keeps specificity even with the
+   dark-mode mermaid rule at the top of this file. */
+.article-prose :is([data-zoomable], svg[id^="mermaid-"]) {
+  cursor: zoom-in;
+}
+.article-prose :is([data-zoomable], svg[id^="mermaid-"]):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
