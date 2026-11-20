@@ -88,4 +88,12 @@ when the mouse moves close to the screen edge) and a **text size** cycler for th
   `margin: auto` centering for modal dialogs. Fixed with `margin: auto` on
   `dialog#figure-lightbox`; verified the dialog's left/right and top/bottom viewports margins
   are equal (43px each) in the built site.
-- 2026-11-20: `pnpm lint`, `pnpm format`, `pnpm typecheck`, `pnpm build` all pass.
+- 2026-11-20: user report — prev/next card titles overflowed into each other. Two causes:
+  the title spans lacked `min-w-0` (flex items refuse to shrink below content width), and on
+  the right-aligned Next card `items-end` disabled flex stretch, so the span was content-sized
+  and never clipped by its card. Both spans now carry `min-w-0 self-stretch truncate`; the
+  built page (power-electronic-circuits 1.4, the reported page) measures both titles at 250px
+  inside their 280px cards with end ellipsis, nothing crossing card borders.
+- 2026-11-20: `pnpm format`, `pnpm typecheck`, `pnpm build` pass; `pnpm lint` reports one
+  error unrelated to this sprint — `noSvgWithoutTitle` in the user's new untracked
+  `course-factory-2/examples/sample-course` SVG — and is clean for all sprint files.
