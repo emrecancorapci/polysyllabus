@@ -54,25 +54,33 @@ function pngDimensions(path: string): { width: number; height: number } {
 
 <figure class="not-prose my-6 flex flex-col gap-2">
   {svg !== undefined ? (
-    <div
-      class="text-foreground grid-paper border-border bg-card flex justify-center rounded-lg border p-4 [&_svg]:h-auto [&_svg]:max-h-96 [&_svg]:w-auto [&_svg]:max-w-full"
-      role="img"
-      aria-label={alt}
+    <button
+      type="button"
+      class="text-foreground grid-paper border-border bg-card flex w-full cursor-zoom-in justify-center rounded-lg border p-4 [&_svg]:h-auto [&_svg]:max-h-96 [&_svg]:w-auto [&_svg]:max-w-full"
+      data-zoomable
+      aria-label={`Enlarge figure: ${alt}`}
       set:html={svg}
     />
   ) : (
     (() => {
       const { width, height } = pngDimensions(src);
       return (
-        <img
-          src={png}
-          alt={alt}
-          width={width}
-          height={height}
-          loading="lazy"
-          decoding="async"
-          class="border-border bg-card grid-paper mx-auto rounded-lg border p-4"
-        />
+        <button
+          type="button"
+          class="block w-full cursor-zoom-in"
+          data-zoomable
+          aria-label={`Enlarge figure: ${alt}`}
+        >
+          <img
+            src={png}
+            alt={alt}
+            width={width}
+            height={height}
+            loading="lazy"
+            decoding="async"
+            class="border-border bg-card grid-paper mx-auto rounded-lg border p-4"
+          />
+        </button>
       );
     })()
   )}
