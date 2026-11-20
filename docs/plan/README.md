@@ -22,4 +22,5 @@ Sprint plans for the study-helper frontend. One file per sprint, per `AGENTS.md`
 | [7](./sprint-7-figures-and-charts.md)               | Figures and charts               | Done        |
 | [8](./sprint-8-backlog.md)                          | Backlog                          | In progress |
 | [9](./sprint-9-course-structure.md)                 | Course structure: lessons, parts | Done        |
-| [10](./sprint-10-annotations.md)                    | Annotations: highlights, notes   | In progress |
+| [10](./sprint-10-annotations.md)                    | Annotations: highlights, notes   | Done        |
+| [11](./sprint-11-reading-experience.md)             | Reading: lightbox, full width    | In progress |

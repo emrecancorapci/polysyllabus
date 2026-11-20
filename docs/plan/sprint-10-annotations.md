@@ -1,6 +1,6 @@
 # Sprint 10 — Text Annotations: Highlights, Bookmarks, Notes
 
-**Status:** In progress
+**Status:** Done
 
 ## Goal
 
@@ -39,11 +39,7 @@ like a markdown link.
       separate lesson page — the course page is the lesson listing). Entries link to
       `#ann-<id>`; marks carry that id, so navigation is a plain anchor jump with a `:target`
       flash and a post-render scroll fallback for cross-page links.
-- [ ] S10-6 **Ask AI on the selection** (future): third popover action asking for a simpler /
-      deeper explanation of the selected text; needs an LLM endpoint decision.
-- [ ] S10-7 **Listen to a part** (future): voice generation for courses. Cheapest route is the
-      browser's built-in `speechSynthesis` (no service, per-sentence highlighting); a hosted TTS
-      would give better voices at a cost. Not started.
+- Moved to sprint 11: S10-6 Ask AI (→ S11-6), S10-7 listen to a part (→ S11-7).
 
 ## Acceptance criteria
 
