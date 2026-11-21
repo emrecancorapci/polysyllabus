@@ -14,7 +14,7 @@ like a markdown link.
 ## Backlog
 
 - [x] S10-1 **Annotation store.** `src/lib/annotations.ts` mirrors `progress.ts`: validated
-      localStorage (`study-helper:annotations:v1`), one record per annotated span (`id`, `partId`,
+      localStorage (`polysyllabus:annotations:v1`), one record per annotated span (`id`, `partId`,
       text quote, `color`, optional `note`, `bookmarked` flag, timestamps), a change event, and the
       preferred highlight color as a separate key.
 - [x] S10-2 **Text-quote anchoring.** `src/lib/annotation-anchor.ts` indexes the article's
@@ -56,7 +56,7 @@ like a markdown link.
 
 - The spec's "lesson page" does not exist as a route: lessons are listed on the course page
   (`/[course]/`), so lesson-level bookmark/note lists live there, under each lesson section.
-- Storage keys keep the `study-helper:` prefix like progress/theme so future renames survive.
+- Storage keys keep the `polysyllabus:` prefix like progress/theme so future renames survive.
 - One record covers highlight + bookmark + note for a span (`note`/`bookmarked` optional
   flags); the panel lists all annotations of the scope with type icons.
 - Data loss modes: content regenerated so the quote no longer matches (entry stays in the

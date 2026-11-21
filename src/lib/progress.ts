@@ -9,11 +9,9 @@ export interface ProgressData {
   quiz: Record<string, QuizResult>;
 }
 
-// Keys keep the legacy "study-helper:" prefix from before the PolySyllabus
-// rename so stored progress and theme preferences survive the rebrand.
-export const PROGRESS_EVENT = "study-helper:progress";
+export const PROGRESS_EVENT = "polysyllabus:progress";
 
-const STORAGE_KEY = "study-helper:progress:v1";
+const STORAGE_KEY = "polysyllabus:progress:v1";
 
 const EMPTY: ProgressData = { completed: [], quiz: {} };
 

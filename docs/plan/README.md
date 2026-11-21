@@ -1,6 +1,6 @@
 # Development Plan
 
-Sprint plans for the study-helper frontend. One file per sprint, per `AGENTS.md`.
+Sprint plans for the polysyllabus frontend. One file per sprint, per `AGENTS.md`.
 
 ## Working rules
 

@@ -40,11 +40,10 @@ export interface Annotation {
   updatedAt: string;
 }
 
-export const ANNOTATIONS_EVENT = "study-helper:annotations";
+export const ANNOTATIONS_EVENT = "polysyllabus:annotations";
 
-// Keys keep the legacy "study-helper:" prefix shared with progress and theme.
-const STORAGE_KEY = "study-helper:annotations:v1";
-const COLOR_KEY = "study-helper:annotation-color";
+const STORAGE_KEY = "polysyllabus:annotations:v1";
+const COLOR_KEY = "polysyllabus:annotation-color";
 
 const EMPTY: Annotation[] = [];
 

@@ -22,8 +22,8 @@ Learners can track progress: mark lessons complete, record quiz scores, and see 
 
 ## Notes
 
-- Storage: single namespaced+versioned key `study-helper:progress:v1` with runtime shape validation; lesson ids (path-derived entry ids) are the stable keys.
-- Architecture: static markup stays the source of truth; `ProgressEnhance.astro` (bundled Astro `<script>`) decorates sidebar/course-page elements from the store. Islands (`CompleteButton`, `Quiz`) write to the store and everything syncs via a `study-helper:progress` window event — no state library, no prop drilling.
+- Storage: single namespaced+versioned key `polysyllabus:progress:v1` with runtime shape validation; lesson ids (path-derived entry ids) are the stable keys.
+- Architecture: static markup stays the source of truth; `ProgressEnhance.astro` (bundled Astro `<script>`) decorates sidebar/course-page elements from the store. Islands (`CompleteButton`, `Quiz`) write to the store and everything syncs via a `polysyllabus:progress` window event — no state library, no prop drilling.
 - Islands initialize uncompleted/unanswered and sync from the store in `useEffect` to avoid SSR hydration mismatches.
 - `Quiz.astro` derives its lesson id from the page URL (`/courses/<course>/<lesson>/` → entry id); quizzes are stored one per lesson.
 - The quiz slot on course cards sits inside the time span so the enhancer can overwrite it without clobbering the minutes.
